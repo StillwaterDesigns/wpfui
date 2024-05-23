@@ -8,8 +8,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows.Controls;
 
-using System.Linq;
-
 using Wpf.Ui.Animations;
 
 // ReSharper disable once CheckNamespace
@@ -418,33 +416,38 @@ public partial class NavigationView {
 		set => SetValue(FrameMarginProperty, value);
 	}
 
+	private void OnMenuItemsSource_CollectionChanged(object? sender, IList collection, NotifyCollectionChangedEventArgs e) {
+		if (!ReferenceEquals(sender, collection)) {
+			switch (e.Action) {
+				case NotifyCollectionChangedAction.Add:
+					foreach (var item in e.NewItems)
+						collection.Add(item);
+					break;
+				case NotifyCollectionChangedAction.Remove:
+					foreach (var item in e.OldItems)
+						if (!e.NewItems.Contains(item))
+							collection.Remove(item);
+					break;
+				case NotifyCollectionChangedAction.Move:
+					var moveItem = MenuItems[e.OldStartingIndex];
+					collection.RemoveAt(e.OldStartingIndex);
+					collection.Insert(e.NewStartingIndex, moveItem);
+					break;
+				case NotifyCollectionChangedAction.Replace:
+					collection.RemoveAt(e.OldStartingIndex);
+					collection.Insert(e.OldStartingIndex, e.NewItems[0]);
+					break;
+				case NotifyCollectionChangedAction.Reset:
+					collection.Clear();
+					break;
+			}
+		}
+	}
+
 	private void OnMenuItems_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) {
 		if (e.NewItems is null)
 			return;
 
-		switch (e.Action) {
-			case NotifyCollectionChangedAction.Add:
-				foreach (var item in e.NewItems)
-					MenuItems.Add(item);
-				break;
-			case NotifyCollectionChangedAction.Remove:
-				foreach (var item in e.OldItems)
-					if (!e.NewItems.Contains(item))
-						MenuItems.Remove(item);
-				break;
-			case NotifyCollectionChangedAction.Move:
-				var moveItem = MenuItems[e.OldStartingIndex];
-				MenuItems.RemoveAt(e.OldStartingIndex);
-				MenuItems.Insert(e.NewStartingIndex, moveItem);
-				break;
-			case NotifyCollectionChangedAction.Replace:
-				MenuItems.RemoveAt(e.OldStartingIndex);
-				MenuItems.Insert(e.OldStartingIndex, e.NewItems[0]);
-				break;
-			case NotifyCollectionChangedAction.Reset:
-				MenuItems.Clear();
-				break;
-		}
 		UpdateMenuItemsTemplate(e.NewItems);
 		AddItemsToDictionaries(e.NewItems);
 	}
@@ -461,43 +464,18 @@ public partial class NavigationView {
 		else if (e.NewValue is not null)
 			navigationView.MenuItems.Add(e.NewValue);
 		if (e.NewValue is INotifyCollectionChanged oc)
-			oc.CollectionChanged += navigationView.OnMenuItems_CollectionChanged;
+			oc.CollectionChanged += (s, e) => navigationView.OnMenuItemsSource_CollectionChanged(oc, navigationView.MenuItems, e);
 	}
 
 	private void OnFooterMenuItems_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) {
 		if (e.NewItems is null)
 			return;
 
-		switch (e.Action) {
-			case NotifyCollectionChangedAction.Add:
-                foreach (var item in e.NewItems)
-					FooterMenuItems.Add(item);
-                break;
-			case NotifyCollectionChangedAction.Remove:
-				foreach (var item in e.OldItems)
-					if(!e.NewItems.Contains(item))
-						FooterMenuItems.Remove(item);
-				break;
-			case NotifyCollectionChangedAction.Move:
-				var moveItem = FooterMenuItems[e.OldStartingIndex];
-				FooterMenuItems.RemoveAt(e.OldStartingIndex);
-				FooterMenuItems.Insert(e.NewStartingIndex, moveItem);
-				break;
-			case NotifyCollectionChangedAction.Replace:
-				FooterMenuItems.RemoveAt(e.OldStartingIndex);
-				FooterMenuItems.Insert(e.OldStartingIndex, e.NewItems[0]);
-				break;
-			case NotifyCollectionChangedAction.Reset:
-				FooterMenuItems.Clear();
-				break;
-		}
-		
 		UpdateMenuItemsTemplate(e.NewItems);
 		AddItemsToDictionaries(e.NewItems);
 	}
 
-	private static void OnFooterMenuItemsSourceChanged(DependencyObject? d, DependencyPropertyChangedEventArgs e
-) {
+	private static void OnFooterMenuItemsSourceChanged(DependencyObject? d, DependencyPropertyChangedEventArgs e) {
 		if (d is not NavigationView navigationView)
 			return;
 
@@ -509,8 +487,8 @@ public partial class NavigationView {
 		else if (e.NewValue is not null)
 			navigationView.FooterMenuItems.Add(e.NewValue);
 
-		if(e.NewValue is INotifyCollectionChanged oc)
-			oc.CollectionChanged += navigationView.OnFooterMenuItems_CollectionChanged;
+		if (e.NewValue is INotifyCollectionChanged oc)
+			oc.CollectionChanged += (s, e) => navigationView.OnMenuItemsSource_CollectionChanged(oc, navigationView.FooterMenuItems, e);
 	}
 
 	private static void OnPaneDisplayModeChanged(DependencyObject? d, DependencyPropertyChangedEventArgs e) {
