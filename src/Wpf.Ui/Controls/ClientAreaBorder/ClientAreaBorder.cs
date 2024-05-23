@@ -50,7 +50,7 @@ public class ClientAreaBorder : System.Windows.Controls.Border, IThemeControl
     private static Thickness? _resizeFrameBorderThickness;
     private static Thickness? _windowChromeNonClientFrameThickness;
     private bool _borderBrushApplied = false;
-    private System.Windows.Window? _oldWindow;
+    private Window? _oldWindow;
 
     public ApplicationTheme ApplicationTheme { get; set; } = ApplicationTheme.Unknown;
 
@@ -66,7 +66,7 @@ public class ClientAreaBorder : System.Windows.Controls.Border, IThemeControl
                 return _paddedBorderThickness.Value;
             }
 
-            var paddedBorder = Interop.User32.GetSystemMetrics(Interop.User32.SM.CXPADDEDBORDER);
+            var paddedBorder = User32.GetSystemMetrics(User32.SM.CXPADDEDBORDER);
 
             (double factorX, double factorY) = GetDpi();
 
@@ -105,16 +105,16 @@ public class ClientAreaBorder : System.Windows.Controls.Border, IThemeControl
     /// </remarks>
     public Thickness WindowChromeNonClientFrameThickness =>
         _windowChromeNonClientFrameThickness ??= new Thickness(
-            ClientAreaBorder.ResizeFrameBorderThickness.Left + PaddedBorderThickness.Left,
-            ClientAreaBorder.ResizeFrameBorderThickness.Top + PaddedBorderThickness.Top,
-            ClientAreaBorder.ResizeFrameBorderThickness.Right + PaddedBorderThickness.Right,
-            ClientAreaBorder.ResizeFrameBorderThickness.Bottom + PaddedBorderThickness.Bottom
+			ResizeFrameBorderThickness.Left + PaddedBorderThickness.Left,
+			ResizeFrameBorderThickness.Top + PaddedBorderThickness.Top,
+			ResizeFrameBorderThickness.Right + PaddedBorderThickness.Right,
+			ResizeFrameBorderThickness.Bottom + PaddedBorderThickness.Bottom
         );
 
     public ClientAreaBorder()
     {
-        ApplicationTheme = Appearance.ApplicationThemeManager.GetAppTheme();
-        Appearance.ApplicationThemeManager.Changed += OnThemeChanged;
+        ApplicationTheme = ApplicationThemeManager.GetAppTheme();
+		ApplicationThemeManager.Changed += OnThemeChanged;
     }
 
     private void OnThemeChanged(ApplicationTheme currentApplicationTheme, Color systemAccent)
@@ -140,7 +140,7 @@ public class ClientAreaBorder : System.Windows.Controls.Border, IThemeControl
             oldWindow.Closing -= OnWindowClosing;
         }
 
-        var newWindow = (System.Windows.Window?)System.Windows.Window.GetWindow(this);
+        var newWindow = (Window?)Window.GetWindow(this);
 
         if (newWindow is not null)
         {
@@ -156,7 +156,7 @@ public class ClientAreaBorder : System.Windows.Controls.Border, IThemeControl
 
     private void OnWindowClosing(object? sender, CancelEventArgs e)
     {
-        Appearance.ApplicationThemeManager.Changed -= OnThemeChanged;
+		ApplicationThemeManager.Changed -= OnThemeChanged;
         if (_oldWindow != null)
         {
             _oldWindow.Closing -= OnWindowClosing;
@@ -165,7 +165,7 @@ public class ClientAreaBorder : System.Windows.Controls.Border, IThemeControl
 
     private void OnWindowStateChanged(object? sender, EventArgs e)
     {
-        if (sender is not System.Windows.Window window)
+        if (sender is not Window window)
         {
             return;
         }

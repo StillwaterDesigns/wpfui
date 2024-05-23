@@ -14,102 +14,91 @@ namespace Wpf.Ui.Controls;
 /// Represents the base class for an icon UI element.
 /// </summary>
 [TypeConverter(typeof(IconElementConverter))]
-public abstract class IconElement : FrameworkElement
-{
-    static IconElement()
-    {
-        FocusableProperty.OverrideMetadata(typeof(IconElement), new FrameworkPropertyMetadata(false));
-        KeyboardNavigation.IsTabStopProperty.OverrideMetadata(
-            typeof(IconElement),
-            new FrameworkPropertyMetadata(false)
-        );
-    }
+public abstract class IconElement : FrameworkElement {
+	static IconElement() {
+		FocusableProperty.OverrideMetadata(typeof(IconElement), new FrameworkPropertyMetadata(false));
+		KeyboardNavigation.IsTabStopProperty.OverrideMetadata(
+			typeof(IconElement),
+			new FrameworkPropertyMetadata(false)
+		);
+	}
 
-    /// <summary>Identifies the <see cref="Foreground"/> dependency property.</summary>
-    public static readonly DependencyProperty ForegroundProperty = TextElement.ForegroundProperty.AddOwner(
-        typeof(IconElement),
-        new FrameworkPropertyMetadata(
-            SystemColors.ControlTextBrush,
-            FrameworkPropertyMetadataOptions.Inherits,
-            static (d, args) => ((IconElement)d).OnForegroundChanged(args)
-        )
-    );
+	/// <summary>Identifies the <see cref="Foreground"/> dependency property.</summary>
+	public static readonly DependencyProperty ForegroundProperty = TextElement.ForegroundProperty.AddOwner(
+		typeof(IconElement),
+		new FrameworkPropertyMetadata(
+			SystemColors.ControlTextBrush,
+			FrameworkPropertyMetadataOptions.Inherits,
+			static (d, args) => ((IconElement)d).OnForegroundChanged(args)
+		)
+	);
 
-    /// <inheritdoc cref="Control.Foreground"/>
-    [Bindable(true)]
-    [Category("Appearance")]
-    public Brush Foreground
-    {
-        get => (Brush)GetValue(ForegroundProperty);
-        set => SetValue(ForegroundProperty, value);
-    }
+	/// <inheritdoc cref="Control.Foreground"/>
+	[Bindable(true)]
+	[Category("Appearance")]
+	public Brush Foreground {
+		get => (Brush)GetValue(ForegroundProperty);
+		set => SetValue(ForegroundProperty, value);
+	}
 
-    protected override int VisualChildrenCount => 1;
+	protected override int VisualChildrenCount => 1;
 
-    private Grid? _layoutRoot;
+	private Grid? _layoutRoot;
 
-    protected abstract UIElement InitializeChildren();
+	protected abstract UIElement InitializeChildren();
 
-    protected virtual void OnForegroundChanged(DependencyPropertyChangedEventArgs args) { }
+	protected virtual void OnForegroundChanged(DependencyPropertyChangedEventArgs args) { }
 
-    private void EnsureLayoutRoot()
-    {
-        if (_layoutRoot != null)
-        {
-            return;
-        }
+	private void EnsureLayoutRoot() {
+		if (_layoutRoot != null) {
+			return;
+		}
 
-        _layoutRoot = new Grid { Background = Brushes.Transparent, SnapsToDevicePixels = true, };
+		_layoutRoot = new Grid { Background = Brushes.Transparent, SnapsToDevicePixels = true, };
 
-        _ = _layoutRoot.Children.Add(InitializeChildren());
+		_ = _layoutRoot.Children.Add(InitializeChildren());
 
-        AddVisualChild(_layoutRoot);
-    }
+		AddVisualChild(_layoutRoot);
+	}
 
-    protected override Visual GetVisualChild(int index)
-    {
-        if (index != 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), "IconElement should have only 1 child");
-        }
+	protected override Visual GetVisualChild(int index) {
+		if (index != 0) {
+			throw new ArgumentOutOfRangeException(nameof(index), "IconElement should have only 1 child");
+		}
 
-        EnsureLayoutRoot();
-        return _layoutRoot!;
-    }
+		EnsureLayoutRoot();
+		return _layoutRoot!;
+	}
 
-    protected override Size MeasureOverride(Size availableSize)
-    {
-        EnsureLayoutRoot();
+	protected override Size MeasureOverride(Size availableSize) {
+		EnsureLayoutRoot();
 
-        _layoutRoot!.Measure(availableSize);
-        return _layoutRoot.DesiredSize;
-    }
+		_layoutRoot!.Measure(availableSize);
+		return _layoutRoot.DesiredSize;
+	}
 
-    protected override Size ArrangeOverride(Size finalSize)
-    {
-        EnsureLayoutRoot();
+	protected override Size ArrangeOverride(Size finalSize) {
+		EnsureLayoutRoot();
 
-        _layoutRoot!.Arrange(new Rect(default, finalSize));
-        return finalSize;
-    }
+		_layoutRoot!.Arrange(new Rect(default, finalSize));
+		return finalSize;
+	}
 
-    /// <summary>
-    /// Coerces the value of an Icon dependency property, allowing the use of either IconElement or IconSourceElement.
-    /// </summary>
-    /// <param name="_">The dependency object (unused).</param>
-    /// <param name="baseValue">The value to be coerced.</param>
-    /// <returns>An IconElement, either directly or derived from an IconSourceElement.</returns>
-    public static object? Coerce(DependencyObject _, object? baseValue)
-    {
-        return baseValue switch
-        {
-            IconSourceElement iconSourceElement => iconSourceElement.CreateIconElement(),
-            IconElement or null => baseValue,
-            _
-                => throw new ArgumentException(
-                    message: $"Expected either '{typeof(IconSourceElement)}' or '{typeof(IconElement)}' but got '{baseValue.GetType()}'.",
-                    paramName: nameof(baseValue)
-                )
-        };
-    }
+	/// <summary>
+	/// Coerces the value of an Icon dependency property, allowing the use of either IconElement or IconSourceElement.
+	/// </summary>
+	/// <param name="_">The dependency object (unused).</param>
+	/// <param name="baseValue">The value to be coerced.</param>
+	/// <returns>An IconElement, either directly or derived from an IconSourceElement.</returns>
+	public static object? Coerce(DependencyObject _, object? baseValue) {
+		return baseValue switch {
+			IconSourceElement iconSourceElement => iconSourceElement.CreateIconElement(),
+			IconElement or null => baseValue,
+			_
+				=> throw new ArgumentException(
+					message: $"Expected either '{typeof(IconSourceElement)}' or '{typeof(IconElement)}' but got '{baseValue.GetType()}'.",
+					paramName: nameof(baseValue)
+				)
+		};
+	}
 }

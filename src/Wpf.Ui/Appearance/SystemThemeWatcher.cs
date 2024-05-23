@@ -10,7 +10,7 @@ namespace Wpf.Ui.Appearance;
 
 /// <summary>
 /// Automatically updates the application background if the system theme or color is changed.
-/// <para><see cref="SystemThemeWatcher"/> settings work globally and cannot be changed for each <see cref="System.Windows.Window"/>.</para>
+/// <para><see cref="SystemThemeWatcher"/> settings work globally and cannot be changed for each <see cref="Window"/>.</para>
 /// </summary>
 /// <example>
 /// <code lang="csharp">

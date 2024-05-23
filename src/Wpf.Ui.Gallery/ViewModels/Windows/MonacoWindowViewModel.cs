@@ -22,8 +22,8 @@ public partial class MonacoWindowViewModel : ObservableObject
         webView.SetCurrentValue(
             WebView2.SourceProperty,
             new Uri(
-                System.IO.Path.Combine(
-                    System.AppDomain.CurrentDomain.BaseDirectory,
+				Path.Combine(
+					AppDomain.CurrentDomain.BaseDirectory,
                     @"Assets\Monaco\index.html"
                 )
             )

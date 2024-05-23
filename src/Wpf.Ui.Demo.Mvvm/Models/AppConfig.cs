@@ -5,9 +5,8 @@
 
 namespace Wpf.Ui.Demo.Mvvm.Models;
 
-public class AppConfig
-{
-    public string? ConfigurationsFolder { get; set; }
+public class AppConfig {
+	public string? ConfigurationsFolder { get; set; }
 
-    public string? AppPropertiesFileName { get; set; }
+	public string? AppPropertiesFileName { get; set; }
 }

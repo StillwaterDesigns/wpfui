@@ -200,12 +200,12 @@ public partial class NavigationView
 
         if (OnNavigating(pageInstance))
         {
-            System.Diagnostics.Debug.WriteLineIf(EnableDebugMessages, "Navigation canceled");
+			Debug.WriteLineIf(EnableDebugMessages, "Navigation canceled");
 
             return false;
         }
 
-        System.Diagnostics.Debug.WriteLineIf(
+		Debug.WriteLineIf(
             EnableDebugMessages,
             $"DEBUG | {viewItem.Id} - {(string.IsNullOrEmpty(viewItem.TargetPageTag) ? "NO_TAG" : viewItem.TargetPageTag)} - {viewItem.TargetPageType} | NAVIGATED"
         );
@@ -296,7 +296,7 @@ public partial class NavigationView
 
         if (_serviceProvider is not null)
         {
-            System.Diagnostics.Debug.WriteLine(
+			Debug.WriteLine(
                 $"Getting {targetPageType} from cache using IServiceProvider."
             );
 
@@ -308,13 +308,13 @@ public partial class NavigationView
 
         if (_pageService is not null)
         {
-            System.Diagnostics.Debug.WriteLine($"Getting {targetPageType} from cache using IPageService.");
+			Debug.WriteLine($"Getting {targetPageType} from cache using IPageService.");
 
             return _pageService.GetPage(targetPageType)
                 ?? throw new InvalidOperationException($"{nameof(_pageService.GetPage)} returned null");
         }
 
-        System.Diagnostics.Debug.WriteLine($"Getting {targetPageType} from cache using reflection.");
+		Debug.WriteLine($"Getting {targetPageType} from cache using reflection.");
 
         return NavigationViewActivator.CreateInstance(targetPageType)
             ?? throw new InvalidOperationException("Failed to create instance of the page");

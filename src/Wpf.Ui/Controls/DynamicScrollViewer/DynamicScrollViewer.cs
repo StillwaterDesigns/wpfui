@@ -9,7 +9,7 @@ using System.Windows.Controls;
 namespace Wpf.Ui.Controls;
 
 /// <summary>
-/// Custom <see cref="System.Windows.Controls.ScrollViewer"/> with events depending on actions taken by the user.
+/// Custom <see cref="ScrollViewer"/> with events depending on actions taken by the user.
 /// </summary>
 [DefaultEvent("ScrollChangedEvent")]
 public class DynamicScrollViewer : PassiveScrollViewer

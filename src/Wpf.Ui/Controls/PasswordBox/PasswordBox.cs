@@ -16,8 +16,7 @@ namespace Wpf.Ui.Controls;
 /// <summary>
 /// The modified password control.
 /// </summary>
-public class PasswordBox : Wpf.Ui.Controls.TextBox
-{
+public class PasswordBox : TextBox {
     private bool _lockUpdatingContents;
 
     /// <summary>Identifies the <see cref="Password"/> dependency property.</summary>

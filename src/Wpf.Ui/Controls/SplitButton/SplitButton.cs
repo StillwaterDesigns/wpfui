@@ -13,8 +13,7 @@ namespace Wpf.Ui.Controls;
 /// Represents a button with two parts that can be invoked separately. One part behaves like a standard button and the other part invokes a flyout.
 /// </summary>
 [TemplatePart(Name = TemplateElementToggleButton, Type = typeof(ToggleButton))]
-public class SplitButton : Wpf.Ui.Controls.Button
-{
+public class SplitButton : Button {
     /// <summary>
     /// Template element represented by the <c>ToggleButton</c> name.
     /// </summary>
@@ -158,7 +157,7 @@ public class SplitButton : Wpf.Ui.Controls.Button
         _contextMenu.SetCurrentValue(ContextMenu.PlacementTargetProperty, this);
         _contextMenu.SetCurrentValue(
             ContextMenu.PlacementProperty,
-            System.Windows.Controls.Primitives.PlacementMode.Bottom
+			PlacementMode.Bottom
         );
         _contextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
     }

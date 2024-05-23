@@ -20,7 +20,7 @@ public partial class MessageBoxViewModel : ObservableObject
     [RelayCommand]
     private async Task OnOpenCustomMessageBox(object sender)
     {
-        var uiMessageBox = new Wpf.Ui.Controls.MessageBox
+        var uiMessageBox = new Ui.Controls.MessageBox
         {
             Title = "WPF UI Message Box",
             Content =

@@ -12,20 +12,16 @@ namespace Wpf.Ui.Controls;
 /// <summary>
 /// A custom WinUI Window with more convenience methods.
 /// </summary>
-public class FluentWindow : System.Windows.Window
-{
+public class FluentWindow : Window {
     private WindowInteropHelper? _interopHelper = null;
 
-    /// <summary>
-    /// Gets contains helper for accessing this window handle.
-    /// </summary>
-    protected WindowInteropHelper InteropHelper
-    {
-        get => _interopHelper ??= new WindowInteropHelper(this);
-    }
+	/// <summary>
+	/// Gets contains helper for accessing this window handle.
+	/// </summary>
+	protected WindowInteropHelper InteropHelper => _interopHelper ??= new WindowInteropHelper(this);
 
-    /// <summary>Identifies the <see cref="WindowCornerPreference"/> dependency property.</summary>
-    public static readonly DependencyProperty WindowCornerPreferenceProperty = DependencyProperty.Register(
+	/// <summary>Identifies the <see cref="WindowCornerPreference"/> dependency property.</summary>
+	public static readonly DependencyProperty WindowCornerPreferenceProperty = DependencyProperty.Register(
         nameof(WindowCornerPreference),
         typeof(WindowCornerPreference),
         typeof(FluentWindow),

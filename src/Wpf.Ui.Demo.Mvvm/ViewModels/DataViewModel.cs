@@ -4,50 +4,45 @@
 // All Rights Reserved.
 
 using System.Windows.Media;
+
 using Wpf.Ui.Controls;
 using Wpf.Ui.Demo.Mvvm.Models;
 
 namespace Wpf.Ui.Demo.Mvvm.ViewModels;
 
-public partial class DataViewModel : ObservableObject, INavigationAware
-{
-    private bool _isInitialized = false;
+public partial class DataViewModel : ObservableObject, INavigationAware {
+	private bool _isInitialized = false;
 
-    [ObservableProperty]
-    private List<DataColor> _colors = [];
+	[ObservableProperty]
+	private List<DataColor> _colors = [];
 
-    public void OnNavigatedTo()
-    {
-        if (!_isInitialized)
-        {
-            InitializeViewModel();
-        }
-    }
+	public void OnNavigatedTo() {
+		if (!_isInitialized) {
+			InitializeViewModel();
+		}
+	}
 
-    public void OnNavigatedFrom() { }
+	public void OnNavigatedFrom() { }
 
-    private void InitializeViewModel()
-    {
-        var random = new Random();
-        Colors.Clear();
+	private void InitializeViewModel() {
+		var random = new Random();
+		Colors.Clear();
 
-        for (int i = 0; i < 8192; i++)
-        {
-            Colors.Add(
-                new DataColor
-                {
-                    Color = new SolidColorBrush(
-                        Color.FromArgb(
-                            (byte)200,
-                            (byte)random.Next(0, 250),
-                            (byte)random.Next(0, 250),
-                            (byte)random.Next(0, 250)
-                        )
-                    )
-                }
-            );
-        }
+		for (int i = 0; i < 8192; i++) {
+			Colors.Add(
+				new DataColor {
+					Color = new SolidColorBrush(
+						Color.FromArgb(
+							(byte)200,
+							(byte)random.Next(0, 250),
+							(byte)random.Next(0, 250),
+							(byte)random.Next(0, 250)
+						)
+					)
+				}
+			);
+		}
 
-        _isInitialized = true;
-    }
+		_isInitialized = true;
+	}
 }

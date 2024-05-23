@@ -154,7 +154,7 @@ public class VirtualizingWrapPanel : VirtualizingPanelBase
     {
         if (
             ItemsOwner is IHierarchicalVirtualizationAndScrollInfo groupItem
-            && VirtualizingPanel.GetIsVirtualizingWhenGrouping(ItemsControl)
+            && GetIsVirtualizingWhenGrouping(ItemsControl)
         )
         {
             if (Orientation == Orientation.Vertical)
@@ -376,7 +376,7 @@ public class VirtualizingWrapPanel : VirtualizingPanelBase
 
         if (ItemsOwner is IHierarchicalVirtualizationAndScrollInfo groupItem)
         {
-            if (!VirtualizingPanel.GetIsVirtualizingWhenGrouping(ItemsControl))
+            if (!GetIsVirtualizingWhenGrouping(ItemsControl))
             {
                 return new ItemRange(0, Items.Count - 1);
             }

@@ -19,8 +19,7 @@ namespace Wpf.Ui.Controls;
 /// &lt;ui:CalendarDatePicker /&gt;
 /// </code>
 /// </example>
-public class CalendarDatePicker : Wpf.Ui.Controls.Button
-{
+public class CalendarDatePicker : Button {
     private Popup? _popup;
 
     /// <summary>Identifies the <see cref="IsCalendarOpen"/> dependency property.</summary>

@@ -7,30 +7,25 @@ using Wpf.Ui.Gallery.Helpers;
 
 namespace Wpf.Ui.Gallery.ViewModels.Pages;
 
-public partial class DashboardViewModel : ObservableObject
-{
-    private readonly INavigationService _navigationService;
+public partial class DashboardViewModel : ObservableObject {
+	private readonly INavigationService _navigationService;
 
-    public DashboardViewModel(INavigationService navigationService)
-    {
-        _navigationService = navigationService;
-    }
+	public DashboardViewModel(INavigationService navigationService) {
+		_navigationService = navigationService;
+	}
 
-    [RelayCommand]
-    private void OnCardClick(string parameter)
-    {
-        if (string.IsNullOrWhiteSpace(parameter))
-        {
-            return;
-        }
+	[RelayCommand]
+	private void OnCardClick(string parameter) {
+		if (string.IsNullOrWhiteSpace(parameter)) {
+			return;
+		}
 
-        Type? pageType = NameToPageTypeConverter.Convert(parameter);
+		Type? pageType = NameToPageTypeConverter.Convert(parameter);
 
-        if (pageType == null)
-        {
-            return;
-        }
+		if (pageType == null) {
+			return;
+		}
 
-        _ = _navigationService.Navigate(pageType);
-    }
+		_ = _navigationService.Navigate(pageType);
+	}
 }

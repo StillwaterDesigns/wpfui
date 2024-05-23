@@ -8,7 +8,7 @@
 namespace Wpf.Ui.Hardware;
 
 /// <summary>
-/// Stores DPI information from which a <see cref="System.Windows.Media.Visual"/> or <see cref="System.Windows.UIElement"/>
+/// Stores DPI information from which a <see cref="Visual"/> or <see cref="UIElement"/>
 /// is rendered.
 /// </summary>
 public readonly struct DisplayDpi

@@ -6,7 +6,7 @@
 namespace Wpf.Ui.Extensions;
 
 /// <summary>
-/// Adds an extension for <see cref="System.Windows.Media.Color"/> that allows manipulation with HSL and HSV color spaces.
+/// Adds an extension for <see cref="Color"/> that allows manipulation with HSL and HSV color spaces.
 /// </summary>
 public static class ColorExtensions
 {
@@ -15,78 +15,78 @@ public static class ColorExtensions
     /// </summary>
     private static readonly float _byteMax = (float)byte.MaxValue;
 
-    /// <summary>
-    /// Creates a <see cref="SolidColorBrush"/> from a <see cref="System.Windows.Media.Color"/>.
-    /// </summary>
-    /// <param name="color">Input color.</param>
-    /// <returns>Brush converted to color.</returns>
-    public static SolidColorBrush ToBrush(this Color color)
+	/// <summary>
+	/// Creates a <see cref="SolidColorBrush"/> from a <see cref="Color"/>.
+	/// </summary>
+	/// <param name="color">Input color.</param>
+	/// <returns>Brush converted to color.</returns>
+	public static SolidColorBrush ToBrush(this Color color)
     {
         return new SolidColorBrush(color);
     }
 
-    /// <summary>
-    /// Creates a <see cref="SolidColorBrush"/> from a <see cref="System.Windows.Media.Color"/> with defined brush opacity.
-    /// </summary>
-    /// <param name="color">Input color.</param>
-    /// <param name="opacity">Degree of opacity.</param>
-    /// <returns>Brush converted to color with modified opacity.</returns>
-    public static SolidColorBrush ToBrush(this Color color, double opacity)
+	/// <summary>
+	/// Creates a <see cref="SolidColorBrush"/> from a <see cref="Color"/> with defined brush opacity.
+	/// </summary>
+	/// <param name="color">Input color.</param>
+	/// <param name="opacity">Degree of opacity.</param>
+	/// <returns>Brush converted to color with modified opacity.</returns>
+	public static SolidColorBrush ToBrush(this Color color, double opacity)
     {
         return new SolidColorBrush { Color = color, Opacity = opacity };
     }
 
-    /// <summary>
-    /// Gets <see cref="System.Windows.Media.Color"/> luminance based on HSL space.
-    /// </summary>
-    /// <param name="color">Input color.</param>
-    public static double GetLuminance(this Color color)
+	/// <summary>
+	/// Gets <see cref="Color"/> luminance based on HSL space.
+	/// </summary>
+	/// <param name="color">Input color.</param>
+	public static double GetLuminance(this Color color)
     {
         (float _, float _, float luminance) = color.ToHsl();
 
         return (double)luminance;
     }
 
-    /// <summary>
-    /// Gets <see cref="System.Windows.Media.Color"/> brightness based on HSV space.
-    /// </summary>
-    /// <param name="color">Input color.</param>
-    public static double GetBrightness(this Color color)
+	/// <summary>
+	/// Gets <see cref="Color"/> brightness based on HSV space.
+	/// </summary>
+	/// <param name="color">Input color.</param>
+	public static double GetBrightness(this Color color)
     {
         (float _, float _, float brightness) = color.ToHsv();
 
         return (double)brightness;
     }
 
-    /// <summary>
-    /// Gets <see cref="System.Windows.Media.Color"/> hue based on HSV space.
-    /// </summary>
-    /// <param name="color">Input color.</param>
-    public static double GetHue(this Color color)
+	/// <summary>
+	/// Gets <see cref="Color"/> hue based on HSV space.
+	/// </summary>
+	/// <param name="color">Input color.</param>
+	public static double GetHue(this Color color)
     {
         (float hue, float _, float _) = color.ToHsv();
 
         return (double)hue;
     }
 
-    /// <summary>
-    /// Gets <see cref="System.Windows.Media.Color"/> saturation based on HSV space.
-    /// </summary>
-    /// <param name="color">Input color.</param>
-    public static double GetSaturation(this Color color)
+	/// <summary>
+	/// Gets <see cref="Color"/> saturation based on HSV space.
+	/// </summary>
+	/// <param name="color">Input color.</param>
+	public static double GetSaturation(this Color color)
     {
         (float _, float saturation, float _) = color.ToHsv();
 
         return (double)saturation;
     }
 
-    /// <summary>
-    /// Allows to change the luminance by a factor based on the HSL color space.
-    /// </summary>
-    /// <param name="color">Input color.</param>
-    /// <param name="factor">The value of the luminance change factor from <see langword="100"/> to <see langword="-100"/>.</param>
-    /// <returns>Updated <see cref="System.Windows.Media.Color"/>.</returns>
-    public static Color UpdateLuminance(this Color color, float factor)
+	/// <summary>
+	/// Allows to change the luminance by a factor based on the HSL color space.
+	/// </summary>
+	/// <param name="color">Input color.</param>
+	/// <param name="factor">The value of the luminance change factor from <see langword="100"/> to <see langword="-100"/>.</param>
+	/// <returns>Updated <see cref="Color"/>.</returns>
+	public static Color UpdateLuminance(this Color color, float factor)
     {
         if (factor is > 100 or < -100)
         {
@@ -100,13 +100,13 @@ public static class ColorExtensions
         return Color.FromArgb(color.A, ToColorByte(red), ToColorByte(green), ToColorByte(blue));
     }
 
-    /// <summary>
-    /// Allows to change the saturation by a factor based on the HSL color space.
-    /// </summary>
-    /// <param name="color">Input color.</param>
-    /// <param name="factor">The value of the saturation change factor from <see langword="100"/> to <see langword="-100"/>.</param>
-    /// <returns>Updated <see cref="System.Windows.Media.Color"/>.</returns>
-    public static Color UpdateSaturation(this Color color, float factor)
+	/// <summary>
+	/// Allows to change the saturation by a factor based on the HSL color space.
+	/// </summary>
+	/// <param name="color">Input color.</param>
+	/// <param name="factor">The value of the saturation change factor from <see langword="100"/> to <see langword="-100"/>.</param>
+	/// <returns>Updated <see cref="Color"/>.</returns>
+	public static Color UpdateSaturation(this Color color, float factor)
     {
         if (factor is > 100f or < -100f)
         {
@@ -120,13 +120,13 @@ public static class ColorExtensions
         return Color.FromArgb(color.A, ToColorByte(red), ToColorByte(green), ToColorByte(blue));
     }
 
-    /// <summary>
-    /// Allows to change the brightness by a factor based on the HSV color space.
-    /// </summary>
-    /// <param name="color">Input color.</param>
-    /// <param name="factor">The value of the brightness change factor from <see langword="100"/> to <see langword="-100"/>.</param>
-    /// <returns>Updated <see cref="System.Windows.Media.Color"/>.</returns>
-    public static Color UpdateBrightness(this Color color, float factor)
+	/// <summary>
+	/// Allows to change the brightness by a factor based on the HSV color space.
+	/// </summary>
+	/// <param name="color">Input color.</param>
+	/// <param name="factor">The value of the brightness change factor from <see langword="100"/> to <see langword="-100"/>.</param>
+	/// <returns>Updated <see cref="Color"/>.</returns>
+	public static Color UpdateBrightness(this Color color, float factor)
     {
         if (factor is > 100f or < -100f)
         {
@@ -140,15 +140,15 @@ public static class ColorExtensions
         return Color.FromArgb(color.A, ToColorByte(red), ToColorByte(green), ToColorByte(blue));
     }
 
-    /// <summary>
-    /// Allows to change the brightness, saturation and luminance by a factors based on the HSL and HSV color space.
-    /// </summary>
-    /// <param name="color">Color to convert.</param>
-    /// <param name="brightnessFactor">The value of the brightness change factor from <see langword="100"/> to <see langword="-100"/>.</param>
-    /// <param name="saturationFactor">The value of the saturation change factor from <see langword="100"/> to <see langword="-100"/>.</param>
-    /// <param name="luminanceFactor">The value of the luminance change factor from <see langword="100"/> to <see langword="-100"/>.</param>
-    /// <returns>Updated <see cref="System.Windows.Media.Color"/>.</returns>
-    public static Color Update(
+	/// <summary>
+	/// Allows to change the brightness, saturation and luminance by a factors based on the HSL and HSV color space.
+	/// </summary>
+	/// <param name="color">Color to convert.</param>
+	/// <param name="brightnessFactor">The value of the brightness change factor from <see langword="100"/> to <see langword="-100"/>.</param>
+	/// <param name="saturationFactor">The value of the saturation change factor from <see langword="100"/> to <see langword="-100"/>.</param>
+	/// <param name="luminanceFactor">The value of the luminance change factor from <see langword="100"/> to <see langword="-100"/>.</param>
+	/// <returns>Updated <see cref="Color"/>.</returns>
+	public static Color Update(
         this Color color,
         float brightnessFactor,
         float saturationFactor = 0,

@@ -9,71 +9,56 @@ using Wpf.Ui.Extensions;
 
 namespace Wpf.Ui.Gallery.ViewModels.Pages;
 
-public sealed partial class SettingsViewModel : ObservableObject, INavigationAware
-{
-    private readonly INavigationService _navigationService;
+public sealed partial class SettingsViewModel : ObservableObject, INavigationAware {
+	private readonly INavigationService _navigationService;
 
-    private bool _isInitialized = false;
+	private bool _isInitialized = false;
 
-    [ObservableProperty]
-    private string _appVersion = string.Empty;
+	[ObservableProperty]
+	private string _appVersion = string.Empty;
 
-    [ObservableProperty]
-    private ApplicationTheme _currentApplicationTheme = ApplicationTheme.Unknown;
+	[ObservableProperty]
+	private ApplicationTheme _currentApplicationTheme = ApplicationTheme.Unknown;
 
-    [ObservableProperty]
-    private NavigationViewPaneDisplayMode _currentApplicationNavigationStyle =
-        NavigationViewPaneDisplayMode.Left;
+	[ObservableProperty]
+	private NavigationViewPaneDisplayMode _currentApplicationNavigationStyle =
+		NavigationViewPaneDisplayMode.Left;
 
-    public SettingsViewModel(INavigationService navigationService)
-    {
-        _navigationService = navigationService;
-    }
+	public SettingsViewModel(INavigationService navigationService) {
+		_navigationService = navigationService;
+	}
 
-    public void OnNavigatedTo()
-    {
-        if (!_isInitialized)
-        {
-            InitializeViewModel();
-        }
-    }
+	public void OnNavigatedTo() {
+		if (!_isInitialized)
+			InitializeViewModel();
+	}
 
-    public void OnNavigatedFrom() { }
+	public void OnNavigatedFrom() { }
 
-    partial void OnCurrentApplicationThemeChanged(ApplicationTheme oldValue, ApplicationTheme newValue)
-    {
-        ApplicationThemeManager.Apply(newValue);
-    }
+	partial void OnCurrentApplicationThemeChanged(ApplicationTheme oldValue, ApplicationTheme newValue) {
+		ApplicationThemeManager.Apply(newValue);
+	}
 
-    partial void OnCurrentApplicationNavigationStyleChanged(
-        NavigationViewPaneDisplayMode oldValue,
-        NavigationViewPaneDisplayMode newValue
-    )
-    {
-        _ = _navigationService.SetPaneDisplayMode(newValue);
-    }
+	partial void OnCurrentApplicationNavigationStyleChanged(
+		NavigationViewPaneDisplayMode oldValue,
+		NavigationViewPaneDisplayMode newValue) {
+		_ = _navigationService.SetPaneDisplayMode(newValue);
+	}
 
-    private void InitializeViewModel()
-    {
-        CurrentApplicationTheme = ApplicationThemeManager.GetAppTheme();
-        AppVersion = $"{GetAssemblyVersion()}";
+	private void InitializeViewModel() {
+		CurrentApplicationTheme = ApplicationThemeManager.GetAppTheme();
+		AppVersion = $"{GetAssemblyVersion()}";
+		ApplicationThemeManager.Changed += OnThemeChanged;
+		_isInitialized = true;
+	}
 
-        ApplicationThemeManager.Changed += OnThemeChanged;
+	private void OnThemeChanged(ApplicationTheme currentApplicationTheme, Color systemAccent) {
+		// Update the theme if it has been changed elsewhere than in the settings.
+		if (CurrentApplicationTheme != currentApplicationTheme)
+			CurrentApplicationTheme = currentApplicationTheme;
+	}
 
-        _isInitialized = true;
-    }
-
-    private void OnThemeChanged(ApplicationTheme currentApplicationTheme, Color systemAccent)
-    {
-        // Update the theme if it has been changed elsewhere than in the settings.
-        if (CurrentApplicationTheme != currentApplicationTheme)
-        {
-            CurrentApplicationTheme = currentApplicationTheme;
-        }
-    }
-
-    private static string GetAssemblyVersion()
-    {
-        return Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? string.Empty;
-    }
+	private static string GetAssemblyVersion() {
+		return Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? string.Empty;
+	}
 }

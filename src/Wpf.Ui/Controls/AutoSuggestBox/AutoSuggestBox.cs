@@ -30,7 +30,7 @@ namespace Wpf.Ui.Controls;
 [TemplatePart(Name = ElementTextBox, Type = typeof(TextBox))]
 [TemplatePart(Name = ElementSuggestionsPopup, Type = typeof(Popup))]
 [TemplatePart(Name = ElementSuggestionsList, Type = typeof(ListView))]
-public class AutoSuggestBox : System.Windows.Controls.ItemsControl, IIconControl
+public class AutoSuggestBox : ItemsControl, IIconControl
 {
     protected const string ElementTextBox = "PART_TextBox";
     protected const string ElementSuggestionsPopup = "PART_SuggestionsPopup";

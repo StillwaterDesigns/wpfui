@@ -5,14 +5,12 @@
 
 namespace Wpf.Ui.Demo.Mvvm.ViewModels;
 
-public partial class DashboardViewModel : ObservableObject
-{
-    [ObservableProperty]
-    private int _counter = 0;
+public partial class DashboardViewModel : ObservableObject {
+	[ObservableProperty]
+	private int _counter = 0;
 
-    [RelayCommand]
-    private void OnCounterIncrement()
-    {
-        Counter++;
-    }
+	[RelayCommand]
+	private void OnCounterIncrement() {
+		Counter++;
+	}
 }

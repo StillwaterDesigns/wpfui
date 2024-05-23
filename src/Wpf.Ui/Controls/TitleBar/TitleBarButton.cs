@@ -11,8 +11,7 @@ using Wpf.Ui.Interop;
 // ReSharper disable once CheckNamespace
 namespace Wpf.Ui.Controls;
 
-public class TitleBarButton : Wpf.Ui.Controls.Button
-{
+public class TitleBarButton : Button {
     /// <summary>Identifies the <see cref="ButtonType"/> dependency property.</summary>
     public static readonly DependencyProperty ButtonTypeProperty = DependencyProperty.Register(
         nameof(ButtonType),

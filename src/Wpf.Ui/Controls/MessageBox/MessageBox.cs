@@ -13,8 +13,7 @@ namespace Wpf.Ui.Controls;
 /// <summary>
 /// Customized window for notifications.
 /// </summary>
-public class MessageBox : System.Windows.Window
-{
+public class MessageBox : Window {
     /// <summary>Identifies the <see cref="ShowTitle"/> dependency property.</summary>
     public static readonly DependencyProperty ShowTitleProperty = DependencyProperty.Register(
         nameof(ShowTitle),
@@ -119,10 +118,10 @@ public class MessageBox : System.Windows.Window
         new PropertyMetadata(null)
     );
 
-    /// <summary>
-    /// Gets or sets a value indicating whether to show the <see cref="System.Windows.Window.Title"/> in <see cref="TitleBar"/>.
-    /// </summary>
-    public bool ShowTitle
+	/// <summary>
+	/// Gets or sets a value indicating whether to show the <see cref="Window.Title"/> in <see cref="TitleBar"/>.
+	/// </summary>
+	public bool ShowTitle
     {
         get => (bool)GetValue(ShowTitleProperty);
         set => SetValue(ShowTitleProperty, value);

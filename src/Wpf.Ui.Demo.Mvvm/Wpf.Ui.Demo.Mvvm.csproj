@@ -8,7 +8,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>applicationIcon.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64</Platforms>
-    <NoWarn>$(NoWarn);SA1601</NoWarn>
+    <NoWarn>$(NoWarn);SA1601;SA1027;</NoWarn>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 

@@ -8,7 +8,7 @@ using System.Windows.Controls;
 namespace Wpf.Ui.Extensions;
 
 /// <summary>
-/// Set of extensions for <see cref="System.Windows.Controls.Frame"/>.
+/// Set of extensions for <see cref="Frame"/>.
 /// </summary>
 public static class FrameExtensions
 {

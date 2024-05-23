@@ -365,15 +365,15 @@ public class TitleBar : System.Windows.Controls.Control, IThemeControl
     /// <summary>
     /// Gets or sets the <see cref="Action"/> that should be executed when the Maximize button is clicked."/>
     /// </summary>
-    public Action<TitleBar, System.Windows.Window>? MaximizeActionOverride { get; set; }
+    public Action<TitleBar, Window>? MaximizeActionOverride { get; set; }
 
     /// <summary>
     /// Gets or sets what <see cref="Action"/> should be executed when the Minimize button is clicked.
     /// </summary>
-    public Action<TitleBar, System.Windows.Window>? MinimizeActionOverride { get; set; }
+    public Action<TitleBar, Window>? MinimizeActionOverride { get; set; }
 
     private readonly TitleBarButton[] _buttons = new TitleBarButton[4];
-    private System.Windows.Window _currentWindow = null!;
+    private Window _currentWindow = null!;
 
     /*private System.Windows.Controls.Grid _mainGrid = null!;*/
     private System.Windows.Controls.ContentPresenter _icon = null!;
@@ -408,7 +408,7 @@ public class TitleBar : System.Windows.Controls.Control, IThemeControl
         }
 
         _currentWindow =
-            System.Windows.Window.GetWindow(this) ?? throw new InvalidOperationException("Window is null");
+			Window.GetWindow(this) ?? throw new InvalidOperationException("Window is null");
         _currentWindow.StateChanged += OnParentWindowStateChanged;
         _currentWindow.ContentRendered += OnWindowContentRendered;
     }

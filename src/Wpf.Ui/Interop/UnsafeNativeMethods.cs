@@ -322,7 +322,7 @@ public static class UnsafeNativeMethods
     /// <returns><see langword="true"/> if invocation of native Windows function succeeds.</returns>
     public static bool ApplyWindowLegacyAcrylicEffect(IntPtr handle)
     {
-        var accentPolicy = new Interop.User32.ACCENT_POLICY
+        var accentPolicy = new User32.ACCENT_POLICY
         {
             nAccentState = User32.ACCENT_STATE.ACCENT_ENABLE_ACRYLICBLURBEHIND,
             nColor = 0x990000 & 0xFFFFFF
@@ -525,7 +525,7 @@ public static class UnsafeNativeMethods
             dwMask = UxTheme.WTNCA.VALIDBITS
         };
 
-        Interop.UxTheme.SetWindowThemeAttribute(
+		UxTheme.SetWindowThemeAttribute(
             hWnd,
             UxTheme.WINDOWTHEMEATTRIBUTETYPE.WTA_NONCLIENT,
             ref wtaOptions,
@@ -550,11 +550,11 @@ public static class UnsafeNativeMethods
             cyBottomHeight = (int)Math.Ceiling(deviceGlassThickness.Bottom),
         };
 
-        // #3 Extend client area
-        Interop.Dwmapi.DwmExtendFrameIntoClientArea(hWnd, ref dwmMargin);
+		// #3 Extend client area
+		Dwmapi.DwmExtendFrameIntoClientArea(hWnd, ref dwmMargin);
 
-        // #4 Clear rounding region
-        Interop.User32.SetWindowRgn(hWnd, IntPtr.Zero, Interop.User32.IsWindowVisible(hWnd));
+		// #4 Clear rounding region
+		User32.SetWindowRgn(hWnd, IntPtr.Zero, User32.IsWindowVisible(hWnd));
 
         return true;
     }

@@ -74,7 +74,7 @@ public class UiApplication
 
                 try
                 {
-                    Wpf.Ui.Appearance.ApplicationAccentColorManager.ApplySystemAccent();
+					Appearance.ApplicationAccentColorManager.ApplySystemAccent();
                     var themesDictionary = new Markup.ThemesDictionary();
                     var controlsDictionary = new Markup.ControlsDictionary();
                     _resources.MergedDictionaries.Add(themesDictionary);

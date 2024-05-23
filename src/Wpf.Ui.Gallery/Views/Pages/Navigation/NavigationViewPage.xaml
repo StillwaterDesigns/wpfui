@@ -30,7 +30,6 @@
                 Margin="0"
                 IsBackButtonVisible="Auto"
                 IsPaneToggleVisible="True"
-                PaneDisplayMode="Left"
                 PaneTitle="Pane Title">
                 <ui:NavigationView.AutoSuggestBox>
                     <ui:AutoSuggestBox Margin="8,0,8,8" PlaceholderText="Search" />

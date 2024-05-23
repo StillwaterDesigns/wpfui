@@ -60,42 +60,30 @@ public struct RECTL
         set { _bottom = value; }
     }
 
-    /// <summary>
-    /// Gets the width of the rectangle.
-    /// </summary>
-    public readonly long Width
-    {
-        get { return _right - _left; }
-    }
+	/// <summary>
+	/// Gets the width of the rectangle.
+	/// </summary>
+	public readonly long Width => _right - _left;
 
-    /// <summary>
-    /// Gets the height of the rectangle.
-    /// </summary>
-    public readonly long Height
-    {
-        get { return _bottom - _top; }
-    }
+	/// <summary>
+	/// Gets the height of the rectangle.
+	/// </summary>
+	public readonly long Height => _bottom - _top;
 
-    /// <summary>
-    /// Gets the position of the rectangle.
-    /// </summary>
-    public POINTL Position
-    {
-        get { return new POINTL { x = _left, y = _top }; }
-    }
+	/// <summary>
+	/// Gets the position of the rectangle.
+	/// </summary>
+	public POINTL Position => new POINTL { x = _left, y = _top };
 
-    /// <summary>
-    /// Gets the size of the rectangle.
-    /// </summary>
-    public SIZE Size
-    {
-        get { return new SIZE { cx = Width, cy = Height }; }
-    }
+	/// <summary>
+	/// Gets the size of the rectangle.
+	/// </summary>
+	public SIZE Size => new SIZE { cx = Width, cy = Height };
 
-    /// <summary>
-    /// Sets offset of the rectangle.
-    /// </summary>
-    public void Offset(int dx, int dy)
+	/// <summary>
+	/// Sets offset of the rectangle.
+	/// </summary>
+	public void Offset(int dx, int dy)
     {
         _left += dx;
         _top += dy;

@@ -57,7 +57,7 @@ internal static class UnsafeReflection
             TaskBarProgressState.Error => ShObjIdl.TBPFLAG.TBPF_ERROR,
             TaskBarProgressState.Paused => ShObjIdl.TBPFLAG.TBPF_PAUSED,
             TaskBarProgressState.Normal => ShObjIdl.TBPFLAG.TBPF_NORMAL,
-            _ => Wpf.Ui.Interop.ShObjIdl.TBPFLAG.TBPF_NOPROGRESS
+            _ => ShObjIdl.TBPFLAG.TBPF_NOPROGRESS
         };
     }
 

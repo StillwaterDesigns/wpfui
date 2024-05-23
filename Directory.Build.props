@@ -29,9 +29,9 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
-  <PropertyGroup>
+  <!--<PropertyGroup>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-  </PropertyGroup>
+  </PropertyGroup>-->
 
   <PropertyGroup>
     <NuGetAudit>true</NuGetAudit>

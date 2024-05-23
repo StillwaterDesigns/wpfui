@@ -28,9 +28,9 @@ namespace Wpf.Ui.Tray.Controls;
 /// &lt;/tray:NotifyIcon&gt;
 /// </code>
 /// </example>
-public class NotifyIcon : System.Windows.FrameworkElement, IDisposable
+public class NotifyIcon : FrameworkElement, IDisposable
 {
-    private readonly Wpf.Ui.Tray.Internal.InternalNotifyIconManager internalNotifyIconManager;
+    private readonly Internal.InternalNotifyIconManager internalNotifyIconManager;
 
     /// <summary>
     /// Gets or sets a value indicating whether the control is disposed.
@@ -245,7 +245,7 @@ public class NotifyIcon : System.Windows.FrameworkElement, IDisposable
 
     public NotifyIcon()
     {
-        internalNotifyIconManager = new Wpf.Ui.Tray.Internal.InternalNotifyIconManager();
+        internalNotifyIconManager = new Internal.InternalNotifyIconManager();
 
         RegisterHandlers();
     }
