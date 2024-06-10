@@ -4,6 +4,7 @@
 // All Rights Reserved.
 
 using System.Windows.Markup;
+
 using Wpf.Ui.Appearance;
 
 namespace Wpf.Ui.Markup;
@@ -28,30 +29,25 @@ namespace Wpf.Ui.Markup;
 [Localizability(LocalizationCategory.Ignore)]
 [Ambient]
 [UsableDuringInitialization(true)]
-public class ThemesDictionary : ResourceDictionary
-{
-    /// <summary>
-    /// Sets the default application theme.
-    /// </summary>
-    public ApplicationTheme Theme
-    {
-        set => SetSourceBasedOnSelectedTheme(value);
-    }
+public class ThemesDictionary : ResourceDictionary {
+	/// <summary>
+	/// Sets the default application theme.
+	/// </summary>
+	public ApplicationTheme Theme {
+		set => SetSourceBasedOnSelectedTheme(value);
+	}
 
-    public ThemesDictionary()
-    {
-        SetSourceBasedOnSelectedTheme(ApplicationTheme.Light);
-    }
+	public ThemesDictionary() {
+		SetSourceBasedOnSelectedTheme(ApplicationTheme.Light);
+	}
 
-    private void SetSourceBasedOnSelectedTheme(ApplicationTheme? selectedApplicationTheme)
-    {
-        var themeName = selectedApplicationTheme switch
-        {
-            ApplicationTheme.Dark => "Dark",
-            ApplicationTheme.HighContrast => "HighContrast",
-            _ => "Light"
-        };
+	private void SetSourceBasedOnSelectedTheme(ApplicationTheme? selectedApplicationTheme) {
+		var themeName = selectedApplicationTheme switch {
+			ApplicationTheme.Dark => "Dark",
+			ApplicationTheme.HighContrast => "HighContrast",
+			_ => "Light"
+		};
 
-        Source = new Uri($"{ApplicationThemeManager.ThemesDictionaryPath}{themeName}.xaml", UriKind.Absolute);
-    }
+		Source = new Uri($"{ApplicationThemeManager.ThemesDictionaryPath}{themeName}.xaml", UriKind.Absolute);
+	}
 }

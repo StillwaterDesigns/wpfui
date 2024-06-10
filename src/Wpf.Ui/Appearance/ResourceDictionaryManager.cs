@@ -10,150 +10,103 @@ namespace Wpf.Ui.Appearance;
 /// <summary>
 /// Allows managing application dictionaries.
 /// </summary>
-internal class ResourceDictionaryManager
-{
-    /// <summary>
-    /// Gets the namespace, e.g. the library the resource is being searched for.
-    /// </summary>
-    public string SearchNamespace { get; }
+internal class ResourceDictionaryManager {
+	/// <summary>
+	/// Gets the namespace, e.g. the library the resource is being searched for.
+	/// </summary>
+	public string SearchNamespace { get; }
 
-    public ResourceDictionaryManager(string searchNamespace)
-    {
-        SearchNamespace = searchNamespace;
-    }
+	public ResourceDictionaryManager(string searchNamespace) => SearchNamespace = searchNamespace;
 
-    /// <summary>
-    /// Shows whether the application contains the <see cref="ResourceDictionary"/>.
-    /// </summary>
-    /// <param name="resourceLookup">Any part of the resource name.</param>
-    /// <returns><see langword="false"/> if it doesn't exist.</returns>
-    public bool HasDictionary(string resourceLookup)
-    {
-        return GetDictionary(resourceLookup) != null;
-    }
+	/// <summary>
+	/// Shows whether the application contains the <see cref="ResourceDictionary"/>.
+	/// </summary>
+	/// <param name="resourceLookup">Any part of the resource name.</param>
+	/// <returns><see langword="false"/> if it doesn't exist.</returns>
+	public bool HasDictionary(string resourceLookup) => GetDictionary(resourceLookup) is not null;
 
-    /// <summary>
-    /// Gets the <see cref="ResourceDictionary"/> if exists.
-    /// </summary>
-    /// <param name="resourceLookup">Any part of the resource name.</param>
-    /// <returns><see cref="ResourceDictionary"/>, <see langword="null"/> if it doesn't exist.</returns>
-    public ResourceDictionary? GetDictionary(string resourceLookup)
-    {
-        Collection<ResourceDictionary> applicationDictionaries = GetApplicationMergedDictionaries();
+	/// <summary>
+	/// Gets the <see cref="ResourceDictionary"/> if exists.
+	/// </summary>
+	/// <param name="resourceLookup">Any part of the resource name.</param>
+	/// <returns><see cref="ResourceDictionary"/>, <see langword="null"/> if it doesn't exist.</returns>
+	public ResourceDictionary? GetDictionary(string resourceLookup) {
+		Collection<ResourceDictionary> applicationDictionaries = GetApplicationMergedDictionaries();
+		if (applicationDictionaries.Count == 0)
+			return null;
 
-        if (applicationDictionaries.Count == 0)
-        {
-            return null;
-        }
+		resourceLookup = resourceLookup.ToLower().Trim();
+		foreach (ResourceDictionary t in applicationDictionaries) {
+			string resourceDictionaryUri;
+			if (t?.Source is not null) {
+				resourceDictionaryUri = t.Source.ToString().ToLower().Trim();
+				if (resourceDictionaryUri.Contains(SearchNamespace)
+						&& resourceDictionaryUri.Contains(resourceLookup))
+					return t;
+			}
 
-        resourceLookup = resourceLookup.ToLower().Trim();
+			foreach (ResourceDictionary? t1 in t!.MergedDictionaries) {
+				if (t1?.Source is null)
+					continue;
 
-        foreach (ResourceDictionary t in applicationDictionaries)
-        {
-            string resourceDictionaryUri;
+				resourceDictionaryUri = t1.Source.ToString().ToLower().Trim();
+				if (!resourceDictionaryUri.Contains(SearchNamespace)
+						|| !resourceDictionaryUri.Contains(resourceLookup))
+					continue;
+				return t1;
+			}
+		}
+		return null;
+	}
 
-            if (t?.Source != null)
-            {
-                resourceDictionaryUri = t.Source.ToString().ToLower().Trim();
+	/// <summary>
+	/// Shows whether the application contains the <see cref="ResourceDictionary"/>.
+	/// </summary>
+	/// <param name="resourceLookup">Any part of the resource name.</param>
+	/// <param name="newResourceUri">A valid <see cref="Uri"/> for the replaced resource.</param>
+	/// <returns><see langword="true"/> if the dictionary <see cref="Uri"/> was updated. <see langword="false"/> otherwise.</returns>
+	public bool UpdateDictionary(string resourceLookup, Uri? newResourceUri) {
+		Collection<ResourceDictionary> applicationDictionaries = UiApplication
+			.Current
+			.Resources
+			.MergedDictionaries;
 
-                if (
-                    resourceDictionaryUri.Contains(SearchNamespace)
-                    && resourceDictionaryUri.Contains(resourceLookup)
-                )
-                {
-                    return t;
-                }
-            }
+		if (applicationDictionaries.Count == 0 || newResourceUri is null)
+			return false;
 
-            foreach (ResourceDictionary? t1 in t!.MergedDictionaries)
-            {
-                if (t1?.Source == null)
-                {
-                    continue;
-                }
+		resourceLookup = resourceLookup.ToLower().Trim();
+		for (var i = 0; i < applicationDictionaries.Count; i++) {
+			string sourceUri;
 
-                resourceDictionaryUri = t1.Source.ToString().ToLower().Trim();
+			if (applicationDictionaries[i]?.Source is not null) {
+				sourceUri = applicationDictionaries[i].Source.ToString().ToLower().Trim();
+				if (sourceUri.Contains(SearchNamespace) && sourceUri.Contains(resourceLookup)) {
+					applicationDictionaries[i] = new() { Source = newResourceUri };
+					return true;
+				}
+			}
 
-                if (
-                    !resourceDictionaryUri.Contains(SearchNamespace)
-                    || !resourceDictionaryUri.Contains(resourceLookup)
-                )
-                {
-                    continue;
-                }
+			for (var j = 0; j < applicationDictionaries[i].MergedDictionaries.Count; j++) {
+				if (applicationDictionaries[i].MergedDictionaries[j]?.Source == null)
+					continue;
 
-                return t1;
-            }
-        }
+				sourceUri = applicationDictionaries[i]
+					.MergedDictionaries[j]
+					.Source.ToString()
+					.ToLower()
+					.Trim();
 
-        return null;
-    }
+				if (!sourceUri.Contains(SearchNamespace) || !sourceUri.Contains(resourceLookup))
+					continue;
 
-    /// <summary>
-    /// Shows whether the application contains the <see cref="ResourceDictionary"/>.
-    /// </summary>
-    /// <param name="resourceLookup">Any part of the resource name.</param>
-    /// <param name="newResourceUri">A valid <see cref="Uri"/> for the replaced resource.</param>
-    /// <returns><see langword="true"/> if the dictionary <see cref="Uri"/> was updated. <see langword="false"/> otherwise.</returns>
-    public bool UpdateDictionary(string resourceLookup, Uri? newResourceUri)
-    {
-        Collection<ResourceDictionary> applicationDictionaries = UiApplication
-            .Current
-            .Resources
-            .MergedDictionaries;
+				applicationDictionaries[i].MergedDictionaries[j] = new() { Source = newResourceUri };
+				return true;
+			}
+		}
+		return false;
+	}
 
-        if (applicationDictionaries.Count == 0 || newResourceUri is null)
-        {
-            return false;
-        }
-
-        resourceLookup = resourceLookup.ToLower().Trim();
-
-        for (var i = 0; i < applicationDictionaries.Count; i++)
-        {
-            string sourceUri;
-
-            if (applicationDictionaries[i]?.Source != null)
-            {
-                sourceUri = applicationDictionaries[i].Source.ToString().ToLower().Trim();
-
-                if (sourceUri.Contains(SearchNamespace) && sourceUri.Contains(resourceLookup))
-                {
-                    applicationDictionaries[i] = new() { Source = newResourceUri };
-
-                    return true;
-                }
-            }
-
-            for (var j = 0; j < applicationDictionaries[i].MergedDictionaries.Count; j++)
-            {
-                if (applicationDictionaries[i].MergedDictionaries[j]?.Source == null)
-                {
-                    continue;
-                }
-
-                sourceUri = applicationDictionaries[i]
-                    .MergedDictionaries[j]
-                    .Source.ToString()
-                    .ToLower()
-                    .Trim();
-
-                if (!sourceUri.Contains(SearchNamespace) || !sourceUri.Contains(resourceLookup))
-                {
-                    continue;
-                }
-
-                applicationDictionaries[i].MergedDictionaries[j] = new() { Source = newResourceUri };
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private Collection<ResourceDictionary> GetApplicationMergedDictionaries()
-    {
-        return UiApplication.Current.Resources.MergedDictionaries;
-    }
+	private Collection<ResourceDictionary> GetApplicationMergedDictionaries() {
+		return UiApplication.Current.Resources.MergedDictionaries;
+	}
 }

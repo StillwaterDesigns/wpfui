@@ -13,255 +13,254 @@ namespace Wpf.Ui.Markup;
 /// &lt;ui:TextBox Foreground={ui:ThemeResource TextFillColorSecondaryBrush} /&gt;
 /// </code>
 /// </example>
-public enum ThemeResource
-{
-    /// <summary>
-    /// Unspecified theme resource.
-    /// </summary>
-    Unknown,
+public enum ThemeResource {
+	/// <summary>
+	/// Unspecified theme resource.
+	/// </summary>
+	Unknown,
 
-    // Accents
-    SystemAccentColor,
-    SystemAccentColorPrimary,
-    SystemAccentColorSecondary,
-    SystemAccentColorTertiary,
-    SystemAccentColorPrimaryBrush,
-    SystemAccentColorSecondaryBrush,
-    SystemAccentColorTertiaryBrush,
+	// Accents
+	SystemAccentColor,
+	SystemAccentColorPrimary,
+	SystemAccentColorSecondary,
+	SystemAccentColorTertiary,
+	SystemAccentColorPrimaryBrush,
+	SystemAccentColorSecondaryBrush,
+	SystemAccentColorTertiaryBrush,
 
-    AccentTextFillColorPrimaryBrush,
-    AccentTextFillColorSecondaryBrush,
-    AccentTextFillColorTertiaryBrush,
+	AccentTextFillColorPrimaryBrush,
+	AccentTextFillColorSecondaryBrush,
+	AccentTextFillColorTertiaryBrush,
 
-    // Background
-    ApplicationBackgroundColor,
-    ApplicationBackgroundBrush,
+	// Background
+	ApplicationBackgroundColor,
+	ApplicationBackgroundBrush,
 
-    // Focus
-    KeyboardFocusBorderColor,
-    KeyboardFocusBorderColorBrush,
+	// Focus
+	KeyboardFocusBorderColor,
+	KeyboardFocusBorderColorBrush,
 
-    // Text
-    TextFillColorPrimary,
-    TextFillColorSecondary,
-    TextFillColorTertiary,
-    TextFillColorDisabled,
-    TextPlaceholderColor,
-    TextFillColorInverse,
+	// Text
+	TextFillColorPrimary,
+	TextFillColorSecondary,
+	TextFillColorTertiary,
+	TextFillColorDisabled,
+	TextPlaceholderColor,
+	TextFillColorInverse,
 
-    AccentTextFillColorDisabled,
-    TextOnAccentFillColorSelectedText,
-    TextOnAccentFillColorPrimary,
-    TextOnAccentFillColorSecondary,
-    TextOnAccentFillColorDisabled,
+	AccentTextFillColorDisabled,
+	TextOnAccentFillColorSelectedText,
+	TextOnAccentFillColorPrimary,
+	TextOnAccentFillColorSecondary,
+	TextOnAccentFillColorDisabled,
 
-    ControlFillColorDefault,
-    ControlFillColorSecondary,
-    ControlFillColorTertiary,
-    ControlFillColorDisabled,
-    ControlFillColorTransparent,
-    ControlFillColorInputActive,
+	ControlFillColorDefault,
+	ControlFillColorSecondary,
+	ControlFillColorTertiary,
+	ControlFillColorDisabled,
+	ControlFillColorTransparent,
+	ControlFillColorInputActive,
 
-    ControlStrongFillColorDefault,
-    ControlStrongFillColorDisabled,
+	ControlStrongFillColorDefault,
+	ControlStrongFillColorDisabled,
 
-    ControlSolidFillColorDefault,
+	ControlSolidFillColorDefault,
 
-    SubtleFillColorTransparent,
-    SubtleFillColorSecondary,
-    SubtleFillColorTertiary,
-    SubtleFillColorDisabled,
+	SubtleFillColorTransparent,
+	SubtleFillColorSecondary,
+	SubtleFillColorTertiary,
+	SubtleFillColorDisabled,
 
-    ControlAltFillColorTransparent,
-    ControlAltFillColorSecondary,
-    ControlAltFillColorTertiary,
-    ControlAltFillColorQuarternary,
-    ControlAltFillColorDisabled,
+	ControlAltFillColorTransparent,
+	ControlAltFillColorSecondary,
+	ControlAltFillColorTertiary,
+	ControlAltFillColorQuarternary,
+	ControlAltFillColorDisabled,
 
-    ControlOnImageFillColorDefault,
-    ControlOnImageFillColorSecondary,
-    ControlOnImageFillColorTertiary,
-    ControlOnImageFillColorDisabled,
+	ControlOnImageFillColorDefault,
+	ControlOnImageFillColorSecondary,
+	ControlOnImageFillColorTertiary,
+	ControlOnImageFillColorDisabled,
 
-    AccentFillColorDisabled,
+	AccentFillColorDisabled,
 
-    ControlStrokeColorDefault,
-    ControlStrokeColorSecondary,
-    ControlStrokeColorTertiary,
-    ControlStrokeColorOnAccentDefault,
-    ControlStrokeColorOnAccentSecondary,
-    ControlStrokeColorOnAccentTertiary,
-    ControlStrokeColorOnAccentDisabled,
+	ControlStrokeColorDefault,
+	ControlStrokeColorSecondary,
+	ControlStrokeColorTertiary,
+	ControlStrokeColorOnAccentDefault,
+	ControlStrokeColorOnAccentSecondary,
+	ControlStrokeColorOnAccentTertiary,
+	ControlStrokeColorOnAccentDisabled,
 
-    ControlStrokeColorForStrongFillWhenOnImage,
+	ControlStrokeColorForStrongFillWhenOnImage,
 
-    CardStrokeColorDefault,
-    CardStrokeColorDefaultSolid,
+	CardStrokeColorDefault,
+	CardStrokeColorDefaultSolid,
 
-    ControlStrongStrokeColorDefault,
-    ControlStrongStrokeColorDisabled,
+	ControlStrongStrokeColorDefault,
+	ControlStrongStrokeColorDisabled,
 
-    SurfaceStrokeColorDefault,
-    SurfaceStrokeColorFlyout,
-    SurfaceStrokeColorInverse,
+	SurfaceStrokeColorDefault,
+	SurfaceStrokeColorFlyout,
+	SurfaceStrokeColorInverse,
 
-    DividerStrokeColorDefault,
+	DividerStrokeColorDefault,
 
-    FocusStrokeColorOuter,
-    FocusStrokeColorInner,
+	FocusStrokeColorOuter,
+	FocusStrokeColorInner,
 
-    CardBackgroundFillColorDefault,
-    CardBackgroundFillColorSecondary,
+	CardBackgroundFillColorDefault,
+	CardBackgroundFillColorSecondary,
 
-    SmokeFillColorDefault,
+	SmokeFillColorDefault,
 
-    LayerFillColorDefault,
-    LayerFillColorAlt,
-    LayerOnAcrylicFillColorDefault,
-    LayerOnAccentAcrylicFillColorDefault,
+	LayerFillColorDefault,
+	LayerFillColorAlt,
+	LayerOnAcrylicFillColorDefault,
+	LayerOnAccentAcrylicFillColorDefault,
 
-    LayerOnMicaBaseAltFillColorDefault,
-    LayerOnMicaBaseAltFillColorSecondary,
-    LayerOnMicaBaseAltFillColorTertiary,
-    LayerOnMicaBaseAltFillColorTransparent,
+	LayerOnMicaBaseAltFillColorDefault,
+	LayerOnMicaBaseAltFillColorSecondary,
+	LayerOnMicaBaseAltFillColorTertiary,
+	LayerOnMicaBaseAltFillColorTransparent,
 
-    SolidBackgroundFillColorBase,
-    SolidBackgroundFillColorSecondary,
-    SolidBackgroundFillColorTertiary,
-    SolidBackgroundFillColorQuarternary,
-    SolidBackgroundFillColorTransparent,
-    SolidBackgroundFillColorBaseAlt,
+	SolidBackgroundFillColorBase,
+	SolidBackgroundFillColorSecondary,
+	SolidBackgroundFillColorTertiary,
+	SolidBackgroundFillColorQuarternary,
+	SolidBackgroundFillColorTransparent,
+	SolidBackgroundFillColorBaseAlt,
 
-    SystemFillColorSuccess,
-    SystemFillColorCaution,
-    SystemFillColorCritical,
-    SystemFillColorNeutral,
-    SystemFillColorSolidNeutral,
-    SystemFillColorAttentionBackground,
-    SystemFillColorSuccessBackground,
-    SystemFillColorCautionBackground,
-    SystemFillColorCriticalBackground,
-    SystemFillColorNeutralBackground,
-    SystemFillColorSolidAttentionBackground,
-    SystemFillColorSolidNeutralBackground,
+	SystemFillColorSuccess,
+	SystemFillColorCaution,
+	SystemFillColorCritical,
+	SystemFillColorNeutral,
+	SystemFillColorSolidNeutral,
+	SystemFillColorAttentionBackground,
+	SystemFillColorSuccessBackground,
+	SystemFillColorCautionBackground,
+	SystemFillColorCriticalBackground,
+	SystemFillColorNeutralBackground,
+	SystemFillColorSolidAttentionBackground,
+	SystemFillColorSolidNeutralBackground,
 
-    // Brushes
-    TextFillColorPrimaryBrush,
-    TextFillColorSecondaryBrush,
-    TextFillColorTertiaryBrush,
-    TextFillColorDisabledBrush,
-    TextPlaceholderColorBrush,
-    TextFillColorInverseBrush,
+	// Brushes
+	TextFillColorPrimaryBrush,
+	TextFillColorSecondaryBrush,
+	TextFillColorTertiaryBrush,
+	TextFillColorDisabledBrush,
+	TextPlaceholderColorBrush,
+	TextFillColorInverseBrush,
 
-    AccentTextFillColorDisabledBrush,
+	AccentTextFillColorDisabledBrush,
 
-    TextOnAccentFillColorSelectedTextBrush,
+	TextOnAccentFillColorSelectedTextBrush,
 
-    TextOnAccentFillColorPrimaryBrush,
-    TextOnAccentFillColorSecondaryBrush,
-    TextOnAccentFillColorDisabledBrush,
+	TextOnAccentFillColorPrimaryBrush,
+	TextOnAccentFillColorSecondaryBrush,
+	TextOnAccentFillColorDisabledBrush,
 
-    ControlFillColorDefaultBrush,
-    ControlFillColorSecondaryBrush,
-    ControlFillColorTertiaryBrush,
-    ControlFillColorDisabledBrush,
-    ControlFillColorTransparentBrush,
-    ControlFillColorInputActiveBrush,
+	ControlFillColorDefaultBrush,
+	ControlFillColorSecondaryBrush,
+	ControlFillColorTertiaryBrush,
+	ControlFillColorDisabledBrush,
+	ControlFillColorTransparentBrush,
+	ControlFillColorInputActiveBrush,
 
-    ControlStrongFillColorDefaultBrush,
-    ControlStrongFillColorDisabledBrush,
+	ControlStrongFillColorDefaultBrush,
+	ControlStrongFillColorDisabledBrush,
 
-    ControlSolidFillColorDefaultBrush,
+	ControlSolidFillColorDefaultBrush,
 
-    SubtleFillColorTransparentBrush,
-    SubtleFillColorSecondaryBrush,
-    SubtleFillColorTertiaryBrush,
-    SubtleFillColorDisabledBrush,
+	SubtleFillColorTransparentBrush,
+	SubtleFillColorSecondaryBrush,
+	SubtleFillColorTertiaryBrush,
+	SubtleFillColorDisabledBrush,
 
-    ControlAltFillColorTransparentBrush,
-    ControlAltFillColorSecondaryBrush,
-    ControlAltFillColorTertiaryBrush,
-    ControlAltFillColorQuarternaryBrush,
-    ControlAltFillColorDisabledBrush,
+	ControlAltFillColorTransparentBrush,
+	ControlAltFillColorSecondaryBrush,
+	ControlAltFillColorTertiaryBrush,
+	ControlAltFillColorQuarternaryBrush,
+	ControlAltFillColorDisabledBrush,
 
-    ControlOnImageFillColorDefaultBrush,
-    ControlOnImageFillColorSecondaryBrush,
-    ControlOnImageFillColorTertiaryBrush,
-    ControlOnImageFillColorDisabledBrush,
+	ControlOnImageFillColorDefaultBrush,
+	ControlOnImageFillColorSecondaryBrush,
+	ControlOnImageFillColorTertiaryBrush,
+	ControlOnImageFillColorDisabledBrush,
 
-    AccentFillColorDisabledBrush,
+	AccentFillColorDisabledBrush,
 
-    ControlStrokeColorDefaultBrush,
-    ControlStrokeColorSecondaryBrush,
-    ControlStrokeColorTertiaryBrush,
-    ControlStrokeColorOnAccentDefaultBrush,
-    ControlStrokeColorOnAccentSecondaryBrush,
-    ControlStrokeColorOnAccentTertiaryBrush,
-    ControlStrokeColorOnAccentDisabledBrush,
+	ControlStrokeColorDefaultBrush,
+	ControlStrokeColorSecondaryBrush,
+	ControlStrokeColorTertiaryBrush,
+	ControlStrokeColorOnAccentDefaultBrush,
+	ControlStrokeColorOnAccentSecondaryBrush,
+	ControlStrokeColorOnAccentTertiaryBrush,
+	ControlStrokeColorOnAccentDisabledBrush,
 
-    ControlStrokeColorForStrongFillWhenOnImageBrush,
+	ControlStrokeColorForStrongFillWhenOnImageBrush,
 
-    CardStrokeColorDefaultBrush,
-    CardStrokeColorDefaultSolidBrush,
+	CardStrokeColorDefaultBrush,
+	CardStrokeColorDefaultSolidBrush,
 
-    ControlStrongStrokeColorDefaultBrush,
-    ControlStrongStrokeColorDisabledBrush,
+	ControlStrongStrokeColorDefaultBrush,
+	ControlStrongStrokeColorDisabledBrush,
 
-    SurfaceStrokeColorDefaultBrush,
-    SurfaceStrokeColorFlyoutBrush,
-    SurfaceStrokeColorInverseBrush,
+	SurfaceStrokeColorDefaultBrush,
+	SurfaceStrokeColorFlyoutBrush,
+	SurfaceStrokeColorInverseBrush,
 
-    DividerStrokeColorDefaultBrush,
+	DividerStrokeColorDefaultBrush,
 
-    FocusStrokeColorOuterBrush,
-    FocusStrokeColorInnerBrush,
+	FocusStrokeColorOuterBrush,
+	FocusStrokeColorInnerBrush,
 
-    CardBackgroundFillColorDefaultBrush,
-    CardBackgroundFillColorSecondaryBrush,
+	CardBackgroundFillColorDefaultBrush,
+	CardBackgroundFillColorSecondaryBrush,
 
-    SmokeFillColorDefaultBrush,
+	SmokeFillColorDefaultBrush,
 
-    LayerFillColorDefaultBrush,
-    LayerFillColorAltBrush,
-    LayerOnAcrylicFillColorDefaultBrush,
-    LayerOnAccentAcrylicFillColorDefaultBrush,
+	LayerFillColorDefaultBrush,
+	LayerFillColorAltBrush,
+	LayerOnAcrylicFillColorDefaultBrush,
+	LayerOnAccentAcrylicFillColorDefaultBrush,
 
-    LayerOnMicaBaseAltFillColorDefaultBrush,
-    LayerOnMicaBaseAltFillColorSecondaryBrush,
-    LayerOnMicaBaseAltFillColorTertiaryBrush,
-    LayerOnMicaBaseAltFillColorTransparentBrush,
+	LayerOnMicaBaseAltFillColorDefaultBrush,
+	LayerOnMicaBaseAltFillColorSecondaryBrush,
+	LayerOnMicaBaseAltFillColorTertiaryBrush,
+	LayerOnMicaBaseAltFillColorTransparentBrush,
 
-    SolidBackgroundFillColorBaseBrush,
-    SolidBackgroundFillColorSecondaryBrush,
-    SolidBackgroundFillColorTertiaryBrush,
-    SolidBackgroundFillColorQuarternaryBrush,
-    SolidBackgroundFillColorBaseAltBrush,
+	SolidBackgroundFillColorBaseBrush,
+	SolidBackgroundFillColorSecondaryBrush,
+	SolidBackgroundFillColorTertiaryBrush,
+	SolidBackgroundFillColorQuarternaryBrush,
+	SolidBackgroundFillColorBaseAltBrush,
 
-    SystemFillColorSuccessBrush,
-    SystemFillColorCautionBrush,
-    SystemFillColorCriticalBrush,
-    SystemFillColorNeutralBrush,
-    SystemFillColorSolidNeutralBrush,
-    SystemFillColorAttentionBackgroundBrush,
-    SystemFillColorSuccessBackgroundBrush,
-    SystemFillColorCautionBackgroundBrush,
-    SystemFillColorCriticalBackgroundBrush,
-    SystemFillColorNeutralBackgroundBrush,
-    SystemFillColorSolidAttentionBackgroundBrush,
-    SystemFillColorSolidNeutralBackgroundBrush,
+	SystemFillColorSuccessBrush,
+	SystemFillColorCautionBrush,
+	SystemFillColorCriticalBrush,
+	SystemFillColorNeutralBrush,
+	SystemFillColorSolidNeutralBrush,
+	SystemFillColorAttentionBackgroundBrush,
+	SystemFillColorSuccessBackgroundBrush,
+	SystemFillColorCautionBackgroundBrush,
+	SystemFillColorCriticalBackgroundBrush,
+	SystemFillColorNeutralBackgroundBrush,
+	SystemFillColorSolidAttentionBackgroundBrush,
+	SystemFillColorSolidNeutralBackgroundBrush,
 
-    /// <summary>
-    /// Gradient <see cref="Brush"/>.
-    /// </summary>
-    ControlElevationBorderBrush,
+	/// <summary>
+	/// Gradient <see cref="Brush"/>.
+	/// </summary>
+	ControlElevationBorderBrush,
 
-    /// <summary>
-    /// Gradient <see cref="Brush"/>.
-    /// </summary>
-    CircleElevationBorderBrush,
+	/// <summary>
+	/// Gradient <see cref="Brush"/>.
+	/// </summary>
+	CircleElevationBorderBrush,
 
-    /// <summary>
-    /// Gradient <see cref="Brush"/>.
-    /// </summary>
-    AccentControlElevationBorderBrush
+	/// <summary>
+	/// Gradient <see cref="Brush"/>.
+	/// </summary>
+	AccentControlElevationBorderBrush
 }

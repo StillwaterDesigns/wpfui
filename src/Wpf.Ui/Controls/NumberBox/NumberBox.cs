@@ -85,6 +85,22 @@ public class NumberBox : TextBox {
 		new PropertyMetadata(true)
 	);
 
+	/// <summary>Identifies the <see cref="IncrementEnabled"/> dependency property.</summary>
+	public static readonly DependencyProperty IncrementEnabledProperty = DependencyProperty.Register(
+		nameof(IncrementEnabled),
+		typeof(bool),
+		typeof(NumberBox),
+		new PropertyMetadata(true)
+	);
+
+	/// <summary>Identifies the <see cref="DecrementEnabled"/> dependency property.</summary>
+	public static readonly DependencyProperty DecrementEnabledProperty = DependencyProperty.Register(
+		nameof(DecrementEnabled),
+		typeof(bool),
+		typeof(NumberBox),
+		new PropertyMetadata(true)
+	);
+
 	/// <summary>Identifies the <see cref="SpinButtonPlacementMode"/> dependency property.</summary>
 	public static readonly DependencyProperty SpinButtonPlacementModeProperty = DependencyProperty.Register(
 		nameof(SpinButtonPlacementMode),
@@ -123,6 +139,22 @@ public class NumberBox : TextBox {
 	public double? Value {
 		get => (double?)GetValue(ValueProperty);
 		set => SetValue(ValueProperty, value);
+	}
+
+	/// <summary>
+	/// Gets or sets whether the increment step button is enabled/>.
+	/// </summary>
+	public bool IncrementEnabled {
+		get => (bool)GetValue(IncrementEnabledProperty);
+		set => SetValue(IncrementEnabledProperty, value);
+	}
+
+	/// <summary>
+	/// Gets or sets whether the decrement step button is enabled/>.
+	/// </summary>
+	public bool DecrementEnabled {
+		get => (bool)GetValue(DecrementEnabledProperty);
+		set => SetValue(DecrementEnabledProperty, value);
 	}
 
 	/// <summary>
@@ -222,9 +254,8 @@ public class NumberBox : TextBox {
 	protected override void OnKeyUp(KeyEventArgs e) {
 		base.OnKeyUp(e);
 
-		if (IsReadOnly) {
+		if (IsReadOnly)
 			return;
-		}
 
 		switch (e.Key) {
 			case Key.PageUp:
@@ -259,15 +290,12 @@ public class NumberBox : TextBox {
 		switch (parameter) {
 			case "clear":
 				OnClearButtonClick();
-
 				break;
 			case "increment":
 				StepValue(SmallChange);
-
 				break;
 			case "decrement":
 				StepValue(-SmallChange);
-
 				break;
 		}
 
@@ -278,7 +306,6 @@ public class NumberBox : TextBox {
 	/// <inheritdoc />
 	protected override void OnLostFocus(RoutedEventArgs e) {
 		base.OnLostFocus(e);
-
 		ValidateInput();
 	}
 
@@ -295,46 +322,35 @@ public class NumberBox : TextBox {
     }*/
 
 	/// <inheritdoc />
-	protected override void OnTemplateChanged(
-		System.Windows.Controls.ControlTemplate oldTemplate,
-		System.Windows.Controls.ControlTemplate newTemplate
-	) {
+	protected override void OnTemplateChanged(System.Windows.Controls.ControlTemplate oldTemplate,
+		System.Windows.Controls.ControlTemplate newTemplate) {
 		base.OnTemplateChanged(oldTemplate, newTemplate);
 
 		// If Text has been set, but Value hasn't, update Value based on Text.
-		if (string.IsNullOrEmpty(Text) && Value != null) {
+		if (string.IsNullOrEmpty(Text) && Value != null)
 			UpdateValueToText();
-		} else {
+		else
 			UpdateTextToValue();
-		}
 	}
 
 	/// <summary>
 	/// Is called when <see cref="Value"/> in this <see cref="NumberBox"/> changes.
 	/// </summary>
 	protected virtual void OnValueChanged(DependencyObject d, double? oldValue) {
-		if (_valueUpdating) {
+		if (_valueUpdating)
 			return;
-		}
 
 		_valueUpdating = true;
-
 		var newValue = Value;
-
-		if (newValue > Maximum) {
+		if (newValue > Maximum)
 			SetCurrentValue(ValueProperty, Maximum);
-		}
-
-		if (newValue < Minimum) {
+		if (newValue < Minimum)
 			SetCurrentValue(ValueProperty, Minimum);
-		}
 
-		if (!Equals(newValue, oldValue)) {
+		if (!Equals(newValue, oldValue))
 			RaiseEvent(new RoutedEventArgs(ValueChangedEvent));
-		}
 
 		UpdateTextToValue();
-
 		_valueUpdating = false;
 	}
 
@@ -343,9 +359,8 @@ public class NumberBox : TextBox {
 	/// </summary>
 	protected virtual void OnClipboardPaste(object sender, DataObjectPastingEventArgs e) {
 		// TODO: Fix clipboard
-		if (sender is not NumberBox) {
+		if (sender is not NumberBox)
 			return;
-		}
 
 		ValidateInput();
 	}
@@ -358,25 +373,27 @@ public class NumberBox : TextBox {
 
 		// Before adjusting the value, validate the contents of the textbox so we don't override it.
 		ValidateInput();
-
 		var newValue = Value ?? 0;
 
-		if (change is not null) {
+		if (change is not null)
 			newValue += change ?? 0d;
-		}
 
 		SetCurrentValue(ValueProperty, newValue);
-
 		MoveCaretToTextEnd();
 	}
 
 	private void UpdateTextToValue() {
 		var newText = string.Empty;
 
-		if (Value is not null && NumberFormatter is not null) {
+		if (Value is not null && NumberFormatter is not null)
 			newText = NumberFormatter.FormatDouble(Math.Round((double)Value, MaxDecimalPlaces));
-		}
 
+		var bb = BindingOperations.GetBindingBase(this, TextProperty);
+		if (bb.StringFormat is not null)
+			newText = string.Format(bb.StringFormat, Value);
+
+		SetCurrentValue(IncrementEnabledProperty, Value < Maximum);
+		SetCurrentValue(DecrementEnabledProperty, Value > Minimum);
 		SetCurrentValue(TextProperty, newText);
 	}
 
@@ -389,7 +406,6 @@ public class NumberBox : TextBox {
 
 		if (string.IsNullOrEmpty(text)) {
 			SetCurrentValue(ValueProperty, null);
-
 			return;
 		}
 
@@ -398,20 +414,15 @@ public class NumberBox : TextBox {
 
 		if (value is null || Equals(Value, value)) {
 			UpdateTextToValue();
-
 			return;
 		}
 
-		if (value > Maximum) {
+		if (value > Maximum)
 			value = Maximum;
-		}
-
-		if (value < Minimum) {
+		if (value < Minimum)
 			value = Minimum;
-		}
 
 		SetCurrentValue(ValueProperty, value);
-
 		UpdateTextToValue();
 	}
 

@@ -61,27 +61,18 @@ public static class ApplicationThemeManager {
 	/// <param name="applicationTheme">Theme to set.</param>
 	/// <param name="backgroundEffect">Whether the custom background effect should be applied.</param>
 	/// <param name="updateAccent">Whether the color accents should be changed.</param>
-	public static void Apply(
-		ApplicationTheme applicationTheme,
-		WindowBackdropType backgroundEffect = WindowBackdropType.Mica,
-		bool updateAccent = true
-	) {
-		if (updateAccent) {
-			ApplicationAccentColorManager.Apply(
-				ApplicationAccentColorManager.GetColorizationColor(),
-				applicationTheme,
-				false
-			);
-		}
+	public static void Apply(ApplicationTheme applicationTheme,
+							WindowBackdropType backgroundEffect = WindowBackdropType.Mica,
+							bool updateAccent = true) {
+		if (updateAccent)
+			ApplicationAccentColorManager.Apply(ApplicationAccentColorManager
+				.GetColorizationColor(), applicationTheme, false);
 
-		if (applicationTheme == ApplicationTheme.Unknown) {
+		if (applicationTheme == ApplicationTheme.Unknown)
 			return;
-		}
 
 		var appDictionaries = new ResourceDictionaryManager(LibraryNamespace);
-
 		var themeDictionaryName = "Light";
-
 		switch (applicationTheme) {
 			case ApplicationTheme.Dark:
 				themeDictionaryName = "Dark";
@@ -97,38 +88,30 @@ public static class ApplicationThemeManager {
 				break;
 		}
 
-		bool isUpdated = appDictionaries.UpdateDictionary(
-			"theme",
-			new Uri(ThemesDictionaryPath + themeDictionaryName + ".xaml", UriKind.Absolute)
-		);
+		bool isUpdated = appDictionaries.UpdateDictionary("theme",
+			new Uri(ThemesDictionaryPath + themeDictionaryName + ".xaml", UriKind.Absolute));
 
 		System.Diagnostics.Debug.WriteLine(
 			$"INFO | {typeof(ApplicationThemeManager)} tries to update theme to {themeDictionaryName} ({applicationTheme}): {isUpdated}",
 			nameof(ApplicationThemeManager)
 		);
 
-		if (!isUpdated) {
+		if (!isUpdated)
 			return;
-		}
 
 		SystemThemeManager.UpdateSystemThemeCache();
-
 		_cachedApplicationTheme = applicationTheme;
-
 		Changed?.Invoke(applicationTheme, ApplicationAccentColorManager.SystemAccent);
-
-		if (UiApplication.Current.MainWindow is Window mainWindow) {
+		if (UiApplication.Current.MainWindow is Window mainWindow)
 			WindowBackgroundManager.UpdateBackground(mainWindow, applicationTheme, backgroundEffect);
-		}
 	}
 
 	/// <summary>
 	/// Applies Resources in the <paramref name="frameworkElement"/>.
 	/// </summary>
 	public static void Apply(FrameworkElement frameworkElement) {
-		if (frameworkElement is null) {
+		if (frameworkElement is null)
 			return;
-		}
 
 		ResourceDictionary[] resourcesRemove = frameworkElement
 			.Resources.MergedDictionaries.Where(e => e.Source is not null)
@@ -148,7 +131,6 @@ public static class ApplicationThemeManager {
 				$"INFO | {typeof(ApplicationThemeManager)} Remove {resource.Source}",
 				"Wpf.Ui.Appearance"
 			);
-
 			_ = frameworkElement.Resources.MergedDictionaries.Remove(resource);
 		}
 
@@ -167,18 +149,13 @@ public static class ApplicationThemeManager {
 
 	public static void ApplySystemTheme(bool updateAccent) {
 		SystemThemeManager.UpdateSystemThemeCache();
-
 		SystemTheme systemTheme = GetSystemTheme();
-
 		ApplicationTheme themeToSet = ApplicationTheme.Light;
 
-		if (systemTheme is SystemTheme.Dark or SystemTheme.CapturedMotion or SystemTheme.Glow) {
+		if (systemTheme is SystemTheme.Dark or SystemTheme.CapturedMotion or SystemTheme.Glow)
 			themeToSet = ApplicationTheme.Dark;
-		} else if (
-			  systemTheme is SystemTheme.HC1 or SystemTheme.HC2 or SystemTheme.HCBlack or SystemTheme.HCWhite
-		  ) {
+		else if (systemTheme is SystemTheme.HC1 or SystemTheme.HC2 or SystemTheme.HCBlack or SystemTheme.HCWhite)
 			themeToSet = ApplicationTheme.HighContrast;
-		}
 
 		Apply(themeToSet, updateAccent: updateAccent);
 	}
@@ -188,10 +165,8 @@ public static class ApplicationThemeManager {
 	/// </summary>
 	/// <returns><see cref="ApplicationTheme.Unknown"/> if something goes wrong.</returns>
 	public static ApplicationTheme GetAppTheme() {
-		if (_cachedApplicationTheme == ApplicationTheme.Unknown) {
+		if (_cachedApplicationTheme == ApplicationTheme.Unknown)
 			FetchApplicationTheme();
-		}
-
 		return _cachedApplicationTheme;
 	}
 
@@ -227,9 +202,8 @@ public static class ApplicationThemeManager {
 		ApplicationTheme appApplicationTheme = GetAppTheme();
 		SystemTheme sysTheme = GetSystemTheme();
 
-		if (appApplicationTheme != ApplicationTheme.Dark) {
+		if (appApplicationTheme != ApplicationTheme.Dark)
 			return false;
-		}
 
 		return sysTheme is SystemTheme.Dark or SystemTheme.CapturedMotion or SystemTheme.Glow;
 	}
@@ -241,9 +215,8 @@ public static class ApplicationThemeManager {
 		ApplicationTheme appApplicationTheme = GetAppTheme();
 		SystemTheme sysTheme = GetSystemTheme();
 
-		if (appApplicationTheme != ApplicationTheme.Light) {
+		if (appApplicationTheme != ApplicationTheme.Light)
 			return false;
-		}
 
 		return sysTheme is SystemTheme.Light or SystemTheme.Flow or SystemTheme.Sunrise;
 	}
@@ -255,22 +228,15 @@ public static class ApplicationThemeManager {
 		ResourceDictionaryManager appDictionaries = new(LibraryNamespace);
 		ResourceDictionary? themeDictionary = appDictionaries.GetDictionary("theme");
 
-		if (themeDictionary == null) {
+		if (themeDictionary is null)
 			return;
-		}
 
 		string themeUri = themeDictionary.Source.ToString().Trim().ToLower();
-
-		if (themeUri.Contains("light")) {
-			_cachedApplicationTheme = ApplicationTheme.Light;
-		}
-
-		if (themeUri.Contains("dark")) {
-			_cachedApplicationTheme = ApplicationTheme.Dark;
-		}
-
-		if (themeUri.Contains("highcontrast")) {
-			_cachedApplicationTheme = ApplicationTheme.HighContrast;
-		}
+		_cachedApplicationTheme = themeUri switch {
+			_ when themeUri.Contains("light") => ApplicationTheme.Light,
+			_ when themeUri.Contains("dark") => ApplicationTheme.Dark,
+			_ when themeUri.Contains("highcontrast") => ApplicationTheme.HighContrast,
+			_ => ApplicationTheme.Unknown
+		} ;
 	}
 }
