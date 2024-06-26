@@ -50,21 +50,17 @@ public abstract class IconElement : FrameworkElement {
 	protected virtual void OnForegroundChanged(DependencyPropertyChangedEventArgs args) { }
 
 	private void EnsureLayoutRoot() {
-		if (_layoutRoot != null) {
+		if (_layoutRoot is not null)
 			return;
-		}
 
 		_layoutRoot = new Grid { Background = Brushes.Transparent, SnapsToDevicePixels = true, };
-
 		_ = _layoutRoot.Children.Add(InitializeChildren());
-
 		AddVisualChild(_layoutRoot);
 	}
 
 	protected override Visual GetVisualChild(int index) {
-		if (index != 0) {
+		if (index != 0)
 			throw new ArgumentOutOfRangeException(nameof(index), "IconElement should have only 1 child");
-		}
 
 		EnsureLayoutRoot();
 		return _layoutRoot!;
@@ -72,14 +68,12 @@ public abstract class IconElement : FrameworkElement {
 
 	protected override Size MeasureOverride(Size availableSize) {
 		EnsureLayoutRoot();
-
 		_layoutRoot!.Measure(availableSize);
 		return _layoutRoot.DesiredSize;
 	}
 
 	protected override Size ArrangeOverride(Size finalSize) {
 		EnsureLayoutRoot();
-
 		_layoutRoot!.Arrange(new Rect(default, finalSize));
 		return finalSize;
 	}
@@ -94,8 +88,7 @@ public abstract class IconElement : FrameworkElement {
 		return baseValue switch {
 			IconSourceElement iconSourceElement => iconSourceElement.CreateIconElement(),
 			IconElement or null => baseValue,
-			_
-				=> throw new ArgumentException(
+			_ => throw new ArgumentException(
 					message: $"Expected either '{typeof(IconSourceElement)}' or '{typeof(IconElement)}' but got '{baseValue.GetType()}'.",
 					paramName: nameof(baseValue)
 				)

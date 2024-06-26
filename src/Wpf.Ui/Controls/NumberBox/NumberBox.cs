@@ -389,7 +389,7 @@ public class NumberBox : TextBox {
 			newText = NumberFormatter.FormatDouble(Math.Round((double)Value, MaxDecimalPlaces));
 
 		var bb = BindingOperations.GetBindingBase(this, TextProperty);
-		if (bb.StringFormat is not null)
+		if (bb is not null && bb.StringFormat is not null)
 			newText = string.Format(bb.StringFormat, Value);
 
 		SetCurrentValue(IncrementEnabledProperty, Value < Maximum);

@@ -9,15 +9,14 @@ namespace Wpf.Ui.Controls;
 /// <summary>
 /// Notifies class about being navigated.
 /// </summary>
-public interface INavigationAware
-{
-    /// <summary>
-    /// Method triggered when the class is navigated.
-    /// </summary>
-    void OnNavigatedTo();
+public interface INavigationAware {
+	/// <summary>
+	/// Method triggered when the class is navigated.
+	/// </summary>
+	void OnNavigatedTo();
 
-    /// <summary>
-    /// Method triggered when the navigation leaves the current class.
-    /// </summary>
-    void OnNavigatedFrom();
+	/// <summary>
+	/// Method triggered when the navigation leaves the current class.
+	/// </summary>
+	void OnNavigatedFrom();
 }
