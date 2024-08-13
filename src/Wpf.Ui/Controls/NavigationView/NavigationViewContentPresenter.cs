@@ -92,21 +92,16 @@ public class NavigationViewContentPresenter : Frame {
 
 	public NavigationViewContentPresenter() {
 		Navigating += static (sender, eventArgs) => {
-			if (eventArgs.Content is null) {
+			if (eventArgs.Content is null)
 				return;
-			}
-
 			var self = (NavigationViewContentPresenter)sender;
 			self.OnNavigating(eventArgs);
 		};
 
 		Navigated += static (sender, eventArgs) => {
 			var self = (NavigationViewContentPresenter)sender;
-
-			if (eventArgs.Content is null) {
+			if (eventArgs.Content is null)
 				return;
-			}
-
 			self.OnNavigated(eventArgs);
 		};
 	}
@@ -116,36 +111,27 @@ public class NavigationViewContentPresenter : Frame {
 
 		// REVIEW: I didn't understand something, but why is it necessary?
 		Unloaded += static (sender, _) => {
-			if (sender is NavigationViewContentPresenter navigator) {
+			if (sender is NavigationViewContentPresenter navigator)
 				NotifyContentAboutNavigatingFrom(navigator.Content);
-			}
 		};
 	}
 
 	protected override void OnMouseDown(MouseButtonEventArgs e) {
-		if (e.ChangedButton is MouseButton.XButton1 or MouseButton.XButton2) {
+		if (e.ChangedButton is MouseButton.XButton1 or MouseButton.XButton2)
 			e.Handled = true;
-		}
-
 		base.OnMouseDown(e);
 	}
 
 	protected virtual void OnNavigating(System.Windows.Navigation.NavigatingCancelEventArgs eventArgs) {
+		if (eventArgs.Navigator is NavigationViewContentPresenter navigator)
+			NotifyContentAboutNavigatingFrom(navigator.Content);
 		NotifyContentAboutNavigatingTo(eventArgs.Content);
-
-		if (eventArgs.Navigator is not NavigationViewContentPresenter navigator) {
-			return;
-		}
-
-		NotifyContentAboutNavigatingFrom(navigator.Content);
 	}
 
 	protected virtual void OnNavigated(NavigationEventArgs eventArgs) {
 		ApplyTransitionEffectToNavigatedPage(eventArgs.Content);
-
-		if (eventArgs.Content is not DependencyObject dependencyObject) {
+		if (eventArgs.Content is not DependencyObject dependencyObject)
 			return;
-		}
 
 		SetCurrentValue(
 			IsDynamicScrollViewerEnabledProperty,
@@ -154,46 +140,36 @@ public class NavigationViewContentPresenter : Frame {
 	}
 
 	private void ApplyTransitionEffectToNavigatedPage(object content) {
-		if (TransitionDuration < 1) {
+		if (TransitionDuration < 1)
 			return;
-		}
-
 		_ = TransitionAnimationProvider.ApplyTransition(content, Transition, TransitionDuration);
 	}
 
 	private static void NotifyContentAboutNavigatingTo(object content) {
-		if (content is INavigationAware navigationAwareNavigationContent) {
+		if (content is INavigationAware navigationAwareNavigationContent)
 			navigationAwareNavigationContent.OnNavigatedTo();
-		}
 
-		if (
-			content is INavigableView<object> {
+		if (content is INavigableView<object> {
 				ViewModel: INavigationAware navigationAwareNavigableViewViewModel
-			}
-		) {
+			}) {
 			navigationAwareNavigableViewViewModel.OnNavigatedTo();
 		}
 
-		if (content is FrameworkElement { DataContext: INavigationAware navigationAwareCurrentContent }) {
+		if (content is FrameworkElement { DataContext: INavigationAware navigationAwareCurrentContent })
 			navigationAwareCurrentContent.OnNavigatedTo();
-		}
 	}
 
 	private static void NotifyContentAboutNavigatingFrom(object content) {
-		if (content is INavigationAware navigationAwareNavigationContent) {
+		if (content is INavigationAware navigationAwareNavigationContent)
 			navigationAwareNavigationContent.OnNavigatedFrom();
-		}
 
-		if (
-			content is INavigableView<object> {
+		if (content is INavigableView<object> {
 				ViewModel: INavigationAware navigationAwareNavigableViewViewModel
-			}
-		) {
+			}) {
 			navigationAwareNavigableViewViewModel.OnNavigatedFrom();
 		}
 
-		if (content is FrameworkElement { DataContext: INavigationAware navigationAwareCurrentContent }) {
+		if (content is FrameworkElement { DataContext: INavigationAware navigationAwareCurrentContent })
 			navigationAwareCurrentContent.OnNavigatedFrom();
-		}
 	}
 }

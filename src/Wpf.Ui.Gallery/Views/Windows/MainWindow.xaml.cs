@@ -76,4 +76,8 @@ public partial class MainWindow : IWindow {
 
 		_isUserClosedPane = true;
 	}
+
+	private void OnNavigationSelectionChanged(NavigationView sender, RoutedEventArgs args) {
+
+	}
 }
