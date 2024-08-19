@@ -10,6 +10,8 @@
 // TODO: Disable expression by default
 // TODO: Lock to digit characters only by property
 
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -243,8 +245,7 @@ public class NumberBox : TextBox {
 		MinLinesProperty.OverrideMetadata(typeof(NumberBox), new FrameworkPropertyMetadata(1));
 	}
 
-	public NumberBox()
-		: base() {
+	public NumberBox() : base() {
 		NumberFormatter ??= GetRegionalSettingsAwareDecimalFormatter();
 
 		DataObject.AddPastingHandler(this, OnClipboardPaste);
@@ -276,6 +277,9 @@ public class NumberBox : TextBox {
 					MoveCaretToTextEnd();
 				}
 
+				FocusManager.SetFocusedElement(FocusManager.GetFocusScope(this), null);
+				FocusManager.SetFocusedElement(FocusManager.GetFocusScope(this), this);
+				//Keyboard.ClearFocus();
 				break;
 		}
 	}
@@ -305,8 +309,20 @@ public class NumberBox : TextBox {
 
 	/// <inheritdoc />
 	protected override void OnLostFocus(RoutedEventArgs e) {
-		base.OnLostFocus(e);
-		ValidateInput();
+		try {
+			var text = new Regex(@"[^\d]").Replace(Text.Trim(), string.Empty);
+			SetCurrentValue(TextProperty, text);
+			base.OnLostFocus(e);
+			ValidateInput();
+		} catch (FormatException fe) {
+		}
+	}
+
+	protected override void OnGotFocus(RoutedEventArgs e) {
+		base.OnGotFocus(e);
+
+		SelectionStart = 0;
+		SelectionLength = Text.Length;
 	}
 
 	/*/// <inheritdoc />
@@ -322,8 +338,8 @@ public class NumberBox : TextBox {
     }*/
 
 	/// <inheritdoc />
-	protected override void OnTemplateChanged(System.Windows.Controls.ControlTemplate oldTemplate,
-		System.Windows.Controls.ControlTemplate newTemplate) {
+	protected override void OnTemplateChanged(ControlTemplate oldTemplate,
+		ControlTemplate newTemplate) {
 		base.OnTemplateChanged(oldTemplate, newTemplate);
 
 		// If Text has been set, but Value hasn't, update Value based on Text.
@@ -402,7 +418,7 @@ public class NumberBox : TextBox {
 	}
 
 	private void ValidateInput() {
-		var text = Text.Trim();
+		var text = new Regex(@"[^\d]").Replace(Text.Trim(), string.Empty);
 
 		if (string.IsNullOrEmpty(text)) {
 			SetCurrentValue(ValueProperty, null);
