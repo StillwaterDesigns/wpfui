@@ -247,14 +247,12 @@ public class NumberBox : TextBox {
 
 	public NumberBox() : base() {
 		NumberFormatter ??= GetRegionalSettingsAwareDecimalFormatter();
-
 		DataObject.AddPastingHandler(this, OnClipboardPaste);
 	}
 
 	/// <inheritdoc />
 	protected override void OnKeyUp(KeyEventArgs e) {
 		base.OnKeyUp(e);
-
 		if (IsReadOnly)
 			return;
 
@@ -310,8 +308,7 @@ public class NumberBox : TextBox {
 	/// <inheritdoc />
 	protected override void OnLostFocus(RoutedEventArgs e) {
 		try {
-			var text = new Regex(@"[^\d]").Replace(Text.Trim(), string.Empty);
-			SetCurrentValue(TextProperty, text);
+			SetCurrentValue(TextProperty, RemoveStringFormatting(Text));
 			base.OnLostFocus(e);
 			ValidateInput();
 		} catch (FormatException fe) {
@@ -320,7 +317,6 @@ public class NumberBox : TextBox {
 
 	protected override void OnGotFocus(RoutedEventArgs e) {
 		base.OnGotFocus(e);
-
 		SelectionStart = 0;
 		SelectionLength = Text.Length;
 	}
@@ -390,7 +386,6 @@ public class NumberBox : TextBox {
 		// Before adjusting the value, validate the contents of the textbox so we don't override it.
 		ValidateInput();
 		var newValue = Value ?? 0;
-
 		if (change is not null)
 			newValue += change ?? 0d;
 
@@ -400,7 +395,6 @@ public class NumberBox : TextBox {
 
 	private void UpdateTextToValue() {
 		var newText = string.Empty;
-
 		if (Value is not null && NumberFormatter is not null)
 			newText = NumberFormatter.FormatDouble(Math.Round((double)Value, MaxDecimalPlaces));
 
@@ -418,8 +412,7 @@ public class NumberBox : TextBox {
 	}
 
 	private void ValidateInput() {
-		var text = new Regex(@"[^\d]").Replace(Text.Trim(), string.Empty);
-
+		var text = RemoveStringFormatting(Text);
 		if (string.IsNullOrEmpty(text)) {
 			SetCurrentValue(ValueProperty, null);
 			return;
@@ -427,17 +420,13 @@ public class NumberBox : TextBox {
 
 		var numberParser = NumberFormatter as INumberParser;
 		var value = numberParser!.ParseDouble(text);
-
 		if (value is null || Equals(Value, value)) {
 			UpdateTextToValue();
 			return;
 		}
 
-		if (value > Maximum)
-			value = Maximum;
-		if (value < Minimum)
-			value = Minimum;
-
+		value = Math.Min(value.Value, Maximum);
+		value = Math.Max(value.Value, Minimum);
 		SetCurrentValue(ValueProperty, value);
 		UpdateTextToValue();
 	}
@@ -446,15 +435,18 @@ public class NumberBox : TextBox {
 		CaretIndex = Text.Length;
 	}
 
+	private string RemoveStringFormatting(string inString) {
+		var removeNonDigits = new Regex(@"[^\d.]");
+		return removeNonDigits.Replace(inString.Trim(), string.Empty);
+	}
+
 	private static INumberFormatter GetRegionalSettingsAwareDecimalFormatter() {
 		return new ValidateNumberFormatter();
 	}
 
 	private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-		if (d is not NumberBox numberBox) {
+		if (d is not NumberBox numberBox)
 			return;
-		}
-
 		numberBox.OnValueChanged(d, (double?)e.OldValue);
 	}
 
