@@ -436,8 +436,9 @@ public class NumberBox : TextBox {
 	}
 
 	private string RemoveStringFormatting(string inString) {
-		var removeNonDigits = new Regex(@"/^\d+(\.\d{0,2})?$/");
-		return removeNonDigits.Replace(inString.Trim(), string.Empty);
+		var removeNonDigits = new Regex(@"(?:^|[^w.,])(\d[\d,.]+)(?=\W|$)");
+		var regexStr = removeNonDigits.Match(inString).Value;
+		return regexStr;
 	}
 
 	private static INumberFormatter GetRegionalSettingsAwareDecimalFormatter() {
