@@ -12,6 +12,8 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
+using Wpf.Ui.Appearance;
+
 // ReSharper disable once CheckNamespace
 namespace Wpf.Ui.Controls;
 
@@ -76,6 +78,13 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 		typeof(bool),
 		typeof(NavigationViewItem),
 		new PropertyMetadata(false)
+	);
+
+	public static readonly DependencyProperty MenuItemsBackgroundProperty = DependencyProperty.Register(
+		nameof(MenuItemsBackground),
+		typeof(Brush),
+		typeof(NavigationViewItem),
+		new PropertyMetadata(ApplicationThemeColorManager.ApplicationBackgroundColor.Brush)
 	);
 
 	/// <summary>Identifies the <see cref="Icon"/> dependency property.</summary>
@@ -161,6 +170,13 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 	public bool IsPaneOpen {
 		get => (bool)GetValue(IsPaneOpenProperty);
 		set => SetValue(IsPaneOpenProperty, value);
+	}
+
+	/// <inheritdoc />
+	[Bindable(true)]
+	public Brush? MenuItemsBackground {
+		get => (Brush?)GetValue(MenuItemsBackgroundProperty);
+		set => SetValue(MenuItemsBackgroundProperty, value);
 	}
 
 	/// <inheritdoc />

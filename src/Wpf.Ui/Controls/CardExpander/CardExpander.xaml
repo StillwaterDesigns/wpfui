@@ -117,51 +117,57 @@
                         <Border
                             x:Name="ToggleButtonBorder"
                             Grid.Row="0"
+                            BorderThickness="1"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="1"
                             CornerRadius="{TemplateBinding CornerRadius}">
-                            <ToggleButton
-                                x:Name="ExpanderToggleButton"
-                                Margin="0"
-                                Padding="{TemplateBinding Padding}"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                HorizontalContentAlignment="Stretch"
-                                VerticalContentAlignment="Center"
-                                FontSize="{TemplateBinding FontSize}"
-                                Foreground="{TemplateBinding Foreground}"
-                                IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                IsEnabled="{TemplateBinding IsEnabled}"
-                                OverridesDefaultStyle="True"
-                                Template="{StaticResource DefaultUiCardExpanderToggleButtonStyle}">
-                                <ToggleButton.Content>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
+							<Grid>
+								<Grid Opacity="0.85" Background="{TemplateBinding BackgroundTint}"/>
+								<ToggleButton
+                                    x:Name="ExpanderToggleButton"
+                                    Margin="0"
+                                    Padding="{TemplateBinding Padding}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Center"
+									FontWeight="{TemplateBinding FontWeight}"
+                                    FontSize="{TemplateBinding FontSize}"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                    IsEnabled="{TemplateBinding IsEnabled}"
+                                    OverridesDefaultStyle="True"
+                                    Template="{StaticResource DefaultUiCardExpanderToggleButtonStyle}">
+									<ToggleButton.Content>
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="Auto" />
+												<ColumnDefinition Width="*" />
+											</Grid.ColumnDefinitions>
 
-                                        <ContentControl
-                                            x:Name="ControlIcon"
-                                            Grid.Column="0"
-                                            Margin="{StaticResource CardExpanderIconMargin}"
-                                            VerticalAlignment="Center"
-                                            Content="{TemplateBinding Icon}"
-                                            Focusable="False"
-                                            FontSize="{StaticResource CardExpanderIconSize}"
-                                            Foreground="{TemplateBinding Foreground}"
-                                            KeyboardNavigation.IsTabStop="False" />
+											<ContentControl
+                                                x:Name="ControlIcon"
+                                                Grid.Column="0"
+                                                Margin="{StaticResource CardExpanderIconMargin}"
+                                                VerticalAlignment="Center"
+                                                Content="{TemplateBinding Icon}"
+                                                Focusable="False"
+                                                FontSize="{StaticResource CardExpanderIconSize}"
+                                                Foreground="{TemplateBinding Foreground}"
+                                                KeyboardNavigation.IsTabStop="False" />
 
-                                        <ContentPresenter
-                                            x:Name="HeaderContentPresenter"
-                                            Grid.Column="1"
-                                            Content="{TemplateBinding Header}"
-                                            TextElement.Foreground="{TemplateBinding Foreground}" />
-                                    </Grid>
-                                </ToggleButton.Content>
-                            </ToggleButton>
-                        </Border>
+											<ContentPresenter
+                                                x:Name="HeaderContentPresenter"
+                                                Grid.Column="1"
+                                                Content="{TemplateBinding Header}"
+                                                TextElement.FontSize="{TemplateBinding FontSize}"
+                                                TextElement.FontWeight="{TemplateBinding FontWeight}"
+                                                TextElement.Foreground="{TemplateBinding Foreground}" />
+										</Grid>
+									</ToggleButton.Content>
+								</ToggleButton>
+							</Grid>
+						</Border>
 
                         <!--  Collapsed content to expand  -->
                         <Grid Grid.Row="1" ClipToBounds="True">

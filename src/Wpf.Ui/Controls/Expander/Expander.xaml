@@ -116,7 +116,8 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="1"
-                            CornerRadius="{TemplateBinding Border.CornerRadius}">
+                            CornerRadius="{TemplateBinding Border.CornerRadius}"
+							OpacityMask="{TemplateBinding OpacityMask}">
                             <ToggleButton
                                 x:Name="ExpanderToggleButton"
                                 Margin="0"

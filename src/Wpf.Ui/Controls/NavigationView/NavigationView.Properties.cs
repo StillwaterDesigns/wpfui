@@ -25,6 +25,14 @@ public partial class NavigationView {
 		new FrameworkPropertyMetadata(false)
 	);
 
+	/// <summary>Identifies the <see cref="NavigationPaneBackgroundBrush"/> dependency property.</summary>
+	public static readonly DependencyProperty NavigationPaneBackgroundBrushProperty = DependencyProperty.Register(
+		nameof(NavigationPaneBackgroundBrush),
+		typeof(Brush),
+		typeof(NavigationView),
+		new FrameworkPropertyMetadata(null)
+	);
+
 	/// <summary>Identifies the <see cref="Header"/> dependency property.</summary>
 	public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
 		nameof(Header),
@@ -250,7 +258,11 @@ public partial class NavigationView {
 		get => (bool)GetValue(EnableDebugMessagesProperty);
 		set => SetValue(EnableDebugMessagesProperty, value);
 	}
-
+	public Brush? NavigationPaneBackgroundBrush {
+		get => (Brush?)GetValue(NavigationPaneBackgroundBrushProperty);
+		set => SetValue(NavigationPaneBackgroundBrushProperty, value);
+	}
+	
 	/// <inheritdoc/>
 	public object? Header {
 		get => GetValue(HeaderProperty);
@@ -420,13 +432,17 @@ public partial class NavigationView {
 		if (!ReferenceEquals(sender, collection)) {
 			switch (e.Action) {
 				case NotifyCollectionChangedAction.Add:
-					foreach (var item in e.NewItems)
-						collection.Add(item);
+					if (e.NewItems is not null) {
+						foreach (var item in e.NewItems)
+							collection.Add(item);
+					}
 					break;
 				case NotifyCollectionChangedAction.Remove:
-					foreach (var item in e.OldItems)
-						if (!e.NewItems.Contains(item))
-							collection.Remove(item);
+					if (e.OldItems is not null && e.NewItems is not null) {
+						foreach (var item in e.OldItems)
+							if (!e.NewItems.Contains(item))
+								collection.Remove(item);
+					}
 					break;
 				case NotifyCollectionChangedAction.Move:
 					var moveItem = MenuItems[e.OldStartingIndex];
@@ -434,8 +450,10 @@ public partial class NavigationView {
 					collection.Insert(e.NewStartingIndex, moveItem);
 					break;
 				case NotifyCollectionChangedAction.Replace:
-					collection.RemoveAt(e.OldStartingIndex);
-					collection.Insert(e.OldStartingIndex, e.NewItems[0]);
+					if (e.NewItems is not null) {
+						collection.RemoveAt(e.OldStartingIndex);
+						collection.Insert(e.OldStartingIndex, e.NewItems[0]);
+					}
 					break;
 				case NotifyCollectionChangedAction.Reset:
 					collection.Clear();

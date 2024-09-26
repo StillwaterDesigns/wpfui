@@ -5,7 +5,9 @@
 
     <!--  NavigationViewItem core style  -->
 
-    <Style x:Key="NavigationViewItemDefaultStyle" TargetType="{x:Type controls:NavigationViewItem}">
+	<SolidColorBrush x:Key="SemiTransparentBackgroundBrush" Color="{DynamicResource ApplicationBackgroundColor}" Opacity="0.75" />
+
+	<Style x:Key="NavigationViewItemDefaultStyle" TargetType="{x:Type controls:NavigationViewItem}">
         <!--  Universal WPF UI focus  -->
         <Setter Property="FocusVisualStyle" Value="{DynamicResource DefaultControlFocusVisualStyle}" />
         <!--  Universal WPF UI focus  -->
@@ -15,7 +17,8 @@
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="Background" Value="{DynamicResource NavigationViewItemBackground}" />
+		<Setter Property="MenuItemsBackground" Value="{DynamicResource SemiTransparentBackgroundBrush}"/>
+		<Setter Property="Background" Value="{DynamicResource NavigationViewItemBackground}" />
         <Setter Property="Foreground" Value="{DynamicResource NavigationViewItemForeground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource NavigationViewItemBorderBrush}" />
         <Setter Property="KeyboardNavigation.IsTabStop" Value="True" />

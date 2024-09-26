@@ -35,6 +35,8 @@ public enum ThemeResource {
 	// Background
 	ApplicationBackgroundColor,
 	ApplicationBackgroundBrush,
+	ApplicationBackgroundSemiTransparentColor,
+	ApplicationBackgroundSemiTransparentBrush,
 
 	// Focus
 	KeyboardFocusBorderColor,

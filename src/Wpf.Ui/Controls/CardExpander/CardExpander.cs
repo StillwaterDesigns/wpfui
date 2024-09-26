@@ -38,10 +38,30 @@ public class CardExpander : System.Windows.Controls.Expander
         )
     );
 
-    /// <summary>
-    /// Gets or sets displayed <see cref="IconElement"/>.
-    /// </summary>
-    [Bindable(true)]
+	/// <summary>Identifies the <see cref="HeaderOpacityMask"/> dependency property.</summary>
+	public static readonly DependencyProperty HeaderOpacityMaskProperty = DependencyProperty.Register(
+		nameof(HeaderOpacityMask),
+		typeof(Brush),
+		typeof(CardExpander),
+		new FrameworkPropertyMetadata(
+			default(Brush)
+		)
+	);
+
+	/// <summary>Identifies the <see cref="BackgroundTint"/> dependency property.</summary>
+	public static readonly DependencyProperty BackgroundTintProperty = DependencyProperty.Register(
+		nameof(BackgroundTint),
+		typeof(Brush),
+		typeof(CardExpander),
+		new FrameworkPropertyMetadata(
+			default(Brush)
+		)
+	);
+
+	/// <summary>
+	/// Gets or sets displayed <see cref="IconElement"/>.
+	/// </summary>
+	[Bindable(true)]
     [Category("Appearance")]
     public IconElement? Icon
     {
@@ -69,5 +89,23 @@ public class CardExpander : System.Windows.Controls.Expander
     {
         get { return (Thickness)GetValue(ContentPaddingProperty); }
         set { SetValue(ContentPaddingProperty, value); }
-    }
+	}
+
+	/// <summary>
+	/// Gets or sets header opacity mask
+	/// </summary>
+	[Bindable(true)]
+	public Brush? HeaderOpacityMask {
+		get => (Brush?)GetValue(HeaderOpacityMaskProperty);
+		set => SetValue(HeaderOpacityMaskProperty, value);
+	}
+
+	/// <summary>
+	/// Gets or sets header background tint
+	/// </summary>
+	[Bindable(true)]
+	public Brush? BackgroundTint {
+		get => (Brush?)GetValue(BackgroundTintProperty);
+		set => SetValue(BackgroundTintProperty, value);
+	}
 }

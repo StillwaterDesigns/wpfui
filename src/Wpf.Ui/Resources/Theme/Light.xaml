@@ -19,7 +19,7 @@
     <Color x:Key="ApplicationBackgroundColor">#FFFAFAFA</Color>
     <SolidColorBrush x:Key="ApplicationBackgroundBrush" Color="{StaticResource ApplicationBackgroundColor}" />
 
-    <Color x:Key="KeyboardFocusBorderColor">#BE000000</Color>
+	<Color x:Key="KeyboardFocusBorderColor">#BE000000</Color>
     <SolidColorBrush x:Key="KeyboardFocusBorderColorBrush" Color="{StaticResource KeyboardFocusBorderColor}" />
 
     <!--  Colors  -->

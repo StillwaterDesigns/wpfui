@@ -75,7 +75,7 @@
                             Content="{TemplateBinding Content}"
                             ContentTemplate="{Binding Path=ItemTemplate, Mode=OneTime, RelativeSource={RelativeSource AncestorType={x:Type controls:BreadcrumbBar}}}"
                             ContentTemplateSelector="{Binding Path=ItemTemplateSelector, Mode=OneTime, RelativeSource={RelativeSource AncestorType={x:Type controls:BreadcrumbBar}}}"
-                            FontSize="{TemplateBinding FontSize}"
+                            
                             FontWeight="{TemplateBinding FontWeight}"
                             Style="{StaticResource DefaultUiBreadcrumbButtonStyle}" />
 

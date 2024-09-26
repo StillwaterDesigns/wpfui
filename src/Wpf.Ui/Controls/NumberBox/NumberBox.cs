@@ -307,12 +307,12 @@ public class NumberBox : TextBox {
 
 	/// <inheritdoc />
 	protected override void OnLostFocus(RoutedEventArgs e) {
-		try {
-			SetCurrentValue(TextProperty, RemoveStringFormatting(Text));
+		//try {
+			SetCurrentValue(TextProperty, Text);
 			base.OnLostFocus(e);
 			ValidateInput();
-		} catch (FormatException fe) {
-		}
+		//} catch (FormatException fe) {
+		//}
 	}
 
 	protected override void OnGotFocus(RoutedEventArgs e) {
@@ -401,10 +401,11 @@ public class NumberBox : TextBox {
 		var bb = BindingOperations.GetBindingBase(this, TextProperty);
 		if (bb is not null && bb.StringFormat is not null)
 			newText = string.Format(bb.StringFormat, Value);
-
-		SetCurrentValue(IncrementEnabledProperty, Value < Maximum);
-		SetCurrentValue(DecrementEnabledProperty, Value > Minimum);
-		SetCurrentValue(TextProperty, newText);
+		if (newText != Text) {
+			SetCurrentValue(IncrementEnabledProperty, Value < Maximum);
+			SetCurrentValue(DecrementEnabledProperty, Value > Minimum);
+			SetCurrentValue(TextProperty, newText);
+		}
 	}
 
 	private void UpdateValueToText() {

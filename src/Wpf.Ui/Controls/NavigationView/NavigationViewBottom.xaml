@@ -119,7 +119,7 @@
 
     <ControlTemplate x:Key="BottomCompactNavigationViewItemTemplate" TargetType="{x:Type controls:NavigationViewItem}">
         <Border x:Name="MainBorder">
-            <Grid>
+			<Grid Background="{TemplateBinding MenuItemsBackground}">
                 <Grid
                     Margin="12,8,12,8"
                     HorizontalAlignment="Stretch"

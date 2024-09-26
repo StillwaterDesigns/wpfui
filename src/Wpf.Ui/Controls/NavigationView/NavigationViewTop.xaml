@@ -120,7 +120,7 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="TopCompactNavigationViewItemTemplate" TargetType="{x:Type controls:NavigationViewItem}">
-        <Grid>
+		<Grid Background="{TemplateBinding MenuItemsBackground}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />

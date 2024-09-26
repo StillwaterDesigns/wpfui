@@ -7,7 +7,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <ControlTemplate x:Key="LeftMinimalCompactNavigationViewItemTemplate" TargetType="{x:Type controls:NavigationViewItem}">
-        <Grid>
+		<Grid Background="{TemplateBinding MenuItemsBackground}" Margin="2 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
