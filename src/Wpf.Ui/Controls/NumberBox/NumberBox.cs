@@ -307,12 +307,12 @@ public class NumberBox : TextBox {
 
 	/// <inheritdoc />
 	protected override void OnLostFocus(RoutedEventArgs e) {
-		//try {
-			SetCurrentValue(TextProperty, Text);
+		try {
+			SetCurrentValue(TextProperty, RemoveStringFormatting(Text));
 			base.OnLostFocus(e);
 			ValidateInput();
-		//} catch (FormatException fe) {
-		//}
+		} catch (FormatException fe) {
+		}
 	}
 
 	protected override void OnGotFocus(RoutedEventArgs e) {
@@ -426,8 +426,7 @@ public class NumberBox : TextBox {
 			return;
 		}
 
-		value = Math.Min(value.Value, Maximum);
-		value = Math.Max(value.Value, Minimum);
+		value = Math.Max(Math.Min(value.Value, Maximum), Minimum);
 		SetCurrentValue(ValueProperty, value);
 		UpdateTextToValue();
 	}
@@ -437,9 +436,17 @@ public class NumberBox : TextBox {
 	}
 
 	private string RemoveStringFormatting(string inString) {
-		var removeNonDigits = new Regex(@"(?:^|[^w.,])(\d[\d,.]+)(?=\W|$)");
-		var regexStr = removeNonDigits.Match(inString).Value;
-		return regexStr;
+		var regex101IntOrFloat = new Regex(@"[^\d,.]+|[,.]\D|\D[,.]|\d+[,.]\d{3}|\d{3,}(?:[,.]\d+)?"); // https://regex101.com/library/u1ITKd?page=326
+		var regexIntOrDecimal = new Regex(@"(?:^|[^w.,])(\d[\d,.]+)(?=\W|$)");
+		var regexMatch = regexIntOrDecimal.Match(inString).Value;
+		var regexMatches = regexIntOrDecimal.Matches(inString, 0);
+		var regexReplace = regexIntOrDecimal.Replace(inString, string.Empty);
+		var resultStr = regexMatches.Count > 0 ? regexMatch : regexReplace;
+		if(string.IsNullOrEmpty(resultStr))
+			return resultStr;
+		var numValue = double.Parse(resultStr);
+		numValue = Math.Max(Math.Min(numValue, Maximum), Minimum);
+		return $"{numValue}";
 	}
 
 	private static INumberFormatter GetRegionalSettingsAwareDecimalFormatter() {

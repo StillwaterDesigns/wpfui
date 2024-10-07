@@ -48,6 +48,7 @@
                 <controls:SymbolIcon
                     x:Name="ControlChevronIcon"
                     FontSize="{StaticResource CardExpanderChevronSize}"
+					FontWeight="ExtraBold"
                     Foreground="{TemplateBinding Foreground}"
                     Symbol="ChevronDown24" />
             </Grid>
@@ -95,12 +96,13 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
-        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="FontWeight" Value="DemiBold" />
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
         <Setter Property="IsExpanded" Value="False" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="Template">
+		<Setter Property="ToggleButtonTemplate" Value="{DynamicResource DefaultExpanderToggleButtonStyle}"/>
+		<Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:CardExpander}">
                     <ControlTemplate.Resources>
@@ -137,7 +139,7 @@
                                     IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                     IsEnabled="{TemplateBinding IsEnabled}"
                                     OverridesDefaultStyle="True"
-                                    Template="{StaticResource DefaultUiCardExpanderToggleButtonStyle}">
+                                    Template="{TemplateBinding ToggleButtonTemplate}">
 									<ToggleButton.Content>
 										<Grid>
 											<Grid.ColumnDefinitions>
@@ -154,7 +156,8 @@
                                                 Focusable="False"
                                                 FontSize="{StaticResource CardExpanderIconSize}"
                                                 Foreground="{TemplateBinding Foreground}"
-                                                KeyboardNavigation.IsTabStop="False" />
+												FontWeight="{TemplateBinding FontWeight}"
+                                                KeyboardNavigation.IsTabStop="False"/>
 
 											<ContentPresenter
                                                 x:Name="HeaderContentPresenter"

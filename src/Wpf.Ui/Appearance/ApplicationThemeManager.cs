@@ -81,9 +81,11 @@ public static class ApplicationThemeManager {
 				themeDictionaryName = GetSystemTheme() switch {
 					SystemTheme.HC1 => "HC1",
 					SystemTheme.HC2 => "HC2",
+					SystemTheme.Dark or
 					SystemTheme.HCBlack => "HCBlack",
-					SystemTheme.HCWhite => "HCBlack",
-					_ => "HCWhite",
+					SystemTheme.Light or
+					SystemTheme.HCWhite => "HCWhite",
+					_ => "HCBlack",
 				};
 				break;
 		}

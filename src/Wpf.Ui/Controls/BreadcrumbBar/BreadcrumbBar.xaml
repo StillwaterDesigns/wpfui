@@ -75,10 +75,8 @@
                             Content="{TemplateBinding Content}"
                             ContentTemplate="{Binding Path=ItemTemplate, Mode=OneTime, RelativeSource={RelativeSource AncestorType={x:Type controls:BreadcrumbBar}}}"
                             ContentTemplateSelector="{Binding Path=ItemTemplateSelector, Mode=OneTime, RelativeSource={RelativeSource AncestorType={x:Type controls:BreadcrumbBar}}}"
-                            
                             FontWeight="{TemplateBinding FontWeight}"
                             Style="{StaticResource DefaultUiBreadcrumbButtonStyle}" />
-
                         <ContentControl
                             x:Name="Icon"
                             Grid.Column="1"

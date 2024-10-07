@@ -27,5 +27,10 @@ public enum ApplicationTheme {
 	/// <summary>
 	/// High contract application theme.
 	/// </summary>
-	HighContrast
+	HighContrast,
+
+	/// <summary>
+	/// Match system theme.
+	/// </summary>
+	System,
 }
