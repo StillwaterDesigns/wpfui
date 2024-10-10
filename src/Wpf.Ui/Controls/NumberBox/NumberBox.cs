@@ -253,7 +253,7 @@ public class NumberBox : TextBox {
 	protected override void OnPreviewTextInput(TextCompositionEventArgs e) {
 		base.OnPreviewTextInput(e);
 		//var regexStr = @"^(0?|(([1-9]{1}\d{0,2})(,\d{1,3})*|[1-9.]+\d*))(\.(0{1}|\d*[1-9]{1})(e(0|[1-9]{1}\d*))?)?$";
-		var regexStr = @"^\d*\.?\d*$";
+		var regexStr = MaxDecimalPlaces > 0 ? @"^\d*\.?\d*$" : @"^\d*$";
 		if (Minimum < 0)
 			regexStr = regexStr.Insert(1, "-?");
 		var isValidPattern = new Regex(regexStr);
