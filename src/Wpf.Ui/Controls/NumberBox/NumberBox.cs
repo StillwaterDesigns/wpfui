@@ -250,6 +250,18 @@ public class NumberBox : TextBox {
 		DataObject.AddPastingHandler(this, OnClipboardPaste);
 	}
 
+	protected override void OnPreviewTextInput(TextCompositionEventArgs e) {
+		base.OnPreviewTextInput(e);
+		//var regexStr = @"^(0?|(([1-9]{1}\d{0,2})(,\d{1,3})*|[1-9.]+\d*))(\.(0{1}|\d*[1-9]{1})(e(0|[1-9]{1}\d*))?)?$";
+		var regexStr = @"^\d*\.?\d*$";
+		if (Minimum < 0)
+			regexStr = regexStr.Insert(1, "-?");
+		var isValidPattern = new Regex(regexStr);
+		var isInputValid = isValidPattern.IsMatch(e.Text);
+		if (!isInputValid && e.Text.Length > 0)
+			e.Handled = true;
+	}
+
 	/// <inheritdoc />
 	protected override void OnKeyUp(KeyEventArgs e) {
 		base.OnKeyUp(e);
@@ -277,7 +289,8 @@ public class NumberBox : TextBox {
 
 				FocusManager.SetFocusedElement(FocusManager.GetFocusScope(this), null);
 				FocusManager.SetFocusedElement(FocusManager.GetFocusScope(this), this);
-				//Keyboard.ClearFocus();
+				break;
+			default:
 				break;
 		}
 	}
@@ -308,7 +321,10 @@ public class NumberBox : TextBox {
 	/// <inheritdoc />
 	protected override void OnLostFocus(RoutedEventArgs e) {
 		try {
-			SetCurrentValue(TextProperty, RemoveStringFormatting(Text));
+			var textValue = Text;
+			if(string.IsNullOrEmpty(Text))
+				textValue = $"{Math.Max(Value ?? Minimum, Minimum)}";
+			SetCurrentValue(TextProperty, RemoveStringFormatting(textValue));
 			base.OnLostFocus(e);
 			ValidateInput();
 		} catch (FormatException fe) {
@@ -317,21 +333,9 @@ public class NumberBox : TextBox {
 
 	protected override void OnGotFocus(RoutedEventArgs e) {
 		base.OnGotFocus(e);
-		SelectionStart = 0;
-		SelectionLength = Text.Length;
+		SetCurrentValue(TextProperty, RemoveStringFormatting(Text));
+		SelectAll();
 	}
-
-	/*/// <inheritdoc />
-    protected override void OnTextChanged(System.Windows.Controls.TextChangedEventArgs e)
-    {
-        base.OnTextChanged(e);
-
-        //if (new string[] { ",", ".", " " }.Any(s => Text.EndsWith(s)))
-        //    return;
-
-        //if (!_textUpdating)
-        //    UpdateValueToText();
-    }*/
 
 	/// <inheritdoc />
 	protected override void OnTemplateChanged(ControlTemplate oldTemplate,
@@ -436,8 +440,9 @@ public class NumberBox : TextBox {
 	}
 
 	private string RemoveStringFormatting(string inString) {
-		var regex101IntOrFloat = new Regex(@"[^\d,.]+|[,.]\D|\D[,.]|\d+[,.]\d{3}|\d{3,}(?:[,.]\d+)?"); // https://regex101.com/library/u1ITKd?page=326
-		var regexIntOrDecimal = new Regex(@"(?:^|[^w.,])(\d[\d,.]+)(?=\W|$)");
+		var cultureDecimal = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+		//var regex101IntOrFloat = new Regex(@"[^\d,.]+|[,.]\D|\D[,.]|\d+[,.]\d{3}|\d{3,}(?:[,.]\d+)?"); // https://regex101.com/library/u1ITKd?page=326
+		var regexIntOrDecimal = new Regex($@"(?:^|[^w{cultureDecimal}])(\d[\d{cultureDecimal}]+)(?=\W|$)");
 		var regexMatch = regexIntOrDecimal.Match(inString).Value;
 		var regexMatches = regexIntOrDecimal.Matches(inString, 0);
 		var regexReplace = regexIntOrDecimal.Replace(inString, string.Empty);
