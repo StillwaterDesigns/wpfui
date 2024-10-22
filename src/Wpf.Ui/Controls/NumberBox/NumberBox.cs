@@ -252,8 +252,8 @@ public class NumberBox : TextBox {
 
 	protected override void OnPreviewTextInput(TextCompositionEventArgs e) {
 		base.OnPreviewTextInput(e);
-		//var regexStr = @"^(0?|(([1-9]{1}\d{0,2})(,\d{1,3})*|[1-9.]+\d*))(\.(0{1}|\d*[1-9]{1})(e(0|[1-9]{1}\d*))?)?$";
-		var regexStr = MaxDecimalPlaces > 0 ? @"^\d*\.?\d*$" : @"^\d*$";
+		var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+		var regexStr = MaxDecimalPlaces > 0 ? @$"^\d*\{decimalSeparator}?\d*$" : @"^\d*$";
 		if (Minimum < 0)
 			regexStr = regexStr.Insert(1, "-?");
 		var isValidPattern = new Regex(regexStr);
@@ -325,6 +325,7 @@ public class NumberBox : TextBox {
 			if(string.IsNullOrEmpty(Text))
 				textValue = $"{Math.Max(Value ?? Minimum, Minimum)}";
 			SetCurrentValue(TextProperty, RemoveStringFormatting(textValue));
+			//SetCurrentValue(TextProperty, textValue);
 			base.OnLostFocus(e);
 			ValidateInput();
 		} catch (FormatException fe) {
@@ -440,12 +441,13 @@ public class NumberBox : TextBox {
 	}
 
 	private string RemoveStringFormatting(string inString) {
-		var cultureDecimal = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-		//var regex101IntOrFloat = new Regex(@"[^\d,.]+|[,.]\D|\D[,.]|\d+[,.]\d{3}|\d{3,}(?:[,.]\d+)?"); // https://regex101.com/library/u1ITKd?page=326
-		var regexIntOrDecimal = new Regex($@"(?:^|[^w{cultureDecimal}])(\d[\d{cultureDecimal}]+)(?=\W|$)");
-		var regexMatch = regexIntOrDecimal.Match(inString).Value;
-		var regexMatches = regexIntOrDecimal.Matches(inString, 0);
-		var regexReplace = regexIntOrDecimal.Replace(inString, string.Empty);
+		var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+		var groupSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator;
+		var cleanStr = inString.Replace(groupSeparator, string.Empty);
+		var regexIntOrDecimal = new Regex($@"(?:^|[^\w{decimalSeparator}])(\d[\d{decimalSeparator}]+)(?=\W|$)");
+		var regexMatch = regexIntOrDecimal.Match(cleanStr).Value;
+		var regexMatches = regexIntOrDecimal.Matches(cleanStr, 0);
+		var regexReplace = regexIntOrDecimal.Replace(cleanStr, string.Empty);
 		var resultStr = regexMatches.Count > 0 ? regexMatch : regexReplace;
 		if(string.IsNullOrEmpty(resultStr))
 			return resultStr;
