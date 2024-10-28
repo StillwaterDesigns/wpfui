@@ -3,6 +3,7 @@
 // Copyright (C) Leszek Pomianowski and WPF UI Contributors.
 // All Rights Reserved.
 
+using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
@@ -66,12 +67,14 @@ public class SplitButton : Button {
         set => SetValue(IsDropDownOpenProperty, value);
     }
 
-    public SplitButton()
-    {
-        Unloaded += static (sender, _) =>
+    public SplitButton() {
+		Loaded += static (sender, _) => {
+			var self = (SplitButton)sender;
+			self.AcquireTemplateResources();
+		};
+		Unloaded += static (sender, _) =>
         {
             var self = (SplitButton)sender;
-
             self.ReleaseTemplateResources();
         };
     }
@@ -136,20 +139,26 @@ public class SplitButton : Button {
                 $"Element {nameof(TemplateElementToggleButton)} of type {typeof(ToggleButton)} not found in {typeof(SplitButton)}"
             );
         }
-    }
+	}
 
-    /// <summary>
-    /// Triggered when the control is unloaded. Releases resource bindings.
-    /// </summary>
-    protected virtual void ReleaseTemplateResources()
+	/// <summary>
+	/// Triggered when the control is loaded. Aquires resource bindings.
+	/// </summary>
+	protected virtual void AcquireTemplateResources() {
+		SplitButtonToggleButton.Click -= OnSplitButtonToggleButtonOnClick;
+		SplitButtonToggleButton.Click += OnSplitButtonToggleButtonOnClick;
+	}
+
+	/// <summary>
+	/// Triggered when the control is unloaded. Releases resource bindings.
+	/// </summary>
+	protected virtual void ReleaseTemplateResources()
     {
         SplitButtonToggleButton.Click -= OnSplitButtonToggleButtonOnClick;
     }
 
-    private void OnSplitButtonToggleButtonOnClick(object sender, RoutedEventArgs e)
-    {
-        if (sender is not ToggleButton || _contextMenu is null)
-        {
+    private void OnSplitButtonToggleButtonOnClick(object sender, RoutedEventArgs e) {
+        if (sender is not ToggleButton || _contextMenu is null) {
             return;
         }
 
@@ -157,8 +166,9 @@ public class SplitButton : Button {
         _contextMenu.SetCurrentValue(ContextMenu.PlacementTargetProperty, this);
         _contextMenu.SetCurrentValue(
             ContextMenu.PlacementProperty,
-			PlacementMode.Bottom
+            PlacementMode.Bottom
         );
-        _contextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
+
+        _contextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, ((ToggleButton)sender).IsChecked ?? false);
     }
 }
