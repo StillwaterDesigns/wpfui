@@ -35,7 +35,7 @@ public class NumberBox : TextBox {
 			OnValueChanged,
 			null,
 			false,
-			UpdateSourceTrigger.LostFocus
+			UpdateSourceTrigger.PropertyChanged
 		)
 	);
 
@@ -315,7 +315,7 @@ public class NumberBox : TextBox {
 		}
 
 		// NOTE: Focus looks and works well with mouse and Clear button. But it sucks for spin buttons
-		_ = Focus();
+		//_ = Focus();
 	}
 
 	/// <inheritdoc />
@@ -395,6 +395,7 @@ public class NumberBox : TextBox {
 			newValue += change ?? 0d;
 
 		SetCurrentValue(ValueProperty, newValue);
+		
 		MoveCaretToTextEnd();
 	}
 

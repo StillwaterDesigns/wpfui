@@ -159,7 +159,8 @@ public class TextBox : System.Windows.Controls.TextBox {
 			SetCurrentValue(PlaceholderEnabledProperty, true);
 		}
 
-		RevealClearButton();
+		if(HasEffectiveKeyboardFocus)
+			RevealClearButton();
 	}
 
 	/// <inheritdoc />
@@ -191,7 +192,7 @@ public class TextBox : System.Windows.Controls.TextBox {
 	/// Hides the clear button by <see cref="ShowClearButton"/> property.
 	/// </summary>
 	protected void HideClearButton() {
-		if (ClearButtonEnabled && !IsKeyboardFocusWithin && ShowClearButton) {
+		if (ClearButtonEnabled) {
 			SetCurrentValue(ShowClearButtonProperty, false);
 		}
 	}
