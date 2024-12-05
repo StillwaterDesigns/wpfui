@@ -25,7 +25,6 @@
                     Margin="-4,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Fill="Red"
                     Opacity="0.0"
                     RadiusX="2"
                     RadiusY="2" />
@@ -48,7 +47,7 @@
                         x:Name="ContentGrid"
                         Grid.Row="1"
                         Height="{StaticResource NavigationViewFluentIconSize}"
-                        Margin="0,2,0,0" Background="#FFEA1212">
+                        Margin="0,2,0,0">
                         <ContentPresenter
                             x:Name="ElementContentPresenter"
                             HorizontalAlignment="Center"

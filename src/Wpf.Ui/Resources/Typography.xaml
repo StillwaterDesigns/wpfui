@@ -28,7 +28,7 @@
         x:Key="BodyStrongTextBlockStyle"
         BasedOn="{StaticResource {x:Type TextBlock}}"
         TargetType="{x:Type TextBlock}">
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="LineHeight" Value="20" />
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>

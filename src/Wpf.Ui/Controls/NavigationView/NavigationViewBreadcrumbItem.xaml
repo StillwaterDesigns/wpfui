@@ -11,7 +11,7 @@
     xmlns:controls="clr-namespace:Wpf.Ui.Controls">
 
     <DataTemplate x:Key="NavigationViewItemDataTemplate" DataType="{x:Type controls:NavigationViewBreadcrumbItem}">
-        <controls:TextBlock FontTypography="Subtitle" Text="{Binding Content}" FontWeight="DemiBold" />
+        <controls:TextBlock FontTypography="BodyStrong" Text="{Binding Content}" FontWeight="DemiBold" />
     </DataTemplate>
 
 </ResourceDictionary>

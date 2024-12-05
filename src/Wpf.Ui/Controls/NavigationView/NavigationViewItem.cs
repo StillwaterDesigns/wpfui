@@ -72,6 +72,14 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 		new PropertyMetadata(false)
 	);
 
+	/// <summary>Identifies the <see cref="IsPaneOpen"/> dependency property.</summary>
+	public static readonly DependencyProperty IsCollapseEnabledProperty = DependencyProperty.Register(
+		nameof(IsCollapseEnabled),
+		typeof(bool),
+		typeof(NavigationViewItem),
+		new PropertyMetadata(true)
+	);
+
 	/// <summary>Identifies the <see cref="IsExpanded"/> dependency property.</summary>
 	public static readonly DependencyProperty IsExpandedProperty = DependencyProperty.Register(
 		nameof(IsExpanded),
@@ -172,6 +180,13 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 		set => SetValue(IsPaneOpenProperty, value);
 	}
 
+	[Browsable(false)]
+	[ReadOnly(true)]
+	public bool IsCollapseEnabled {
+		get => (bool)GetValue(IsCollapseEnabledProperty);
+		set => SetValue(IsCollapseEnabledProperty, value);
+	}
+
 	/// <inheritdoc />
 	[Bindable(true)]
 	public Brush? MenuItemsBackground {
@@ -219,6 +234,7 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 	/// <inheritdoc />
 	public string Id { get; }
 
+	private Grid? _chevronGrid;
 	protected Grid? ChevronGrid { get; set; }
 
 	static NavigationViewItem() {
@@ -308,10 +324,13 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 
 	/// <inheritdoc />
 	protected override void OnClick() {
+		//if (HasMenuItems && !IsCollapseEnabled) {
+		//	return;
+		//}
 		if (NavigationView.GetNavigationParent(this) is not { } navigationView)
 			return;
 
-		if (HasMenuItems && navigationView.IsPaneOpen)
+		if (HasMenuItems && IsCollapseEnabled && navigationView.IsPaneOpen)
 			SetCurrentValue(IsExpandedProperty, !IsExpanded);
 
 		if (TargetPageType is not null)
@@ -324,6 +343,9 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 	/// Is called when mouse is clicked down.
 	/// </summary>
 	protected override void OnMouseDown(MouseButtonEventArgs e) {
+		//if (HasMenuItems && !IsCollapseEnabled) {
+		//	return;
+		//}
 		if (!HasMenuItems || e.LeftButton != MouseButtonState.Pressed) {
 			base.OnMouseDown(e);
 			return;

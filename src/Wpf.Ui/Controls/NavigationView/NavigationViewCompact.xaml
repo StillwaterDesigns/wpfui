@@ -210,11 +210,22 @@
                 <Setter TargetName="PART_InfoBadge" Property="Margin" Value="0" />
                 <Setter TargetName="PART_InfoBadge" Property="Visibility" Value="Collapsed" />
             </Trigger>
-            <Trigger Property="HasMenuItems" Value="True">
+            <!--<Trigger Property="HasMenuItems" Value="True">
                 <Setter TargetName="PART_ChevronGrid" Property="Visibility" Value="Visible" />
                 <Setter TargetName="PART_ChevronGrid" Property="Width" Value="40" />
-            </Trigger>
-            <Trigger Property="IsExpanded" Value="True">
+            </Trigger>-->
+
+			<MultiTrigger>
+				<MultiTrigger.Conditions>
+					<Condition Property="HasMenuItems" Value="True" />
+					<Condition Property="IsCollapseEnabled" Value="True" />
+				</MultiTrigger.Conditions>
+				<MultiTrigger.Setters>
+					<Setter TargetName="PART_ChevronGrid" Property="Visibility" Value="Visible" />
+					<Setter TargetName="PART_ChevronGrid" Property="Width" Value="40" />
+				</MultiTrigger.Setters>
+			</MultiTrigger>
+			<Trigger Property="IsExpanded" Value="True">
                 <Setter TargetName="MenuItemsPresenter" Property="Visibility" Value="Visible" />
                 <Trigger.EnterActions>
                     <BeginStoryboard>

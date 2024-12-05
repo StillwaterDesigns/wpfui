@@ -38,7 +38,8 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
+		<Setter Property="FocusVisualStyle" Value="{x:Null}" />
+		<Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
@@ -73,7 +74,8 @@
                                 Opacity="0.0"
                                 RadiusX="10"
                                 RadiusY="10"
-                                StrokeThickness="0" />
+                                Stroke="{DynamicResource ToggleSwitchKnobFillOn}"
+                                StrokeThickness="1" />
                             <Ellipse
                                 x:Name="ToggleEllipse"
                                 Width="12"
