@@ -290,7 +290,6 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 		}
 
 		if (navigationView.IsPaneOpen) {
-            SetCurrentValue(IsCollapseEnabledProperty, false);
             SetCurrentValue(IsExpandedProperty, true);
 		}
     }
