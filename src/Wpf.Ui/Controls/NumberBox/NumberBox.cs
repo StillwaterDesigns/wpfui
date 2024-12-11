@@ -135,6 +135,23 @@ public class NumberBox : TextBox {
 		typeof(NumberBox)
 	);
 
+
+	/// <summary>Identifies the <see cref="CoerceStepperSmChangeCallback"/> routed event.</summary>
+	public static readonly DependencyProperty CoerceStepperSmChangeCallbackProperty = DependencyProperty.Register(
+		nameof(CoerceStepperSmChangeCallback),
+		typeof(CoerceValueCallback),
+		typeof(NumberBox),
+		new PropertyMetadata(null)
+	);
+
+	/// <summary>
+	/// Gets or sets the numeric value of a <see cref="NumberBox"/>.
+	/// </summary>
+	public CoerceValueCallback? CoerceStepperSmChangeCallback {
+		get => (CoerceValueCallback?)GetValue(CoerceStepperSmChangeCallbackProperty);
+		set => SetValue(CoerceStepperSmChangeCallbackProperty, value);
+	}
+
 	/// <summary>
 	/// Gets or sets the numeric value of a <see cref="NumberBox"/>.
 	/// </summary>
@@ -276,9 +293,11 @@ public class NumberBox : TextBox {
 				StepValue(-LargeChange);
 				break;
 			case Key.Up:
+				SetCurrentValue(SmallChangeProperty, (CoerceStepperSmChangeCallback?.Invoke(this, Value + SmallChange) ?? SmallChange));
 				StepValue(SmallChange);
 				break;
 			case Key.Down:
+				SetCurrentValue(SmallChangeProperty, (CoerceStepperSmChangeCallback?.Invoke(this, Value - SmallChange) ?? SmallChange));
 				StepValue(-SmallChange);
 				break;
 			case Key.Enter:
@@ -307,9 +326,13 @@ public class NumberBox : TextBox {
 				OnClearButtonClick();
 				break;
 			case "increment":
+				SetCurrentValue(SmallChangeProperty,
+					Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, SmallChange) ?? SmallChange));
 				StepValue(SmallChange);
 				break;
 			case "decrement":
+				SetCurrentValue(SmallChangeProperty,
+					Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, -SmallChange) ?? SmallChange));
 				StepValue(-SmallChange);
 				break;
 		}
