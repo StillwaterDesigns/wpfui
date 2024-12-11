@@ -470,6 +470,7 @@ public class NumberBox : TextBox {
 		var cleanStr = inString.Replace(groupSeparator, string.Empty);
 		var regexIntOrDecimal = new Regex($@"(?:^|[^\w{decimalSeparator}])(\d[\d{decimalSeparator}]+)(?=\W|$)");
 		var regexMatch = regexIntOrDecimal.Match(cleanStr).Value;
+		regexMatch = Regex.Replace(regexMatch, "^0+(?!$)", string.Empty);
 		var regexMatches = regexIntOrDecimal.Matches(cleanStr, 0);
 		var regexReplace = regexIntOrDecimal.Replace(cleanStr, string.Empty);
 		var resultStr = regexMatches.Count > 0 ? regexMatch : regexReplace;
