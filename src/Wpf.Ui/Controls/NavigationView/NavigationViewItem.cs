@@ -288,7 +288,11 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 				&& navigationView.PaneDisplayMode == NavigationViewPaneDisplayMode.LeftFluent) {
 			symbolIcon.Filled = true;
 		}
-	}
+
+		if (navigationView.IsPaneOpen) {
+            SetCurrentValue(IsExpandedProperty, true);
+		}
+    }
 
 	/// <summary>
 	/// Correctly deactivates
@@ -297,13 +301,11 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 		SetCurrentValue(IsActiveProperty, false);
 		NavigationViewItemParent?.Deactivate(navigationView);
 
-		if (!navigationView.IsPaneOpen && HasMenuItems)
-			SetCurrentValue(IsExpandedProperty, false);
-
 		if (Icon is SymbolIcon symbolIcon
 				&& navigationView.PaneDisplayMode == NavigationViewPaneDisplayMode.LeftFluent) {
 			symbolIcon.Filled = false;
 		}
+
 	}
 
 	/// <inheritdoc />
