@@ -416,6 +416,10 @@ public class NumberBox : TextBox {
 		var newValue = Value ?? 0;
 		if (change is not null)
 			newValue += change ?? 0d;
+		if (newValue > Maximum)
+			newValue = Maximum;
+		if (newValue < Minimum)
+			newValue = Minimum;
 
 		SetCurrentValue(ValueProperty, newValue);
 		
