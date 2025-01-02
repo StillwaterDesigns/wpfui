@@ -332,15 +332,15 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
 		UpdateMenuItemsTemplate(FooterMenuItems);
 	}
 
-	protected virtual void CloseNavigationViewItemMenus() {
-		if (Journal.Count <= 0 || IsPaneOpen)
+	protected virtual void UpdateNavigationViewItemMenus() {
+		if (Journal.Count <= 0)
 			return;
 
 		DeactivateMenuItems(MenuItems);
 		DeactivateMenuItems(FooterMenuItems);
 
 		INavigationViewItem currentItem = PageIdOrTargetTagNavigationViewsDictionary[Journal[^1]];
-		if (currentItem.NavigationViewItemParent is null) {
+		if (IsPaneOpen || currentItem.NavigationViewItemParent is null) {
 			currentItem.Activate(this);
 			return;
 		}

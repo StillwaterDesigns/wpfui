@@ -532,7 +532,7 @@ public partial class NavigationView {
 		else
 			navigationView.OnPaneClosed();
 
-		navigationView.CloseNavigationViewItemMenus();
+		navigationView.UpdateNavigationViewItemMenus();
 		navigationView.TitleBar?.SetCurrentValue(MarginProperty,
 			navigationView.IsPaneOpen ? TitleBarPaneOpenMarginDefault : TitleBarPaneCompactMarginDefault);
 
