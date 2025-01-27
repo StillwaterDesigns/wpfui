@@ -339,14 +339,17 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
 		DeactivateMenuItems(MenuItems);
 		DeactivateMenuItems(FooterMenuItems);
 
-		INavigationViewItem currentItem = PageIdOrTargetTagNavigationViewsDictionary[Journal[^1]];
-		if (IsPaneOpen || currentItem.NavigationViewItemParent is null) {
-			currentItem.Activate(this);
-			return;
-		}
+		try {
+			INavigationViewItem currentItem = PageIdOrTargetTagNavigationViewsDictionary[Journal[^1]];
+			if (IsPaneOpen || currentItem.NavigationViewItemParent is null) {
+				currentItem.Activate(this);
+				return;
+			}
 
-		currentItem.Deactivate(this);
-		currentItem.NavigationViewItemParent?.Activate(this);
+			currentItem.Deactivate(this);
+			currentItem.NavigationViewItemParent?.Activate(this);
+		} catch (Exception ex) {
+		}
 	}
 
 	protected void DeactivateMenuItems(IEnumerable list) {
