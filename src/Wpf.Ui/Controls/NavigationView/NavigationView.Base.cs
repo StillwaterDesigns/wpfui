@@ -336,18 +336,36 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
 		if (Journal.Count <= 0)
 			return;
 
+		var journalId = Journal[^1];
 		DeactivateMenuItems(MenuItems);
 		DeactivateMenuItems(FooterMenuItems);
 
+		INavigationViewItem? currentItem = null;
 		try {
-			INavigationViewItem currentItem = PageIdOrTargetTagNavigationViewsDictionary[Journal[^1]];
-			if (IsPaneOpen || currentItem.NavigationViewItemParent is null) {
-				currentItem.Activate(this);
-				return;
+			if (PageIdOrTargetTagNavigationViewsDictionary.TryGetValue(journalId, out var value))
+				currentItem = value;
+			else {
+				foreach (var entry in PageIdOrTargetTagNavigationViewsDictionary.Values) {
+					if (entry is NavigationViewItem mItem) {
+						var subItems = mItem.MenuItems as ObservableCollection<object>;
+						currentItem = (INavigationViewItem?)(subItems?
+							.Where(x => x is NavigationViewItem).ToList()
+							.FirstOrDefault(y => ((NavigationViewItem)y).Id == journalId));
+						if (currentItem is not null)
+							break;
+					}
+				}
 			}
 
-			currentItem.Deactivate(this);
-			currentItem.NavigationViewItemParent?.Activate(this);
+			if (currentItem is not null) {
+				if (IsPaneOpen || currentItem.NavigationViewItemParent is null) {
+					currentItem.Activate(this);
+					return;
+				}
+
+				currentItem.Deactivate(this);
+				currentItem.NavigationViewItemParent?.Activate(this);
+			}
 		} catch (Exception ex) {
 		}
 	}
