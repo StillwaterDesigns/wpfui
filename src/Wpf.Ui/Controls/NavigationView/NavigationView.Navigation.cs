@@ -69,8 +69,10 @@ public partial class NavigationView {
 
 	/// <inheritdoc />
 	public virtual bool ReplaceContent(Type? pageTypeToEmbed) {
-		if (pageTypeToEmbed is null)
+		if (pageTypeToEmbed is null) {
+			UpdateContent(pageTypeToEmbed);
 			return false;
+		}
 
 		if (_serviceProvider is not null) {
 			UpdateContent(_serviceProvider.GetService(pageTypeToEmbed));

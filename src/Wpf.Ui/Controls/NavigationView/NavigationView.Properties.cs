@@ -457,6 +457,17 @@ public partial class NavigationView {
 					break;
 				case NotifyCollectionChangedAction.Reset:
 					collection.Clear();
+
+					PageIdOrTargetTagNavigationViewsDictionary.Clear();
+					PageTypeNavigationViewsDictionary.Clear();
+
+					ClearJournal();
+					ReplaceContent(null);
+					InvalidateArrange();
+					InvalidateVisual();
+					UpdateLayout();
+					UpdateAutoSuggestBoxSuggestions();
+					AddItemsToDictionaries();
 					break;
 			}
 		}
