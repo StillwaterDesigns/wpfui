@@ -49,6 +49,11 @@ public interface INavigationViewItem {
 	/// <summary>
 	/// Gets or sets a value indicating whether the sub-<see cref="MenuItems"/> are expanded.
 	/// </summary>
+	bool IsCollapseEnabled { get; set; }
+
+	/// <summary>
+	/// Gets or sets a value indicating whether the sub-<see cref="MenuItems"/> are expanded.
+	/// </summary>
 	bool IsExpanded { get; internal set; }
 
 	/// <summary>

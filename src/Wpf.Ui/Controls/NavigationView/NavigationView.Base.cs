@@ -342,6 +342,12 @@ public partial class NavigationView : System.Windows.Controls.Control, INavigati
 
 		INavigationViewItem? currentItem = null;
 		try {
+			if (IsPaneOpen) {
+				PageIdOrTargetTagNavigationViewsDictionary.Values
+					.Where(x => !x.IsCollapseEnabled).ToList()
+					.ForEach(ni => ni.IsExpanded = true);
+			}
+			
 			if (PageIdOrTargetTagNavigationViewsDictionary.TryGetValue(journalId, out var value))
 				currentItem = value;
 			else {
