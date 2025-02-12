@@ -4,6 +4,8 @@
 // All Rights Reserved.
 
 // ReSharper disable once CheckNamespace
+using System.Windows.Controls;
+
 namespace Wpf.Ui.Controls;
 
 /// <summary>
@@ -35,15 +37,15 @@ public class ImageIcon : IconElement {
 	protected override UIElement InitializeChildren() {
 		Image = new System.Windows.Controls.Image() { Source = Source, Stretch = Stretch.UniformToFill };
 
-		return Image;
+		var layoutMask = new Grid { Background = Foreground, SnapsToDevicePixels = true, };
+		layoutMask.SetCurrentValue(OpacityMaskProperty, new VisualBrush(Image));
+		return layoutMask;
 	}
 
 	private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 		ImageIcon self = (ImageIcon)d;
-
-		if (self.Image is null) {
+		if (self.Image is null)
 			return;
-		}
 
 		self.Image.SetCurrentValue(System.Windows.Controls.Image.SourceProperty, (ImageSource?)e.NewValue);
 	}

@@ -472,7 +472,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <ContentControl
+					<ContentControl
                         x:Name="IconElement"
                         Grid.Column="0"
                         Margin="0,0,6,0"
@@ -481,7 +481,8 @@
                         KeyboardNavigation.IsTabStop="False"
                         Content="{TemplateBinding Icon}"
                         FontSize="{TemplateBinding FontSize}"
-						Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+						Background="{DynamicResource TextFillColorPrimaryBrush}">
+					</ContentControl>
 
                     <ContentPresenter
                         x:Name="HeaderPresenter"
@@ -587,7 +588,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <ContentControl
+				<ContentControl
                     x:Name="IconElement"
                     Grid.Column="0"
                     Margin="0,0,6,0"
@@ -596,9 +597,10 @@
                     KeyboardNavigation.IsTabStop="False"
                     Content="{TemplateBinding Icon}"
                     FontSize="{TemplateBinding FontSize}"
-						Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+					Background="{DynamicResource TextFillColorPrimaryBrush}">
+				</ContentControl>
 
-                <ContentPresenter
+				<ContentPresenter
                     x:Name="HeaderPresenter"
                     Grid.Column="2"
                     VerticalAlignment="Center"
@@ -676,7 +678,8 @@
                     KeyboardNavigation.IsTabStop="False"
                     Content="{TemplateBinding Icon}"
                     FontSize="16"
-						Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+					Background="{DynamicResource TextFillColorPrimaryBrush}">
+				</ContentControl>
 
                 <ContentPresenter
                     Grid.Column="3"
@@ -754,9 +757,10 @@
                         KeyboardNavigation.IsTabStop="False"
                         Content="{TemplateBinding Icon}"
                         FontSize="16"
-						Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+						Background="{DynamicResource TextFillColorPrimaryBrush}">
+					</ContentControl>
 
-                    <ContentPresenter
+					<ContentPresenter
                         x:Name="HeaderHost"
                         Grid.Column="2"
                         ContentSource="Header"
