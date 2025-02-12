@@ -480,7 +480,8 @@ public class NumberBox : TextBox {
 		var resultStr = regexMatches.Count > 0 ? regexMatch : regexReplace;
 		if(string.IsNullOrEmpty(resultStr))
 			return resultStr;
-		var numValue = double.Parse(resultStr);
+		if (!double.TryParse(resultStr, out var numValue))
+			numValue = Value ?? numValue;
 		numValue = Math.Max(Math.Min(numValue, Maximum), Minimum);
 		return $"{numValue}";
 	}
