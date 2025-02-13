@@ -1,4 +1,4 @@
-// This Source Code Form is subject to the terms of the MIT License.
+﻿// This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file, You can obtain one at https://opensource.org/licenses/MIT.
 // Copyright (C) Leszek Pomianowski and WPF UI Contributors.
 // All Rights Reserved.
@@ -11,12 +11,12 @@ namespace Wpf.Ui.Controls;
 /// <summary>
 /// Represents an icon that uses an <see cref="System.Windows.Controls.Image"/> as its content.
 /// </summary>
-public class ImageIcon : IconElement {
+public class ImageMaskIcon : IconElement {
 	/// <summary>Identifies the <see cref="Source"/> dependency property.</summary>
 	public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(
 		nameof(Source),
 		typeof(ImageSource),
-		typeof(ImageIcon),
+		typeof(ImageMaskIcon),
 		new FrameworkPropertyMetadata(
 			null,
 			FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender,
@@ -36,11 +36,14 @@ public class ImageIcon : IconElement {
 
 	protected override UIElement InitializeChildren() {
 		Image = new System.Windows.Controls.Image() { Source = Source, Stretch = Stretch.UniformToFill };
-		return Image;
+
+		var layoutMask = new Grid { Background = Foreground, SnapsToDevicePixels = true, };
+		layoutMask.SetCurrentValue(OpacityMaskProperty, new VisualBrush(Image));
+		return layoutMask;
 	}
 
 	private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-		ImageIcon self = (ImageIcon)d;
+		ImageMaskIcon self = (ImageMaskIcon)d;
 		if (self.Image is null)
 			return;
 
