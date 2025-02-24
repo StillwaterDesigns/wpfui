@@ -162,8 +162,4 @@
     <EmbeddedResource Include="Controls\VirtualizingWrapPanel\VirtualizingWrapPanel.bmp" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if exist  &quot;$(SolutionDir)$(SolutionName)\Resources&quot; goto :exists&#xD;&#xA;goto :exit&#xD;&#xA;&#xD;&#xA;:exists&#xD;&#xA;xcopy /y /d &quot;$(TargetPath)&quot; &quot;$(SolutionDir)$(SolutionName)\Resources&quot;&#xD;&#xA;&#xD;&#xA;:exit" />
-  </Target>
-
 </Project>
