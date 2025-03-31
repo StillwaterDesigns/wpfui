@@ -116,6 +116,7 @@ public class FontIcon : IconElement {
 
 		TextBlock = new TextBlock {
 			Style = null,
+			Foreground = Foreground,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Center,
 			TextAlignment = TextAlignment.Center,
@@ -133,8 +134,14 @@ public class FontIcon : IconElement {
 		return TextBlock;
 	}
 
+	protected override void OnForegroundChanged(DependencyPropertyChangedEventArgs args) {
+		base.OnForegroundChanged(args);
+		TextBlock?.SetCurrentValue(System.Windows.Controls.TextBlock.ForegroundProperty, Foreground);
+	}
+
 	private static void OnFontFamilyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 		var self = (FontIcon)d;
+		self.FontFamily = (FontFamily)e.NewValue;
 		if (self.TextBlock is null) {
 			return;
 		}
@@ -147,6 +154,7 @@ public class FontIcon : IconElement {
 
 	private static void OnFontSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 		var self = (FontIcon)d;
+		self.FontSize = (double)e.NewValue;
 		if (self.TextBlock is null) {
 			return;
 		}
@@ -159,6 +167,7 @@ public class FontIcon : IconElement {
 
 	private static void OnFontStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 		var self = (FontIcon)d;
+		self.FontStyle = (FontStyle)e.NewValue;
 		if (self.TextBlock is null) {
 			return;
 		}
@@ -171,6 +180,7 @@ public class FontIcon : IconElement {
 
 	private static void OnFontWeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 		var self = (FontIcon)d;
+		self.FontWeight = (FontWeight)e.NewValue;
 		if (self.TextBlock is null) {
 			return;
 		}
@@ -183,6 +193,7 @@ public class FontIcon : IconElement {
 
 	private static void OnGlyphChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 		var self = (FontIcon)d;
+		self.Glyph = (string)e.NewValue;
 		if (self.TextBlock is null) {
 			return;
 		}

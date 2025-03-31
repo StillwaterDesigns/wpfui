@@ -177,7 +177,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
-                    <Grid HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                    <Grid
+						  Width="{TemplateBinding Width}" MinWidth="{TemplateBinding MinWidth}"
+						  Height="{TemplateBinding Height}" MinHeight="{TemplateBinding MinHeight}">
                         <Border
                             x:Name="ContentBorder"
                             Grid.Row="0"
