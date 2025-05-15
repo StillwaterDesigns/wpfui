@@ -61,7 +61,7 @@
 
     <!--  END REMOVE COLORS  -->
 
-    <Style x:Key="DefaultDataGridCheckBoxColumnCellStyle" TargetType="{x:Type DataGridColumn}" />
+    <!--<Style x:Key="DefaultDataGridCheckBoxColumnCellStyle" TargetType="{x:Type DataGridColumn}" />-->
 
     <Style x:Key="{ComponentResourceKey ResourceId=DataGridSelectAllButtonStyle, TypeInTargetAssembly={x:Type DataGrid}}" TargetType="{x:Type Button}">
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -487,7 +487,7 @@
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="SeparatorBrush" Value="{DynamicResource ControlFillColorDefault}" />
+		<Setter Property="SeparatorBrush" Value="{DynamicResource ControlFillColorDefaultBrush}" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
@@ -626,9 +626,9 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style TargetType="{x:Type DataGridTextColumn}">
+    <!--<Style TargetType="{x:Type DataGridTextColumn}">
         <Setter Property="EditingElementStyle" Value="{StaticResource TextBoxStyle}" />
-    </Style>
+    </Style>-->
 
     <!--  Style and template for the DataGrid.  -->
     <Style x:Key="DefaultDataGridStyle" TargetType="{x:Type DataGrid}">

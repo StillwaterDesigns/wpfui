@@ -192,7 +192,7 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{TemplateBinding Border.CornerRadius}">
-                            <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <Grid>
                                 <!--
                                     Funky grid - because:
                                     Chevron is over Presenter, ToggleButton is over Chevron, TextBox is over ToggleButton.
@@ -203,7 +203,10 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <Grid Grid.Column="0" Margin="{TemplateBinding Padding}">
+									<Grid Grid.Column="0"
+										  Margin="{TemplateBinding Padding}"
+										  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+										  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                         <ContentPresenter
                                             Name="PART_ContentPresenter"
                                             HorizontalAlignment="Stretch"
