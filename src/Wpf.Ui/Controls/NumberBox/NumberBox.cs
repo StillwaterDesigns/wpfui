@@ -416,10 +416,6 @@ public class NumberBox : TextBox {
 		var newValue = Value ?? 0;
 		if (change is not null)
 			newValue += change ?? 0d;
-		if (newValue > Maximum)
-			newValue = Maximum;
-		if (newValue < Minimum)
-			newValue = Minimum;
 
 		SetCurrentValue(ValueProperty, newValue);
 		
@@ -480,8 +476,7 @@ public class NumberBox : TextBox {
 		var resultStr = regexMatches.Count > 0 ? regexMatch : regexReplace;
 		if(string.IsNullOrEmpty(resultStr))
 			return resultStr;
-		if (!double.TryParse(resultStr, out var numValue))
-			numValue = Value ?? numValue;
+		var numValue = double.Parse(resultStr);
 		numValue = Math.Max(Math.Min(numValue, Maximum), Minimum);
 		return $"{numValue}";
 	}
