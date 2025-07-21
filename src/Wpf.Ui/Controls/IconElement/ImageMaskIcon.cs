@@ -33,13 +33,19 @@ public class ImageMaskIcon : IconElement {
 	}
 
 	protected System.Windows.Controls.Image? Image { get; set; }
+	private Grid? LayoutMask { get; set; }
 
 	protected override UIElement InitializeChildren() {
 		Image = new System.Windows.Controls.Image() { Source = Source, Stretch = Stretch.UniformToFill };
+		
+		LayoutMask = new Grid { Background = Foreground, SnapsToDevicePixels = true, Margin = this.Margin };
+		LayoutMask.SetCurrentValue(OpacityMaskProperty, new VisualBrush(Image));
+		return LayoutMask;
+	}
 
-		var layoutMask = new Grid { Background = Foreground, SnapsToDevicePixels = true, };
-		layoutMask.SetCurrentValue(OpacityMaskProperty, new VisualBrush(Image));
-		return layoutMask;
+	protected override void OnForegroundChanged(DependencyPropertyChangedEventArgs args) {
+		base.OnForegroundChanged(args);
+		LayoutMask?.SetCurrentValue(Panel.BackgroundProperty, Foreground);
 	}
 
 	private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
