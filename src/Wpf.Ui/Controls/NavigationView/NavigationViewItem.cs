@@ -72,7 +72,7 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 		new PropertyMetadata(false)
 	);
 
-	/// <summary>Identifies the <see cref="IsPaneOpen"/> dependency property.</summary>
+	/// <summary>Identifies the <see cref="IsCollapseEnabled"/> dependency property.</summary>
 	public static readonly DependencyProperty IsCollapseEnabledProperty = DependencyProperty.Register(
 		nameof(IsCollapseEnabled),
 		typeof(bool),
@@ -88,6 +88,7 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 		new PropertyMetadata(false)
 	);
 
+	/// <summary>Identifies the <see cref="MenuItemsBackground"/> dependency property.</summary>
 	public static readonly DependencyProperty MenuItemsBackgroundProperty = DependencyProperty.Register(
 		nameof(MenuItemsBackground),
 		typeof(Brush),
