@@ -175,7 +175,6 @@ public class TextBox : System.Windows.Controls.TextBox {
 	/// <inheritdoc />
 	protected override void OnLostFocus(RoutedEventArgs e) {
 		base.OnLostFocus(e);
-
 		HideClearButton();
 	}
 
@@ -192,7 +191,7 @@ public class TextBox : System.Windows.Controls.TextBox {
 	/// Hides the clear button by <see cref="ShowClearButton"/> property.
 	/// </summary>
 	protected void HideClearButton() {
-		if (ClearButtonEnabled) {
+		if (ClearButtonEnabled && !IsKeyboardFocusWithin && ShowClearButton) {
 			SetCurrentValue(ShowClearButtonProperty, false);
 		}
 	}
@@ -202,7 +201,8 @@ public class TextBox : System.Windows.Controls.TextBox {
 	/// </summary>
 	protected virtual void OnClearButtonClick() {
 		if (Text.Length > 0) {
-			SetCurrentValue(TextProperty, string.Empty);
+            Debug.WriteLine("OnClearButtonClick");
+            SetCurrentValue(TextProperty, string.Empty);
 		}
 	}
 
@@ -211,7 +211,6 @@ public class TextBox : System.Windows.Controls.TextBox {
 	/// </summary>
 	protected virtual void OnTemplateButtonClick(string? parameter) {
 		Debug.WriteLine($"INFO: {typeof(TextBox)} button clicked", "Wpf.Ui.TextBox");
-
 		OnClearButtonClick();
 	}
 }

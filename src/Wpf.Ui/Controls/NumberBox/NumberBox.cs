@@ -10,6 +10,7 @@
 // TODO: Disable expression by default
 // TODO: Lock to digit characters only by property
 
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -269,7 +270,7 @@ public class NumberBox : TextBox {
 
 	protected override void OnPreviewTextInput(TextCompositionEventArgs e) {
 		base.OnPreviewTextInput(e);
-		var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+        var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 		var regexStr = MaxDecimalPlaces > 0 ? @$"^\d*\{decimalSeparator}?\d*$" : @"^\d*$";
 		if (Minimum < 0)
 			regexStr = regexStr.Insert(1, "-?");
@@ -293,12 +294,14 @@ public class NumberBox : TextBox {
 				StepValue(-LargeChange);
 				break;
 			case Key.Up:
-				SetCurrentValue(SmallChangeProperty, (CoerceStepperSmChangeCallback?.Invoke(this, Value + SmallChange) ?? SmallChange));
-				StepValue(SmallChange);
+				SetCurrentValue(SmallChangeProperty,
+					Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, SmallChange) ?? SmallChange));
+                StepValue(SmallChange);
 				break;
 			case Key.Down:
-				SetCurrentValue(SmallChangeProperty, (CoerceStepperSmChangeCallback?.Invoke(this, Value - SmallChange) ?? SmallChange));
-				StepValue(-SmallChange);
+                SetCurrentValue(SmallChangeProperty,
+                    Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, -SmallChange) ?? SmallChange));
+                StepValue(-SmallChange);
 				break;
 			case Key.Enter:
 				if (TextWrapping != TextWrapping.Wrap) {
@@ -323,7 +326,7 @@ public class NumberBox : TextBox {
 
 		switch (parameter) {
 			case "clear":
-				OnClearButtonClick();
+				//OnClearButtonClick();
 				break;
 			case "increment":
 				SetCurrentValue(SmallChangeProperty,
@@ -344,20 +347,29 @@ public class NumberBox : TextBox {
 	/// <inheritdoc />
 	protected override void OnLostFocus(RoutedEventArgs e) {
 		try {
-			var textValue = Text;
-			if(string.IsNullOrEmpty(Text))
-				textValue = $"{Math.Max(Value ?? Minimum, Minimum)}";
-			SetCurrentValue(TextProperty, RemoveStringFormatting(textValue));
-			//SetCurrentValue(TextProperty, textValue);
-			base.OnLostFocus(e);
-			ValidateInput();
+			var element = Keyboard.FocusedElement;
+			if (element is Button) {
+				var element2 = (Button)element;
+				if (element2.CommandParameter.ToString() == "clear") {
+					SetCurrentValue(TextProperty, string.Empty);
+					base.OnLostFocus(e);
+				}
+			} else {
+				var textValue = Text;
+				if (string.IsNullOrEmpty(Text))
+					textValue = $"{Math.Max(Value ?? Minimum, Minimum)}";
+				SetCurrentValue(TextProperty, RemoveStringFormatting(textValue));
+				//SetCurrentValue(TextProperty, textValue);
+				base.OnLostFocus(e);
+				ValidateInput();
+			}
 		} catch (FormatException fe) {
 		}
 	}
 
 	protected override void OnGotFocus(RoutedEventArgs e) {
 		base.OnGotFocus(e);
-		SetCurrentValue(TextProperty, RemoveStringFormatting(Text));
+        SetCurrentValue(TextProperty, RemoveStringFormatting(Text));
 		SelectAll();
 	}
 
@@ -365,9 +377,8 @@ public class NumberBox : TextBox {
 	protected override void OnTemplateChanged(ControlTemplate oldTemplate,
 		ControlTemplate newTemplate) {
 		base.OnTemplateChanged(oldTemplate, newTemplate);
-
-		// If Text has been set, but Value hasn't, update Value based on Text.
-		if (string.IsNullOrEmpty(Text) && Value != null)
+        // If Text has been set, but Value hasn't, update Value based on Text.
+        if (string.IsNullOrEmpty(Text) && Value != null)
 			UpdateValueToText();
 		else
 			UpdateTextToValue();
@@ -379,9 +390,9 @@ public class NumberBox : TextBox {
 	protected virtual void OnValueChanged(DependencyObject d, double? oldValue) {
 		if (_valueUpdating)
 			return;
-
 		_valueUpdating = true;
 		var newValue = Value;
+
 		if (newValue > Maximum)
 			SetCurrentValue(ValueProperty, Maximum);
 		if (newValue < Minimum)
@@ -423,7 +434,7 @@ public class NumberBox : TextBox {
 	}
 
 	private void UpdateTextToValue() {
-		var newText = string.Empty;
+        var newText = string.Empty;
 		if (Value is not null && NumberFormatter is not null)
 			newText = NumberFormatter.FormatDouble(Math.Round((double)Value, MaxDecimalPlaces));
 
@@ -434,20 +445,16 @@ public class NumberBox : TextBox {
 			SetCurrentValue(IncrementEnabledProperty, Value < Maximum);
 			SetCurrentValue(DecrementEnabledProperty, Value > Minimum);
 			SetCurrentValue(TextProperty, newText);
-		}
-	}
+		}        
+    }
 
 	private void UpdateValueToText() {
-		ValidateInput();
+        ValidateInput();
 	}
 
 	private void ValidateInput() {
-		var text = RemoveStringFormatting(Text);
-		if (string.IsNullOrEmpty(text)) {
-			SetCurrentValue(ValueProperty, null);
-			return;
-		}
-
+        var text = RemoveStringFormatting(Text);
+		
 		var numberParser = NumberFormatter as INumberParser;
 		var value = numberParser!.ParseDouble(text);
 		if (value is null || Equals(Value, value)) {
@@ -465,7 +472,7 @@ public class NumberBox : TextBox {
 	}
 
 	private string RemoveStringFormatting(string inString) {
-		var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+        var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 		var groupSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator;
 		var cleanStr = inString.Replace(groupSeparator, string.Empty);
 		var regexIntOrDecimal = new Regex($@"(?:^|[^\w{decimalSeparator}])(\d[\d{decimalSeparator}]+)(?=\W|$)");
