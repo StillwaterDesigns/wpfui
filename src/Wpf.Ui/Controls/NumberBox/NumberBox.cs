@@ -326,7 +326,7 @@ public class NumberBox : TextBox {
 
 		switch (parameter) {
 			case "clear":
-				//OnClearButtonClick();
+				OnClearButtonClick();
 				break;
 			case "increment":
 				SetCurrentValue(SmallChangeProperty,
@@ -348,18 +348,20 @@ public class NumberBox : TextBox {
 	protected override void OnLostFocus(RoutedEventArgs e) {
 		try {
 			var element = Keyboard.FocusedElement;
-			if (element is Button) {
+
+			if (element != null && element is Button) {
 				var element2 = (Button)element;
-				if (element2.CommandParameter.ToString() == "clear") {
-					SetCurrentValue(TextProperty, string.Empty);
-					base.OnLostFocus(e);
+				if (element2.CommandParameter is not null) {
+					if (element2.CommandParameter.ToString() == "clear") {
+						SetCurrentValue(TextProperty, string.Empty);
+						base.OnLostFocus(e);
+					}
 				}
 			} else {
 				var textValue = Text;
 				if (string.IsNullOrEmpty(Text))
 					textValue = $"{Math.Max(Value ?? Minimum, Minimum)}";
 				SetCurrentValue(TextProperty, RemoveStringFormatting(textValue));
-				//SetCurrentValue(TextProperty, textValue);
 				base.OnLostFocus(e);
 				ValidateInput();
 			}
