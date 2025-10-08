@@ -5,7 +5,7 @@
 
 using System.Diagnostics;
 using System.Windows.Controls;
-
+using System.Windows.Input;
 using Wpf.Ui.Input;
 
 // ReSharper disable once CheckNamespace
@@ -203,7 +203,9 @@ public class TextBox : System.Windows.Controls.TextBox {
 		if (Text.Length > 0) {
             Debug.WriteLine("OnClearButtonClick");
             SetCurrentValue(TextProperty, string.Empty);
-		}
+            FocusManager.SetFocusedElement(FocusManager.GetFocusScope(this), null);
+            FocusManager.SetFocusedElement(FocusManager.GetFocusScope(this), this);
+        }
 	}
 
 	/// <summary>
