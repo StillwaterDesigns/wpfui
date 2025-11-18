@@ -1,53 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Markup;
+﻿using System.Windows.Markup;
 
-using Wpf.Ui.Controls;
+using Wpf.Ui.Controls;    // <-- make sure this matches where your VectorIcon lives
 
 namespace Wpf.Ui.Markup;
 
 /// <summary>
-/// Custom <see cref="MarkupExtension"/> which can provide <see cref="VectorIcon"/>.
+/// Markup extension that creates a VectorIcon from Geometry or path data.
 /// </summary>
-/// <example>
-/// <code lang="xml">
-/// &lt;ui:Button
-///     Appearance="Primary"
-///     Content="WPF UI button with font icon"
-///     Icon="{ui:FontIcon '&#x1F308;'}" /&gt;
-/// </code>
-/// <code lang="xml">
-/// &lt;ui:Button Icon="{ui:FontIcon '&amp;#x1F308;'}" /&gt;
-/// </code>
-/// <code lang="xml">
-/// &lt;ui:HyperlinkButton Icon="{ui:FontIcon '&amp;#x1F308;'}" /&gt;
-/// </code>
-/// <code lang="xml">
-/// &lt;ui:TitleBar Icon="{ui:FontIcon '&amp;#x1F308;'}" /&gt;
-/// </code>
-/// </example>
-[ContentProperty(nameof(Geometry))]
+[ContentProperty(nameof(Data))]
 [MarkupExtensionReturnType(typeof(VectorIcon))]
-public class VectorIconExtension(Geometry geometry) : MarkupExtension {
-	public VectorIconExtension(Geometry geometry, Geometry clipGeometry)  : this(geometry) {
-		ClipGeometry = clipGeometry;
+public class VectorIconExtension : MarkupExtension {
+	public VectorIconExtension() { }
+
+	public VectorIconExtension(Geometry data) {
+		Data = data;
 	}
 
-	[ConstructorArgument("geometry")]
-	public Geometry Geometry { get; set; } = geometry;
+	public VectorIconExtension(string pathData) {
+		Data = Geometry.Parse(pathData);
+	}
 
-
-	[ConstructorArgument("clipGeometry")]
-	public Geometry? ClipGeometry { get; set; }
+	/// <summary>
+	/// The geometry used to draw the icon.
+	/// </summary>
+	[ConstructorArgument("data")]
+	public Geometry? Data { get; set; }
 
 	public override object ProvideValue(IServiceProvider serviceProvider) {
-		var vectorIcon = new VectorIcon {
-			Geometry = Geometry,
-			ClipGeometry = ClipGeometry,
-		};
-		return vectorIcon;
+		return Data is null
+			? new VectorIcon()
+			: new VectorIcon { Data = Data };
 	}
 }
