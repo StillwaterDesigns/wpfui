@@ -437,13 +437,15 @@ public class TitleBar : System.Windows.Controls.Control, IThemeControl
         }
 
         MouseRightButtonUp += TitleBar_MouseRightButtonUp;
+        if(_parentWindow is not null)
+            SetCurrentValue(IsMaximizedProperty, ((Window)_parentWindow).WindowState == WindowState.Maximized);
 
         /*_mainGrid = GetTemplateChild<System.Windows.Controls.Grid>(ElementMainGrid);*/
         _icon = GetTemplateChild<System.Windows.Controls.ContentPresenter>(ElementIcon);
 
         TitleBarButton helpButton = GetTemplateChild<TitleBarButton>(ElementHelpButton);
         TitleBarButton minimizeButton = GetTemplateChild<TitleBarButton>(ElementMinimizeButton);
-        TitleBarButton maximizeButton = GetTemplateChild<TitleBarButton>(ElementMaximizeButton);
+		TitleBarButton maximizeButton = GetTemplateChild<TitleBarButton>(ElementMaximizeButton);
         TitleBarButton closeButton = GetTemplateChild<TitleBarButton>(ElementCloseButton);
 
         _buttons[0] = maximizeButton;

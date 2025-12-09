@@ -95,7 +95,8 @@ public class FluentWindow : Window {
 	protected override void OnSourceInitialized(EventArgs e) {
 		OnCornerPreferenceChanged(default, WindowCornerPreference);
 		OnExtendsContentIntoTitleBarChanged(default, ExtendsContentIntoTitleBar);
-		OnBackdropTypeChanged(default, WindowBackdropType);
+		if (ExtendsContentIntoTitleBar)
+			OnBackdropTypeChanged(default, WindowBackdropType);
 		base.OnSourceInitialized(e);
 	}
 
