@@ -1,5 +1,7 @@
 ﻿using System.Windows.Shapes;
 
+using Wpf.Ui.Markup;
+
 namespace Wpf.Ui.Controls;
 
 /// <summary>
@@ -7,6 +9,13 @@ namespace Wpf.Ui.Controls;
 /// </summary>
 public class VectorIcon : IconElement {
 	private Path? _path;
+
+	public VectorIcon() { }
+
+	public VectorIcon(string pathData, Brush? brush = null) : this() {
+		Data = Geometry.Parse(pathData);
+		Foreground = brush ?? (Brush)UiApplication.Current.Resources[ThemeResource.TextFillColorPrimaryBrush];
+	}
 
 	/// <summary>
 	/// The vector path geometry being rendered.
@@ -51,12 +60,12 @@ public class VectorIcon : IconElement {
 	// Called when Foreground changes
 	protected override void OnForegroundChanged(DependencyPropertyChangedEventArgs args) {
 		if (_path is not null)
-			_path.Fill = Foreground;
+			_path.SetCurrentValue(Shape.FillProperty, Foreground);
 	}
 
 	private static void OnDataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
 		if (d is VectorIcon icon && icon._path is not null)
-			icon._path.Data = (Geometry)e.NewValue;
+			icon._path.SetCurrentValue(Path.DataProperty, (Geometry)e.NewValue);
 	}
 
 	/// <summary>
