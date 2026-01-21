@@ -1,4 +1,6 @@
-﻿using System.Windows.Shapes;
+﻿using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Shapes;
 
 using Wpf.Ui.Markup;
 
@@ -8,7 +10,7 @@ namespace Wpf.Ui.Controls;
 /// Displays vector path data as an IconElement.
 /// </summary>
 public class VectorIcon : IconElement {
-	private Path? _path;
+	private Path? _fgPath, _bgPath;
 
 	public VectorIcon() { }
 
@@ -57,30 +59,77 @@ public class VectorIcon : IconElement {
 			)
 		);
 
+
+	/// <inheritdoc cref="Control.Background"/>
+	[Bindable(true)]
+	[Category("Appearance")]
+	public Brush Background {
+		get => (Brush)GetValue(BackgroundProperty);
+		set => SetValue(BackgroundProperty, value);
+	}
+
+	/// <summary>Identifies the <see cref="Background"/> dependency property.</summary>
+	public static readonly DependencyProperty BackgroundProperty = TextElement.BackgroundProperty.AddOwner(
+		typeof(VectorIcon),
+		new FrameworkPropertyMetadata(
+			Brushes.Transparent,
+			FrameworkPropertyMetadataOptions.Inherits,
+			static (d, args) => ((VectorIcon)d).OnBackgroundChanged(args)
+		)
+	);
+
 	// Called when Foreground changes
 	protected override void OnForegroundChanged(DependencyPropertyChangedEventArgs args) {
-		if (_path is not null)
-			_path.SetCurrentValue(Shape.FillProperty, Foreground);
+		_fgPath?.SetCurrentValue(Shape.FillProperty, Foreground);
+	}
+	// Called when Background changes
+	protected void OnBackgroundChanged(DependencyPropertyChangedEventArgs args) {
+		_bgPath?.SetCurrentValue(Shape.FillProperty, Background);
 	}
 
 	private static void OnDataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-		if (d is VectorIcon icon && icon._path is not null)
-			icon._path.SetCurrentValue(Path.DataProperty, (Geometry)e.NewValue);
+		if (d is not VectorIcon icon)
+			return;
+
+		var g = (Geometry)e.NewValue;
+		icon._bgPath?.SetCurrentValue(Path.DataProperty, ToPathGeometryWithFillRule(g, FillRule.Nonzero));
+		icon._fgPath?.SetCurrentValue(Path.DataProperty, ToPathGeometryWithFillRule(g, FillRule.EvenOdd));
 	}
 
 	/// <summary>
 	/// Called once to create the inner visual.
 	/// </summary>
 	protected override UIElement InitializeChildren() {
-		_path = new Path {
+		_bgPath = new Path {
 			Stretch = Stretch,
-			Fill = Foreground,
-			Data = Data,
+			Fill = Background,
+			Data = ToPathGeometryWithFillRule(Data, FillRule.Nonzero), // solid silhouette
 			SnapsToDevicePixels = true
 		};
 
-		return _path;
+		_fgPath = new Path {
+			Stretch = Stretch,
+			Fill = Foreground,
+			Data = ToPathGeometryWithFillRule(Data, FillRule.EvenOdd), // preserves holes
+			SnapsToDevicePixels = true
+		};
+
+		var grid = new Grid { SnapsToDevicePixels = true };
+		grid.Children.Add(_bgPath);
+		grid.Children.Add(_fgPath);
+		return grid;
 	}
+	private static PathGeometry ToPathGeometryWithFillRule(Geometry geometry, FillRule fillRule) {
+		// Converts *any* Geometry into a PathGeometry you can control.
+		var pg = PathGeometry.CreateFromGeometry(geometry);
+		pg.FillRule = fillRule;
+
+		// Optional: freezing is nice if you won't mutate it further
+		if (pg.CanFreeze)
+			pg.Freeze();
+		return pg;
+	}
+
 }
 //public class VectorIcon: IconElement {
 //	private static readonly Type mType = typeof(VectorIcon);
