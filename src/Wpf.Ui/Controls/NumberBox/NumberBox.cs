@@ -486,8 +486,11 @@ public class NumberBox : TextBox {
 		if(string.IsNullOrEmpty(resultStr))
 			return resultStr;
 		var numValue = double.Parse(resultStr);
+
 		numValue = Math.Max(Math.Min(numValue, Maximum), Minimum);
-		return $"{numValue}";
+		return NumberFormatter is not null ?
+			$"{NumberFormatter.FormatDouble(Math.Round(numValue, MaxDecimalPlaces))}"
+			: $"{numValue}";
 	}
 
 	private static INumberFormatter GetRegionalSettingsAwareDecimalFormatter() {
