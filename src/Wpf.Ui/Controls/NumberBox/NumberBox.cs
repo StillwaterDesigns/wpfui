@@ -316,10 +316,27 @@ public class NumberBox : TextBox {
 				break;
 		}
 	}
+	protected override void OnPreviewMouseWheel(MouseWheelEventArgs e) {
+		base.OnPreviewMouseWheel(e);
+		if (e.Handled)
+			return;
+		if (IsReadOnly || !IsEnabled || !IsMouseOver)
+			return;
+		 if (!IsKeyboardFocusWithin)
+			return;
+
+		var smChange = e.Delta > 0 ? SmallChange : -SmallChange;
+		SetCurrentValue(SmallChangeProperty,
+			Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, smChange) ?? SmallChange));
+		var change = Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? LargeChange : SmallChange;
+		change *= e.Delta > 0 ? 1 : -1;
+		StepValue(change);
+		e.Handled = true;
+	}
 
 	/// <inheritdoc />
 	protected override void OnTemplateButtonClick(string? parameter) {
-		System.Diagnostics.Debug.WriteLine(
+		Debug.WriteLine(
 			$"INFO: {typeof(NumberBox)} button clicked with param: {parameter}",
 			"Wpf.Ui.NumberBox"
 		);
@@ -419,7 +436,7 @@ public class NumberBox : TextBox {
 	}
 
 	private void StepValue(double? change) {
-		System.Diagnostics.Debug.WriteLine(
+		Debug.WriteLine(
 			$"INFO: {typeof(NumberBox)} {nameof(StepValue)} raised, change {change}",
 			"Wpf.Ui.NumberBox"
 		);

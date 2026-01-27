@@ -23,6 +23,13 @@ public abstract class IconElement : FrameworkElement {
 		);
 	}
 
+	/// <inheritdoc cref="Control.Foreground"/>
+	[Bindable(true)]
+	[Category("Brush")]
+	public Brush Foreground {
+		get => (Brush)GetValue(ForegroundProperty);
+		set => SetValue(ForegroundProperty, value);
+	}
 	/// <summary>Identifies the <see cref="Foreground"/> dependency property.</summary>
 	public static readonly DependencyProperty ForegroundProperty = TextElement.ForegroundProperty.AddOwner(
 		typeof(IconElement),
@@ -32,14 +39,6 @@ public abstract class IconElement : FrameworkElement {
 			static (d, args) => ((IconElement)d).OnForegroundChanged(args)
 		)
 	);
-
-	/// <inheritdoc cref="Control.Foreground"/>
-	[Bindable(true)]
-	[Category("Appearance")]
-	public Brush Foreground {
-		get => (Brush)GetValue(ForegroundProperty);
-		set => SetValue(ForegroundProperty, value);
-	}
 
 	protected override int VisualChildrenCount => 1;
 
