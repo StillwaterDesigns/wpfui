@@ -494,8 +494,10 @@ public class NumberBox : TextBox {
         var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 		var groupSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator;
 		var cleanStr = inString.Replace(groupSeparator, string.Empty);
-		var regexIntOrDecimal = new Regex($@"(?:^|[^\w{decimalSeparator}])(\d[\d{decimalSeparator}]+)(?=\W|$)");
-		var regexMatch = regexIntOrDecimal.Match(cleanStr).Value;
+        //Seems to have a problem capturing single digit values.  My guess is a '+' instead of a '*'
+        //var regexIntOrDecimal = new Regex($@"(?:^|[^\w{decimalSeparator}])(\d[\d{decimalSeparator}]+)(?=\W|$)");
+        var regexIntOrDecimal = new Regex($@"(?:^|[^\w{decimalSeparator}])(\d[\d{decimalSeparator}]*)(?=\W|$)");
+        var regexMatch = regexIntOrDecimal.Match(cleanStr).Value;
 		regexMatch = Regex.Replace(regexMatch, "^0+(?!$)", string.Empty);
 		var regexMatches = regexIntOrDecimal.Matches(cleanStr, 0);
 		var regexReplace = regexIntOrDecimal.Replace(cleanStr, string.Empty);
