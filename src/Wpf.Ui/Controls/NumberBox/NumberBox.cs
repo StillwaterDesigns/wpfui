@@ -294,14 +294,28 @@ public class NumberBox : TextBox {
 				StepValue(-LargeChange);
 				break;
 			case Key.Up:
-				SetCurrentValue(SmallChangeProperty,
-					Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, SmallChange) ?? SmallChange));
-                StepValue(SmallChange);
+                SetCurrentValue(SmallChangeProperty,
+                        Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, SmallChange) ?? SmallChange));
+                if (Keyboard.Modifiers == ModifierKeys.Control) {
+					if (SmallChange >= LargeChange)
+						StepValue(SmallChange * 2);
+					else
+						StepValue(LargeChange);
+                } else {					
+					StepValue(SmallChange);
+				}
 				break;
 			case Key.Down:
                 SetCurrentValue(SmallChangeProperty,
                     Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, -SmallChange) ?? SmallChange));
-                StepValue(-SmallChange);
+                if (Keyboard.Modifiers == ModifierKeys.Control) {
+                    if (SmallChange >= LargeChange)
+                        StepValue(-(SmallChange * 2));
+                    else
+                        StepValue(-LargeChange);
+				} else {					
+					StepValue(-SmallChange);
+				}
 				break;
 			case Key.Enter:
 				if (TextWrapping != TextWrapping.Wrap) {
