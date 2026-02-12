@@ -24,6 +24,9 @@ namespace Wpf.Ui.Controls;
 /// </summary>
 public class NumberBox : TextBox {
 	private bool _valueUpdating;
+	private const string paramClear = "clear";
+	private const string paramIncrement = "increment";
+	private const string paramDecrement = "decrement";
 
 	/// <summary>Identifies the <see cref="Value"/> dependency property.</summary>
 	public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(
@@ -270,7 +273,7 @@ public class NumberBox : TextBox {
 
 	protected override void OnPreviewTextInput(TextCompositionEventArgs e) {
 		base.OnPreviewTextInput(e);
-        var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+		var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 		var regexStr = MaxDecimalPlaces > 0 ? @$"^\d*\{decimalSeparator}?\d*$" : @"^\d*$";
 		if (Minimum < 0)
 			regexStr = regexStr.Insert(1, "-?");
@@ -294,28 +297,14 @@ public class NumberBox : TextBox {
 				StepValue(-LargeChange);
 				break;
 			case Key.Up:
-                SetCurrentValue(SmallChangeProperty,
-                        Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, SmallChange) ?? SmallChange));
-                if (Keyboard.Modifiers == ModifierKeys.Control) {
-					if (SmallChange >= LargeChange)
-						StepValue(SmallChange * 2);
-					else
-						StepValue(LargeChange);
-                } else {					
-					StepValue(SmallChange);
-				}
+				SetCurrentValue(SmallChangeProperty,
+					Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, SmallChange) ?? SmallChange));
+				StepValue(SmallChange);
 				break;
 			case Key.Down:
-                SetCurrentValue(SmallChangeProperty,
-                    Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, -SmallChange) ?? SmallChange));
-                if (Keyboard.Modifiers == ModifierKeys.Control) {
-                    if (SmallChange >= LargeChange)
-                        StepValue(-(SmallChange * 2));
-                    else
-                        StepValue(-LargeChange);
-				} else {					
-					StepValue(-SmallChange);
-				}
+				SetCurrentValue(SmallChangeProperty,
+					Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, -SmallChange) ?? SmallChange));
+				StepValue(-SmallChange);
 				break;
 			case Key.Enter:
 				if (TextWrapping != TextWrapping.Wrap) {
@@ -330,13 +319,27 @@ public class NumberBox : TextBox {
 				break;
 		}
 	}
+	protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e) {
+		if (e.Handled)
+			return;
+
+		// First click gives focus -> prevent TextBox from moving the caret and clearing selection
+		if (!IsKeyboardFocusWithin) {
+			e.Handled = true;
+			Focus();
+			SelectAll();
+			return;
+		}
+		base.OnPreviewMouseLeftButtonDown(e);
+	}
+
 	protected override void OnPreviewMouseWheel(MouseWheelEventArgs e) {
 		base.OnPreviewMouseWheel(e);
 		if (e.Handled)
 			return;
 		if (IsReadOnly || !IsEnabled || !IsMouseOver)
 			return;
-		 if (!IsKeyboardFocusWithin)
+		if (!IsKeyboardFocusWithin)
 			return;
 
 		var smChange = e.Delta > 0 ? SmallChange : -SmallChange;
@@ -356,15 +359,15 @@ public class NumberBox : TextBox {
 		);
 
 		switch (parameter) {
-			case "clear":
+			case paramClear:
 				OnClearButtonClick();
 				break;
-			case "increment":
+			case paramIncrement:
 				SetCurrentValue(SmallChangeProperty,
 					Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, SmallChange) ?? SmallChange));
 				StepValue(SmallChange);
 				break;
-			case "decrement":
+			case paramDecrement:
 				SetCurrentValue(SmallChangeProperty,
 					Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, -SmallChange) ?? SmallChange));
 				StepValue(-SmallChange);
@@ -378,12 +381,9 @@ public class NumberBox : TextBox {
 	/// <inheritdoc />
 	protected override void OnLostFocus(RoutedEventArgs e) {
 		try {
-			var element = Keyboard.FocusedElement;
-
-			if (element != null && element is Button) {
-				var element2 = (Button)element;
-				if (element2.CommandParameter is not null) {
-					if (element2.CommandParameter.ToString() == "clear") {
+			if(Keyboard.FocusedElement is Button element) {
+				if (element.CommandParameter is not null) {
+					if (element.CommandParameter.ToString() == paramClear) {
 						SetCurrentValue(TextProperty, string.Empty);
 						base.OnLostFocus(e);
 					}
@@ -400,9 +400,9 @@ public class NumberBox : TextBox {
 		}
 	}
 
-	protected override void OnGotFocus(RoutedEventArgs e) {
-		base.OnGotFocus(e);
-        SetCurrentValue(TextProperty, RemoveStringFormatting(Text));
+	protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e) {
+		base.OnGotKeyboardFocus(e);
+		SetCurrentValue(TextProperty, RemoveStringFormatting(Text));
 		SelectAll();
 	}
 
@@ -410,8 +410,8 @@ public class NumberBox : TextBox {
 	protected override void OnTemplateChanged(ControlTemplate oldTemplate,
 		ControlTemplate newTemplate) {
 		base.OnTemplateChanged(oldTemplate, newTemplate);
-        // If Text has been set, but Value hasn't, update Value based on Text.
-        if (string.IsNullOrEmpty(Text) && Value != null)
+		// If Text has been set, but Value hasn't, update Value based on Text.
+		if (string.IsNullOrEmpty(Text) && Value is not null)
 			UpdateValueToText();
 		else
 			UpdateTextToValue();
@@ -430,7 +430,6 @@ public class NumberBox : TextBox {
 			SetCurrentValue(ValueProperty, Maximum);
 		if (newValue < Minimum)
 			SetCurrentValue(ValueProperty, Minimum);
-
 		if (!Equals(newValue, oldValue))
 			RaiseEvent(new RoutedEventArgs(ValueChangedEvent));
 
@@ -462,12 +461,11 @@ public class NumberBox : TextBox {
 			newValue += change ?? 0d;
 
 		SetCurrentValue(ValueProperty, newValue);
-		
 		MoveCaretToTextEnd();
 	}
 
 	private void UpdateTextToValue() {
-        var newText = string.Empty;
+		var newText = string.Empty;
 		if (Value is not null && NumberFormatter is not null)
 			newText = NumberFormatter.FormatDouble(Math.Round((double)Value, MaxDecimalPlaces));
 
@@ -478,16 +476,15 @@ public class NumberBox : TextBox {
 			SetCurrentValue(IncrementEnabledProperty, Value < Maximum);
 			SetCurrentValue(DecrementEnabledProperty, Value > Minimum);
 			SetCurrentValue(TextProperty, newText);
-		}        
-    }
+		}
+	}
 
 	private void UpdateValueToText() {
-        ValidateInput();
+		ValidateInput();
 	}
 
 	private void ValidateInput() {
-        var text = RemoveStringFormatting(Text);
-		
+		var text = RemoveStringFormatting(Text);
 		var numberParser = NumberFormatter as INumberParser;
 		var value = numberParser!.ParseDouble(text);
 		if (value is null || Equals(Value, value)) {
@@ -505,18 +502,16 @@ public class NumberBox : TextBox {
 	}
 
 	private string RemoveStringFormatting(string inString) {
-        var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+		var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 		var groupSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator;
 		var cleanStr = inString.Replace(groupSeparator, string.Empty);
-        //Seems to have a problem capturing single digit values.  My guess is a '+' instead of a '*'
-        //var regexIntOrDecimal = new Regex($@"(?:^|[^\w{decimalSeparator}])(\d[\d{decimalSeparator}]+)(?=\W|$)");
-        var regexIntOrDecimal = new Regex($@"(?:^|[^\w{decimalSeparator}])(\d[\d{decimalSeparator}]*)(?=\W|$)");
-        var regexMatch = regexIntOrDecimal.Match(cleanStr).Value;
+		var regexIntOrDecimal = new Regex($@"(?:^|[^\w{decimalSeparator}])(\d[\d{decimalSeparator}]*)(?=\W|$)");
+		var regexMatch = regexIntOrDecimal.Match(cleanStr).Value;
 		regexMatch = Regex.Replace(regexMatch, "^0+(?!$)", string.Empty);
 		var regexMatches = regexIntOrDecimal.Matches(cleanStr, 0);
 		var regexReplace = regexIntOrDecimal.Replace(cleanStr, string.Empty);
 		var resultStr = regexMatches.Count > 0 ? regexMatch : regexReplace;
-		if(string.IsNullOrEmpty(resultStr))
+		if (string.IsNullOrEmpty(resultStr))
 			return resultStr;
 		var numValue = double.Parse(resultStr);
 
