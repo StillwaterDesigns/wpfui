@@ -37,7 +37,8 @@ public class ImageMaskIcon : IconElement {
 
 	protected override UIElement InitializeChildren() {
 		Image = new System.Windows.Controls.Image() { Source = Source, Stretch = Stretch.UniformToFill };
-		
+		if(Foreground == Brushes.Transparent)
+			SetCurrentValue(ForegroundProperty, SystemColors.ControlTextBrush);
 		LayoutMask = new Grid { Background = Foreground, SnapsToDevicePixels = true, Margin = this.Margin };
 		LayoutMask.SetCurrentValue(OpacityMaskProperty, new VisualBrush(Image));
 		return LayoutMask;
