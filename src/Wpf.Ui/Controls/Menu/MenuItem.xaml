@@ -682,6 +682,7 @@
 				</ContentControl>
 
                 <ContentPresenter
+					VerticalAlignment="Center"
                     Grid.Column="3"
                     ContentSource="Header"
                     RecognizesAccessKey="True"
