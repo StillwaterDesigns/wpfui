@@ -299,12 +299,14 @@ public class NumberBox : TextBox {
 			case Key.Up:
 				SetCurrentValue(SmallChangeProperty,
 					Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, SmallChange) ?? SmallChange));
-				StepValue(SmallChange);
+				var increment = Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? LargeChange : SmallChange;
+				StepValue(increment);
 				break;
 			case Key.Down:
 				SetCurrentValue(SmallChangeProperty,
 					Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, -SmallChange) ?? SmallChange));
-				StepValue(-SmallChange);
+				var decrement = Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? LargeChange : SmallChange;
+				StepValue(-decrement);
 				break;
 			case Key.Enter:
 				if (TextWrapping != TextWrapping.Wrap) {
@@ -365,12 +367,14 @@ public class NumberBox : TextBox {
 			case paramIncrement:
 				SetCurrentValue(SmallChangeProperty,
 					Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, SmallChange) ?? SmallChange));
-				StepValue(SmallChange);
+				var increment = Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? LargeChange : SmallChange;
+				StepValue(increment);
 				break;
 			case paramDecrement:
 				SetCurrentValue(SmallChangeProperty,
 					Convert.ToDouble(CoerceStepperSmChangeCallback?.Invoke(this, -SmallChange) ?? SmallChange));
-				StepValue(-SmallChange);
+				var decrement = Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? LargeChange : SmallChange;
+				StepValue(-decrement);
 				break;
 		}
 
