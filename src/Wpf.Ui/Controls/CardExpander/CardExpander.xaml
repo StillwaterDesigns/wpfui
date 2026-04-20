@@ -116,7 +116,14 @@
                         </Grid.RowDefinitions>
 
                         <!--  Top level controls always visible  -->
-                        <Border
+
+						<Border
+                            x:Name="ToggleButtonBorderMask"
+                            Grid.Row="0"
+                            BorderThickness="1"
+                            Background="White"
+                            CornerRadius="{TemplateBinding CornerRadius}"/>
+						<Border
                             x:Name="ToggleButtonBorder"
                             Grid.Row="0"
                             BorderThickness="1"
@@ -124,7 +131,11 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             CornerRadius="{TemplateBinding CornerRadius}">
 							<Grid>
-								<Grid Opacity="0.85" Background="{TemplateBinding BackgroundTint}"/>
+								<Grid Opacity="0.85" Background="{TemplateBinding BackgroundTint}">
+									<Grid.OpacityMask>
+										<VisualBrush Visual="{Binding ElementName=ToggleButtonBorderMask}" />
+									</Grid.OpacityMask>
+								</Grid>
 								<ToggleButton
                                     x:Name="ExpanderToggleButton"
                                     Margin="0"

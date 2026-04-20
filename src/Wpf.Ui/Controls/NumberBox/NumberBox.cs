@@ -274,12 +274,19 @@ public class NumberBox : TextBox {
 	protected override void OnPreviewTextInput(TextCompositionEventArgs e) {
 		base.OnPreviewTextInput(e);
 		var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-		var regexStr = MaxDecimalPlaces > 0 ? @$"^\d*\{decimalSeparator}?\d*$" : @"^\d*$";
+
+		// Build the resulting text after input
+		var newText = Text.Insert(SelectionStart, e.Text);
+
+		// Regex: allow only ONE decimal separator
+		var regexStr = MaxDecimalPlaces > 0
+			? @$"^\d*({Regex.Escape(decimalSeparator)}\d*)?$"
+			: @"^\d*$";
 		if (Minimum < 0)
 			regexStr = regexStr.Insert(1, "-?");
-		var isValidPattern = new Regex(regexStr);
-		var isInputValid = isValidPattern.IsMatch(e.Text);
-		if (!isInputValid && e.Text.Length > 0)
+
+		var isValid = Regex.IsMatch(newText, regexStr);
+		if (!isValid)
 			e.Handled = true;
 	}
 
