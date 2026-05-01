@@ -72,7 +72,7 @@ public class NumberBox : TextBox {
 		nameof(Maximum),
 		typeof(double),
 		typeof(NumberBox),
-		new PropertyMetadata(double.MaxValue)
+		new PropertyMetadata(double.MaxValue, OnRangedChanged)
 	);
 
 	/// <summary>Identifies the <see cref="Minimum"/> dependency property.</summary>
@@ -80,7 +80,7 @@ public class NumberBox : TextBox {
 		nameof(Minimum),
 		typeof(double),
 		typeof(NumberBox),
-		new PropertyMetadata(double.MinValue)
+		new PropertyMetadata(double.MinValue, OnRangedChanged)
 	);
 
 	/// <summary>Identifies the <see cref="AcceptsExpression"/> dependency property.</summary>
@@ -429,6 +429,14 @@ public class NumberBox : TextBox {
 	}
 
 	/// <summary>
+	/// Is called when <see cref="Minimum"/> or <see cref="Maximum"/> in this <see cref="NumberBox"/> changes.
+	/// </summary>
+	protected virtual void OnRangeChanged(DependencyObject d) {
+		SetCurrentValue(IncrementEnabledProperty, Value < Maximum);
+		SetCurrentValue(DecrementEnabledProperty, Value > Minimum);
+	}
+
+	/// <summary>
 	/// Is called when <see cref="Value"/> in this <see cref="NumberBox"/> changes.
 	/// </summary>
 	protected virtual void OnValueChanged(DependencyObject d, double? oldValue) {
@@ -483,9 +491,9 @@ public class NumberBox : TextBox {
 		var bb = BindingOperations.GetBindingBase(this, TextProperty);
 		if (bb is not null && bb.StringFormat is not null)
 			newText = string.Format(bb.StringFormat, Value);
+		SetCurrentValue(IncrementEnabledProperty, Value < Maximum);
+		SetCurrentValue(DecrementEnabledProperty, Value > Minimum);
 		if (newText != Text) {
-			SetCurrentValue(IncrementEnabledProperty, Value < Maximum);
-			SetCurrentValue(DecrementEnabledProperty, Value > Minimum);
 			SetCurrentValue(TextProperty, newText);
 		}
 	}
@@ -534,6 +542,13 @@ public class NumberBox : TextBox {
 
 	private static INumberFormatter GetRegionalSettingsAwareDecimalFormatter() {
 		return new ValidateNumberFormatter();
+	}
+
+	private static void OnRangedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+		if (d is not NumberBox numberBox)
+			return;
+
+		numberBox.OnRangeChanged(d);
 	}
 
 	private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
