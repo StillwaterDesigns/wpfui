@@ -145,6 +145,8 @@ public class SplitButton : Button {
 	/// Triggered when the control is loaded. Aquires resource bindings.
 	/// </summary>
 	protected virtual void AcquireTemplateResources() {
+        if (SplitButtonToggleButton is null)
+            return;
 		SplitButtonToggleButton.Click -= OnSplitButtonToggleButtonOnClick;
 		SplitButtonToggleButton.Click += OnSplitButtonToggleButtonOnClick;
 	}
