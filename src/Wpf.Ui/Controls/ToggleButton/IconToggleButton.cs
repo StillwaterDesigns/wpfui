@@ -205,11 +205,11 @@ public class IconToggleButton : System.Windows.Controls.Primitives.ToggleButton,
 					SetCurrentValue(IconProperty, IsChecked is true ? CheckedIcon : UncheckedIcon);
 				break;
 			case nameof(CheckedIcon):
-				if(IsChecked is true)
+				if(IsChecked is true && CheckedIcon is not null)
 					SetCurrentValue(IconProperty, CheckedIcon);
 				break;
 			case nameof(UncheckedIcon):
-				if (IsChecked is false)
+				if (IsChecked is false && UncheckedIcon is not null)
 					SetCurrentValue(IconProperty, UncheckedIcon);
 				break;
 			default:

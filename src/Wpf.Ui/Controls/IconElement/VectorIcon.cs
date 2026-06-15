@@ -131,5 +131,4 @@ public class VectorIcon : IconElement {
 			pg.Freeze();
 		return pg;
 	}
-
 }

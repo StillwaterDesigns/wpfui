@@ -50,6 +50,8 @@
                         HorizontalAlignment="Stretch"
                         Margin="{TemplateBinding Padding}"
                         Style="{DynamicResource DefaultTextBoxScrollViewerStyle}"
+						TextElement.FontSize="{TemplateBinding FontSize}"
+						TextElement.FontWeight="{TemplateBinding FontWeight}"
                         TextElement.Foreground="{TemplateBinding Foreground}" />
                 </ControlTemplate>
             </Setter.Value>
@@ -215,6 +217,8 @@
                                             ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                             ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                             IsHitTestVisible="False"
+											TextElement.FontSize="{TemplateBinding FontSize}"
+											TextElement.FontWeight="{TemplateBinding FontWeight}"
                                             TextElement.Foreground="{TemplateBinding Foreground}" />
                                     </Grid>
                                     <Grid Grid.Column="1" Margin="{StaticResource ComboBoxChevronMargin}">
