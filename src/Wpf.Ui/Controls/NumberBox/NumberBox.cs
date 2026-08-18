@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 // ReSharper disable once CheckNamespace
 namespace Wpf.Ui.Controls;
@@ -273,21 +274,38 @@ public class NumberBox : TextBox {
 
 	protected override void OnPreviewTextInput(TextCompositionEventArgs e) {
 		base.OnPreviewTextInput(e);
+
 		var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 
-		// Build the resulting text after input
-		var newText = Text.Insert(SelectionStart, e.Text);
+		var newText = Text.Remove(SelectionStart, SelectionLength)
+			.Insert(SelectionStart, e.Text);
 
-		// Regex: allow only ONE decimal separator
 		var regexStr = MaxDecimalPlaces > 0
 			? @$"^\d*({Regex.Escape(decimalSeparator)}\d*)?$"
 			: @"^\d*$";
+
 		if (Minimum < 0)
 			regexStr = regexStr.Insert(1, "-?");
 
-		var isValid = Regex.IsMatch(newText, regexStr);
-		if (!isValid)
+		if (!Regex.IsMatch(newText, regexStr))
 			e.Handled = true;
+	}
+
+	protected override void OnPreviewKeyDown(KeyEventArgs e) {
+		base.OnPreviewKeyDown(e);
+
+		if (e.Key != Key.Enter || IsReadOnly)
+			return;
+
+		if (TextWrapping != TextWrapping.Wrap)
+			ValidateInput();
+
+		e.Handled = true;
+
+		Dispatcher.BeginInvoke(() => {
+			Keyboard.Focus(this);
+			SelectAll();
+		}, DispatcherPriority.Input);
 	}
 
 	/// <inheritdoc />
@@ -315,19 +333,11 @@ public class NumberBox : TextBox {
 				var decrement = Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? LargeChange : SmallChange;
 				StepValue(-decrement);
 				break;
-			case Key.Enter:
-				if (TextWrapping != TextWrapping.Wrap) {
-					ValidateInput();
-					MoveCaretToTextEnd();
-				}
-
-				FocusManager.SetFocusedElement(FocusManager.GetFocusScope(this), null);
-				FocusManager.SetFocusedElement(FocusManager.GetFocusScope(this), this);
-				break;
 			default:
 				break;
 		}
 	}
+
 	protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e) {
 		if (e.Handled)
 			return;
