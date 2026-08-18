@@ -5,7 +5,7 @@
 
 using System.Diagnostics;
 using System.Windows.Controls;
-using System.Windows.Input;
+
 using Wpf.Ui.Input;
 
 // ReSharper disable once CheckNamespace
@@ -42,6 +42,14 @@ public class TextBox : System.Windows.Controls.TextBox {
 	/// <summary>Identifies the <see cref="PlaceholderEnabled"/> dependency property.</summary>
 	public static readonly DependencyProperty PlaceholderEnabledProperty = DependencyProperty.Register(
 		nameof(PlaceholderEnabled),
+		typeof(bool),
+		typeof(TextBox),
+		new PropertyMetadata(true, OnPlaceholderEnabledChanged)
+	);
+
+	/// <summary>Identifies the <see cref="CurrentPlaceholderEnabled"/> dependency property.</summary>
+	public static readonly DependencyProperty CurrentPlaceholderEnabledProperty = DependencyProperty.Register(
+		nameof(CurrentPlaceholderEnabled),
 		typeof(bool),
 		typeof(TextBox),
 		new PropertyMetadata(true)
@@ -96,7 +104,7 @@ public class TextBox : System.Windows.Controls.TextBox {
 	}
 
 	/// <summary>
-	/// Gets or sets numbers pattern.
+	/// Gets or sets placeholder text.
 	/// </summary>
 	public string PlaceholderText {
 		get => (string)GetValue(PlaceholderTextProperty);
@@ -104,11 +112,19 @@ public class TextBox : System.Windows.Controls.TextBox {
 	}
 
 	/// <summary>
-	/// Gets or sets a value indicating whether to display the placeholder text.
+	/// Gets or sets a value indicating whether to enable the placeholder text.
 	/// </summary>
 	public bool PlaceholderEnabled {
 		get => (bool)GetValue(PlaceholderEnabledProperty);
 		set => SetValue(PlaceholderEnabledProperty, value);
+	}
+
+	/// <summary>
+	/// Gets or sets a value indicating whether to display the placeholder text.
+	/// </summary>
+	public bool CurrentPlaceholderEnabled {
+		get => (bool)GetValue(CurrentPlaceholderEnabledProperty);
+		protected set => SetValue(CurrentPlaceholderEnabledProperty, value);
 	}
 
 	/// <summary>
@@ -145,22 +161,30 @@ public class TextBox : System.Windows.Controls.TextBox {
 	/// </summary>
 	public TextBox() {
 		SetValue(TemplateButtonCommandProperty, new RelayCommand<string>(OnTemplateButtonClick));
+		CurrentPlaceholderEnabled = PlaceholderEnabled;
 	}
 
 	/// <inheritdoc />
 	protected override void OnTextChanged(TextChangedEventArgs e) {
 		base.OnTextChanged(e);
 
-		if (PlaceholderEnabled && Text.Length > 0) {
-			SetCurrentValue(PlaceholderEnabledProperty, false);
-		}
+		SetPlaceholderTextVisibility();
 
-		if (!PlaceholderEnabled && Text.Length < 1) {
-			SetCurrentValue(PlaceholderEnabledProperty, true);
-		}
+		RevealClearButton();
+	}
 
-		if(HasEffectiveKeyboardFocus)
-			RevealClearButton();
+	protected void SetPlaceholderTextVisibility() {
+		if (PlaceholderEnabled) {
+			if (CurrentPlaceholderEnabled && Text.Length > 0) {
+				SetCurrentValue(CurrentPlaceholderEnabledProperty, false);
+			}
+
+			if (!CurrentPlaceholderEnabled && Text.Length < 1) {
+				SetCurrentValue(CurrentPlaceholderEnabledProperty, true);
+			}
+		} else if (CurrentPlaceholderEnabled) {
+			SetCurrentValue(CurrentPlaceholderEnabledProperty, false);
+		}
 	}
 
 	/// <inheritdoc />
@@ -175,6 +199,7 @@ public class TextBox : System.Windows.Controls.TextBox {
 	/// <inheritdoc />
 	protected override void OnLostFocus(RoutedEventArgs e) {
 		base.OnLostFocus(e);
+
 		HideClearButton();
 	}
 
@@ -201,11 +226,8 @@ public class TextBox : System.Windows.Controls.TextBox {
 	/// </summary>
 	protected virtual void OnClearButtonClick() {
 		if (Text.Length > 0) {
-            Debug.WriteLine("OnClearButtonClick");
-            SetCurrentValue(TextProperty, string.Empty);
-            FocusManager.SetFocusedElement(FocusManager.GetFocusScope(this), null);
-            FocusManager.SetFocusedElement(FocusManager.GetFocusScope(this), this);
-        }
+			SetCurrentValue(TextProperty, string.Empty);
+		}
 	}
 
 	/// <summary>
@@ -213,6 +235,19 @@ public class TextBox : System.Windows.Controls.TextBox {
 	/// </summary>
 	protected virtual void OnTemplateButtonClick(string? parameter) {
 		Debug.WriteLine($"INFO: {typeof(TextBox)} button clicked", "Wpf.Ui.TextBox");
+
 		OnClearButtonClick();
+	}
+
+	private static void OnPlaceholderEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+		if (d is not TextBox control) {
+			return;
+		}
+
+		control.OnPlaceholderEnabledChanged();
+	}
+
+	protected virtual void OnPlaceholderEnabledChanged() {
+		SetPlaceholderTextVisibility();
 	}
 }
