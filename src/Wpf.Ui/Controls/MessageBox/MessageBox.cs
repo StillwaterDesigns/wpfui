@@ -3,8 +3,12 @@
 // Copyright (C) Leszek Pomianowski and WPF UI Contributors.
 // All Rights Reserved.
 
+using System.Runtime.InteropServices;
+
 using Wpf.Ui.Input;
 using Wpf.Ui.Interop;
+using Wpf.Ui.Interop.WinDef;
+
 using Size = System.Windows.Size;
 
 // ReSharper disable once CheckNamespace
@@ -317,7 +321,7 @@ public class MessageBox : Window {
         var rootElement = (UIElement)GetVisualChild(0)!;
 
         ResizeToContentSize(rootElement);
-        CenterWindowOnScreen();
+		ApplyWindowStartupLocation();
     }
 
     /// <summary>
@@ -350,21 +354,98 @@ public class MessageBox : Window {
         _ = Tcs?.TrySetResult(MessageBoxResult.None);
     }
 
-    protected virtual void CenterWindowOnScreen()
-    {
-        // TODO: MessageBox should be displayed on the window on which the application
-        double screenWidth = SystemParameters.PrimaryScreenWidth;
-        double screenHeight = SystemParameters.PrimaryScreenHeight;
+	/// <summary>
+	/// Positions the MessageBox according to <see cref="Window.WindowStartupLocation"/>.
+	/// </summary>
+	protected virtual void ApplyWindowStartupLocation() {
+		switch (WindowStartupLocation) {
+			case WindowStartupLocation.CenterOwner:
+				CenterWindowOnOwner();
+				break;
+			case WindowStartupLocation.CenterScreen:
+				CenterWindowOnScreen();
+				break;
+			case WindowStartupLocation.Manual:
+				break;
+		}
+	}
+	protected virtual void CenterWindowOnOwner() {
+		if (Owner is null)
+			return;
 
-        SetCurrentValue(LeftProperty, (screenWidth / 2) - (Width / 2));
-        SetCurrentValue(TopProperty, (screenHeight / 2) - (Height / 2));
-    }
+		var ownerHandle = new WindowInteropHelper(Owner).Handle;
+		if (ownerHandle == IntPtr.Zero || !GetWindowRect(ownerHandle, out var rect))
+			return;
 
-    /// <summary>
-    /// Occurs after the <see cref="MessageBoxButton"/> is clicked
-    /// </summary>
-    /// <param name="button">The MessageBox button</param>
-    protected virtual void OnButtonClick(MessageBoxButton button)
+		var source = PresentationSource.FromVisual(Owner);
+		if (source?.CompositionTarget is null)
+			return;
+
+		var topLeft = source.CompositionTarget.TransformFromDevice.Transform(
+			new Point(rect.Left, rect.Top)
+		);
+
+		var bottomRight = source.CompositionTarget.TransformFromDevice.Transform(
+			new Point(rect.Right, rect.Bottom)
+		);
+
+		double ownerWidth = bottomRight.X - topLeft.X;
+		double ownerHeight = bottomRight.Y - topLeft.Y;
+
+		SetCurrentValue(LeftProperty, topLeft.X + ((ownerWidth - Width) / 2));
+		SetCurrentValue(TopProperty, topLeft.Y + ((ownerHeight - Height) / 2));
+	}
+
+	protected virtual void CenterWindowOnScreen() {
+		nint monitor;
+
+		if (Owner is not null) {
+			var ownerHandle = new WindowInteropHelper(Owner).Handle;
+
+			monitor = MonitorFromWindow(
+				ownerHandle,
+				MonitorOptions.MONITOR_DEFAULTTONEAREST
+			);
+		} else if (GetCursorPos(out var cursorPosition)) {
+			monitor = MonitorFromPoint(
+				cursorPosition,
+				MonitorOptions.MONITOR_DEFAULTTONEAREST
+			);
+		} else {
+			return;
+		}
+
+		var monitorInfo = new MONITORINFO {
+			cbSize = (uint)Marshal.SizeOf<MONITORINFO>()
+		};
+
+		if (!GetMonitorInfo(monitor, ref monitorInfo))
+			return;
+
+		var source = PresentationSource.FromVisual(this);
+		if (source?.CompositionTarget is null)
+			return;
+
+		var topLeft = source.CompositionTarget.TransformFromDevice.Transform(
+			new Point(monitorInfo.rcWork.Left, monitorInfo.rcWork.Top)
+		);
+
+		var bottomRight = source.CompositionTarget.TransformFromDevice.Transform(
+			new Point(monitorInfo.rcWork.Right, monitorInfo.rcWork.Bottom)
+		);
+
+		double workAreaWidth = bottomRight.X - topLeft.X;
+		double workAreaHeight = bottomRight.Y - topLeft.Y;
+
+		SetCurrentValue(LeftProperty, topLeft.X + ((workAreaWidth - Width) / 2));
+		SetCurrentValue(TopProperty, topLeft.Y + ((workAreaHeight - Height) / 2));
+	}
+
+	/// <summary>
+	/// Occurs after the <see cref="MessageBoxButton"/> is clicked
+	/// </summary>
+	/// <param name="button">The MessageBox button</param>
+	protected virtual void OnButtonClick(MessageBoxButton button)
     {
         MessageBoxResult result = button switch
         {
@@ -418,4 +499,48 @@ public class MessageBox : Window {
             SetCurrentValue(MaxWidthProperty, Width);
         }
     }
+
+	[DllImport("user32.dll")]
+	[return: MarshalAs(UnmanagedType.Bool)]
+	private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+	[StructLayout(LayoutKind.Sequential)]
+	private struct RECT {
+		public int Left;
+		public int Top;
+		public int Right;
+		public int Bottom;
+	}
+	[DllImport("user32.dll")]
+	[return: MarshalAs(UnmanagedType.Bool)]
+	private static extern bool GetCursorPos(out POINT lpPoint);
+
+	[DllImport("user32.dll")]
+	internal static extern nint MonitorFromWindow(nint hwnd, MonitorOptions dwFlags);
+
+	[DllImport("user32.dll")]
+	private static extern nint MonitorFromPoint(POINT pt, MonitorOptions dwFlags);
+
+	[DllImport("user32.dll", CharSet = CharSet.Auto)]
+	[return: MarshalAs(UnmanagedType.Bool)]
+	private static extern bool GetMonitorInfo(nint hMonitor, ref MONITORINFO lpmi);
+	[StructLayout(LayoutKind.Sequential)]
+	private struct POINT {
+		public int X;
+		public int Y;
+	}
+
+	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+	private struct MONITORINFO {
+		public uint cbSize;
+		public RECT rcMonitor;
+		public RECT rcWork;
+		public uint dwFlags;
+	}
+
+	internal enum MonitorOptions : uint {
+		MONITOR_DEFAULTTONULL = 0x00000000,
+		MONITOR_DEFAULTTOPRIMARY = 0x00000001,
+		MONITOR_DEFAULTTONEAREST = 0x00000002
+	}
 }
