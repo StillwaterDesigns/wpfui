@@ -80,6 +80,14 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 		new PropertyMetadata(null)
 	);
 
+	/// <summary>Identifies the <see cref="CoerceLargeChangeCallback"/> dependency property.</summary>
+	public static readonly DependencyProperty CoerceLargeChangeCallbackProperty = DependencyProperty.Register(
+		nameof(CoerceLargeChangeCallback),
+		typeof(NumberBoxStepCoercionCallback),
+		typeof(NumberBox),
+		new PropertyMetadata(null)
+	);
+
 	/// <summary>Identifies the <see cref="LargeChange"/> dependency property.</summary>
 	public static readonly DependencyProperty LargeChangeProperty = DependencyProperty.Register(
 		nameof(LargeChange),
@@ -186,6 +194,15 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 	}
 
 	/// <summary>
+	/// Gets or sets a callback that dynamically determines the effective value of
+	/// <see cref="LargeChange"/> before each large increment or decrement operation.
+	/// </summary>
+	public NumberBoxStepCoercionCallback? CoerceLargeChangeCallback {
+		get => (NumberBoxStepCoercionCallback?)GetValue(CoerceLargeChangeCallbackProperty);
+		set => SetValue(CoerceLargeChangeCallbackProperty, value);
+	}
+
+	/// <summary>
 	/// Gets or sets the numerical maximum for <see cref="Value"/>.
 	/// </summary>
 	public double Maximum {
@@ -271,15 +288,15 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 				break;
 			case Key.Up:
 				StepValue(
-					Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? LargeChange : SmallChange,
-					Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? StepKind.Large : StepKind.Small
+					Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? LargeChange : SmallChange,
+					Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? StepKind.Large : StepKind.Small
 				);
 				e.Handled = true;
 				break;
 			case Key.Down:
 				StepValue(
-					Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? -LargeChange : -SmallChange,
-					Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? StepKind.Large : StepKind.Small
+					Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? -LargeChange : -SmallChange,
+					Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? StepKind.Large : StepKind.Small
 				);
 				e.Handled = true;
 				break;
@@ -473,6 +490,8 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 
 		if (stepKind == StepKind.Small && CoerceSmallChangeCallback is not null) {
 			change = CoerceSmallChangeCallback(this, currentValue, change);
+		} else if (stepKind == StepKind.Large && CoerceLargeChangeCallback is not null) {
+			change = CoerceLargeChangeCallback(this, currentValue, change);
 		}
 
 		var newValue = currentValue + change;
