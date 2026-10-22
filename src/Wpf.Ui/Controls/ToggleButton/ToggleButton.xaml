@@ -126,7 +126,7 @@
         </Setter>
     </Style>
 
-	<Style x:Key="DefaultUiToggleButtonStyle" TargetType="{x:Type controls:IconToggleButton}">
+	<Style x:Key="DefaultIconToggleButtonStyle" TargetType="{x:Type controls:IconToggleButton}">
 		<!--  Universal WPF UI focus  -->
 		<Setter Property="FocusVisualStyle" Value="{DynamicResource DefaultControlFocusVisualStyle}" />
 		<!--  Universal WPF UI focus  -->
@@ -168,23 +168,24 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{TemplateBinding CornerRadius}">
-							<Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+							<Grid x:Name="ContentGrid"
+								  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 								  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="Auto" />
 									<ColumnDefinition Width="*" />
 								</Grid.ColumnDefinitions>
 
-								<ContentPresenter
-                                    x:Name="ControlIcon"
-                                    Grid.Column="0"
-                                    Margin="{StaticResource ToggleButtonIconMargin}"
-                                    VerticalAlignment="Center"
-                                    Content="{TemplateBinding Icon}"
-                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                    Focusable="False"
-                                    TextElement.FontSize="{TemplateBinding FontSize}"
-                                    TextElement.Foreground="{TemplateBinding Foreground}" />
+									<ContentPresenter
+										x:Name="ControlIcon"
+										Grid.Column="0"
+										Margin="{StaticResource ToggleButtonIconMargin}"
+										VerticalAlignment="Center"
+										Content="{TemplateBinding Icon}"
+										ContentTemplate="{TemplateBinding ContentTemplate}"
+										Focusable="False"
+										TextElement.FontSize="{TemplateBinding FontSize}"
+										TextElement.Foreground="{TemplateBinding Foreground}" />
 
 								<ContentPresenter
                                     x:Name="ContentPresenter"
@@ -243,75 +244,6 @@
 			<Trigger Property="Appearance" Value="Transparent">
 				<Setter Property="Background" Value="Transparent" />
 			</Trigger>
-
-			<!--  PRIMARY  -->
-			<!--<Trigger Property="Appearance" Value="Primary">
-				<Setter Property="Background" Value="{DynamicResource AccentButtonBackground}" />
-				<Setter Property="MouseOverBackground" Value="{DynamicResource AccentButtonBackgroundPointerOver}" />
-				<Setter Property="PressedBackground" Value="{DynamicResource AccentButtonBackgroundPressed}" />
-				<Setter Property="Foreground" Value="{DynamicResource AccentButtonForeground}" />
-				<Setter Property="PressedForeground" Value="{DynamicResource AccentButtonForegroundPointerOver}" />
-				<Setter Property="BorderBrush" Value="{DynamicResource AccentControlElevationBorderBrush}" />
-				<Setter Property="PressedBorderBrush" Value="{DynamicResource AccentButtonBorderBrushPressed}" />
-			</Trigger>-->
-
-			<!--  DARK  -->
-			<!--<Trigger Property="Appearance" Value="Dark">
-				<Setter Property="Background">
-					<Setter.Value>
-						<SolidColorBrush Color="{DynamicResource ControlStrongFillColorDark}" />
-					</Setter.Value>
-				</Setter>
-				<Setter Property="MouseOverBackground">
-					<Setter.Value>
-						<SolidColorBrush Color="#62000000" />
-					</Setter.Value>
-				</Setter>
-				<Setter Property="PressedBackground">
-					<Setter.Value>
-						<SolidColorBrush Color="#52000000" />
-					</Setter.Value>
-				</Setter>
-				<Setter Property="Foreground">
-					<Setter.Value>
-						<SolidColorBrush Color="{DynamicResource TextFillColorLightPrimary}" />
-					</Setter.Value>
-				</Setter>
-				<Setter Property="PressedForeground">
-					<Setter.Value>
-						<SolidColorBrush Color="{DynamicResource TextFillColorLightSecondary}" />
-					</Setter.Value>
-				</Setter>
-			</Trigger>
-
-			--><!--  LIGHT  --><!--
-			<Trigger Property="Appearance" Value="Light">
-				<Setter Property="Background">
-					<Setter.Value>
-						<SolidColorBrush Color="{DynamicResource ControlStrongFillColorLight}" />
-					</Setter.Value>
-				</Setter>
-				<Setter Property="MouseOverBackground">
-					<Setter.Value>
-						<SolidColorBrush Color="#D3FFFFFF" />
-					</Setter.Value>
-				</Setter>
-				<Setter Property="PressedBackground">
-					<Setter.Value>
-						<SolidColorBrush Color="#F3FFFFFF" />
-					</Setter.Value>
-				</Setter>
-				<Setter Property="Foreground">
-					<Setter.Value>
-						<SolidColorBrush Color="{DynamicResource TextFillColorDarkPrimary}" />
-					</Setter.Value>
-				</Setter>
-				<Setter Property="PressedForeground">
-					<Setter.Value>
-						<SolidColorBrush Color="{DynamicResource TextFillColorDarkSecondary}" />
-					</Setter.Value>
-				</Setter>
-			</Trigger>-->
 
 			<!--  INFO  -->
 			<Trigger Property="Appearance" Value="Info">
@@ -397,6 +329,6 @@
 	</Style>
 
 	<Style BasedOn="{StaticResource DefaultToggleButtonStyle}" TargetType="{x:Type ToggleButton}" />
-	<Style BasedOn="{StaticResource DefaultUiToggleButtonStyle}" TargetType="{x:Type controls:IconToggleButton}" />
+	<Style BasedOn="{StaticResource DefaultIconToggleButtonStyle}" TargetType="{x:Type controls:IconToggleButton}" />
 
 </ResourceDictionary>
