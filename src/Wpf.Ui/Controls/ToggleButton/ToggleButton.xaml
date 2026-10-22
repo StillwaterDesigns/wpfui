@@ -176,16 +176,16 @@
 									<ColumnDefinition Width="*" />
 								</Grid.ColumnDefinitions>
 
-									<ContentPresenter
-										x:Name="ControlIcon"
-										Grid.Column="0"
-										Margin="{StaticResource ToggleButtonIconMargin}"
-										VerticalAlignment="Center"
-										Content="{TemplateBinding Icon}"
-										ContentTemplate="{TemplateBinding ContentTemplate}"
-										Focusable="False"
-										TextElement.FontSize="{TemplateBinding FontSize}"
-										TextElement.Foreground="{TemplateBinding Foreground}" />
+								<ContentPresenter
+									x:Name="ControlIcon"
+									Grid.Column="0"
+									Margin="{StaticResource ToggleButtonIconMargin}"
+									VerticalAlignment="Center"
+									Content="{TemplateBinding Icon}"
+									ContentTemplate="{TemplateBinding ContentTemplate}"
+									Focusable="False"
+									TextElement.FontSize="{TemplateBinding FontSize}"
+									TextElement.Foreground="{TemplateBinding Foreground}" />
 
 								<ContentPresenter
                                     x:Name="ContentPresenter"
