@@ -34,6 +34,8 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 	private const string PART_InlineIncrementButton = nameof(PART_InlineIncrementButton);
 	private const string PART_InlineDecrementButton = nameof(PART_InlineDecrementButton);
 
+	private const ModifierKeys LargeChangeModifier = ModifierKeys.Shift;
+
 	private bool _valueUpdating;
 
 	private enum StepKind {
@@ -288,15 +290,15 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 				break;
 			case Key.Up:
 				StepValue(
-					Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? LargeChange : SmallChange,
-					Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? StepKind.Large : StepKind.Small
+					Keyboard.Modifiers.HasFlag(LargeChangeModifier) ? LargeChange : SmallChange,
+					Keyboard.Modifiers.HasFlag(LargeChangeModifier) ? StepKind.Large : StepKind.Small
 				);
 				e.Handled = true;
 				break;
 			case Key.Down:
 				StepValue(
-					Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? -LargeChange : -SmallChange,
-					Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? StepKind.Large : StepKind.Small
+					Keyboard.Modifiers.HasFlag(LargeChangeModifier) ? -LargeChange : -SmallChange,
+					Keyboard.Modifiers.HasFlag(LargeChangeModifier) ? StepKind.Large : StepKind.Small
 				);
 				e.Handled = true;
 				break;
@@ -333,8 +335,8 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 
 			var overIncrement = (GetTemplateChild(PART_InlineIncrementButton) as UIElement)?.IsMouseOver ?? false;
 			var overDecrement = (GetTemplateChild(PART_InlineDecrementButton) as UIElement)?.IsMouseOver ?? false;
-			var change = Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? LargeChange : SmallChange;
-			var stepKind = Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? StepKind.Large : StepKind.Small;
+			var change = Keyboard.Modifiers.HasFlag(LargeChangeModifier) ? LargeChange : SmallChange;
+			var stepKind = Keyboard.Modifiers.HasFlag(LargeChangeModifier) ? StepKind.Large : StepKind.Small;
 
 			if (overIncrement) {
 				StepValue(change, stepKind);
@@ -358,10 +360,10 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 			return;
 		}
 
-		var change = Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? LargeChange : SmallChange;
+		var change = Keyboard.Modifiers.HasFlag(LargeChangeModifier) ? LargeChange : SmallChange;
 		StepValue(
 			e.Delta > 0 ? change : -change,
-			Keyboard.Modifiers.HasFlag(ModifierKeys.Control) ? StepKind.Large : StepKind.Small
+			Keyboard.Modifiers.HasFlag(LargeChangeModifier) ? StepKind.Large : StepKind.Small
 		);
 		e.Handled = true;
 	}
