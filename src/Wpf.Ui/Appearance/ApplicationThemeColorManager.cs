@@ -1,6 +1,6 @@
 ﻿namespace Wpf.Ui.Appearance;
 public static class ApplicationThemeColorManager {
-	private static Type mType = typeof(ApplicationThemeColorManager);
+	private static Type _type = typeof(ApplicationThemeColorManager);
 
 
 	/// <summary>
