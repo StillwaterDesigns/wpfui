@@ -341,6 +341,8 @@ public class NavigationViewItem : ButtonBase, INavigationViewItem, IIconControl 
 
 		if (TargetPageType is not null)
 			navigationView.OnNavigationViewItemClick(this);
+		else if (HasMenuItems && !navigationView.IsPaneOpen)
+			navigationView.IsPaneOpen = true;
 
 		base.OnClick();
 	}

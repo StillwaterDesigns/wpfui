@@ -477,6 +477,7 @@ public partial class NavigationView {
 		if (e.NewItems is null)
 			return;
 
+		SetCurrentValue(IsPaneOpenProperty, true);
 		UpdateMenuItemsTemplate(e.NewItems);
 		AddItemsToDictionaries(e.NewItems);
 	}
