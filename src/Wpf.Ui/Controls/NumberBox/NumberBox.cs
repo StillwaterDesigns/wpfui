@@ -146,6 +146,22 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 		new PropertyMetadata(null, OnNumberFormatterChanged)
 	);
 
+	/// <summary>Identifies the <see cref="IncrementEnabled"/> dependency property.</summary>
+	public static readonly DependencyProperty IncrementEnabledProperty = DependencyProperty.Register(
+		nameof(IncrementEnabled),
+		typeof(bool),
+		typeof(NumberBox),
+		new PropertyMetadata(true)
+	);
+
+	/// <summary>Identifies the <see cref="DecrementEnabled"/> dependency property.</summary>
+	public static readonly DependencyProperty DecrementEnabledProperty = DependencyProperty.Register(
+		nameof(DecrementEnabled),
+		typeof(bool),
+		typeof(NumberBox),
+		new PropertyMetadata(true)
+	);
+
 	/// <summary>Identifies the <see cref="ValueChanged"/> routed event.</summary>
 	public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent(
 		nameof(ValueChanged),
@@ -153,6 +169,22 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 		typeof(NumberBoxValueChangedEvent),
 		typeof(NumberBox)
 	);
+
+	/// <summary>
+	/// Gets or sets the increment enabled value of a <see cref="NumberBox"/>.
+	/// </summary>
+	public bool IncrementEnabled {
+		get => (bool)GetValue(IncrementEnabledProperty);
+		set => SetValue(IncrementEnabledProperty, value);
+	}
+
+	/// <summary>
+	/// Gets or sets the decrement enabled value of a <see cref="NumberBox"/>.
+	/// </summary>
+	public bool DecrementEnabled {
+		get => (bool)GetValue(DecrementEnabledProperty);
+		set => SetValue(DecrementEnabledProperty, value);
+	}
 
 	/// <summary>
 	/// Gets or sets the numeric value of a <see cref="NumberBox"/>.
@@ -271,6 +303,8 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 		NumberFormatter ??= NumberBox.GetRegionalSettingsAwareDecimalFormatter();
 
 		DataObject.AddPastingHandler(this, OnClipboardPaste);
+
+		Loaded += (s, e) => UpdateIncrementDecrementEnabled();
 	}
 
 	/// <inheritdoc />
@@ -466,6 +500,7 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 		}
 
 		UpdateTextToValue();
+		UpdateIncrementDecrementEnabled();
 
 		_valueUpdating = false;
 	}
@@ -507,6 +542,11 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 		Focus();
 	}
 
+	private void UpdateIncrementDecrementEnabled() {
+		SetCurrentValue(IncrementEnabledProperty, Value < Maximum);
+		SetCurrentValue(DecrementEnabledProperty, Value > Minimum);
+	}
+
 	private void UpdateTextToValue(bool applyStringFormat = true) {
 		var newText = string.Empty;
 
@@ -523,6 +563,7 @@ public partial class NumberBox : Wpf.Ui.Controls.TextBox {
 		}
 
 		SetCurrentValue(TextProperty, newText);
+		UpdateIncrementDecrementEnabled();
 	}
 
 	private void UpdateValueToText() {

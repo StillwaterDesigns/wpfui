@@ -157,10 +157,12 @@
 												<RowDefinition Height="*" />
 											</Grid.RowDefinitions>
 
-											<Button x:Name="PART_CompactIncrementButton">
+											<Button x:Name="PART_CompactIncrementButton"
+													IsEnabled="{TemplateBinding IncrementEnabled}">
 												<controls:SymbolIcon FontSize="{StaticResource NumberBoxButtonIconSize}" Symbol="ChevronUp24" />
 											</Button>
-											<Button x:Name="PART_CompactDecrementButton" Grid.Row="1">
+											<Button x:Name="PART_CompactDecrementButton" Grid.Row="1"
+													IsEnabled="{TemplateBinding DecrementEnabled}">
 												<controls:SymbolIcon FontSize="{StaticResource NumberBoxButtonIconSize}" Symbol="ChevronDown24" />
 											</Button>
 										</Grid>
@@ -168,6 +170,7 @@
 
 									<RepeatButton
                                         x:Name="PART_InlineIncrementButton"
+										IsEnabled="{TemplateBinding IncrementEnabled}"
                                         Width="{StaticResource NumberBoxButtonHeight}"
                                         Height="{StaticResource NumberBoxButtonHeight}"
                                         Margin="{StaticResource NumberBoxButtonMargin}"
@@ -185,6 +188,7 @@
 									</RepeatButton>
 									<RepeatButton
                                         x:Name="PART_InlineDecrementButton"
+										IsEnabled="{TemplateBinding DecrementEnabled}"
                                         Width="{StaticResource NumberBoxButtonHeight}"
                                         Height="{StaticResource NumberBoxButtonHeight}"
                                         Margin="{StaticResource NumberBoxButtonMargin}"
@@ -269,6 +273,14 @@
 							<Setter TargetName="AccentBorder" Property="BorderThickness" Value="0,0,0,2" />
 							<Setter TargetName="AccentBorder" Property="BorderBrush" Value="{DynamicResource TextControlFocusedBorderBrush}" />
 							<Setter TargetName="ContentBorder" Property="Background" Value="{DynamicResource TextControlBackgroundFocused}" />
+						</Trigger>
+						<Trigger Property="IncrementEnabled" Value="False">
+							<Setter TargetName="PART_InlineIncrementButton" Property="Opacity" Value="0.3" />
+							<Setter TargetName="PART_CompactIncrementButton" Property="Opacity" Value="0.3" />
+						</Trigger>
+						<Trigger Property="DecrementEnabled" Value="False">
+							<Setter TargetName="PART_InlineDecrementButton" Property="Opacity" Value="0.3" />
+							<Setter TargetName="PART_CompactDecrementButton" Property="Opacity" Value="0.3" />
 						</Trigger>
 						<MultiTrigger>
 							<MultiTrigger.Conditions>
