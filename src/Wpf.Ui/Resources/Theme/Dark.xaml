@@ -480,7 +480,7 @@
     <SolidColorBrush x:Key="InfoBarErrorSeverityIconBackground" Color="{StaticResource SystemFillColorCritical}" />
     <SolidColorBrush x:Key="InfoBarWarningSeverityIconBackground" Color="{StaticResource SystemFillColorCaution}" />
     <SolidColorBrush x:Key="InfoBarSuccessSeverityIconBackground" Color="{StaticResource SystemFillColorSuccess}" />
-    <SolidColorBrush x:Key="InfoBarInformationalSeverityIconBackground" Color="{DynamicResource SystemAccentColorPrimary}" />
+	<SolidColorBrush x:Key="InfoBarInformationalSeverityIconBackground" Color="{DynamicResource SystemFillColorAttention}" />
 
     <!--  Label  -->
     <SolidColorBrush x:Key="LabelForeground" Color="{StaticResource TextFillColorSecondary}" />
